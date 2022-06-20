@@ -1,0 +1,9 @@
+class ExternalClass{
+    static Integer life = 42i;
+
+    static function String wow(String a){
+        String s = "wow:";
+        s.concat(a);
+        return s;
+    }
+}

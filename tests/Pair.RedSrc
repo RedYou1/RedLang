@@ -1,0 +1,18 @@
+class Pair<K,V>{
+    K key;
+    V value;
+
+	static function Pair(K key, V value){
+		this.key = key;
+        this.value = value;
+	}
+
+    function String toString(){
+        String s = "(";
+        s.concat(this.key.toString());
+        s.concat(",");
+        s.concat(this.value.toString());
+        s.concat(")");
+        return s;
+    }
+}

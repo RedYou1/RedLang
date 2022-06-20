@@ -1,0 +1,26 @@
+class test2{
+
+	static Integer b = 1i;
+	Integer a = 1i;
+
+	static function test2(Integer a){
+		this.a = a;
+	}
+
+	function Integer getA(){
+		return this.a;
+	}
+
+	function void salut(){
+		if(this.a.Equals(5i)){
+			System.println("Parfait");
+		}
+		System.print(this.a);
+		System.print(" et ");
+		System.println(test2.b);
+		this.a.add(1i);
+		if(this.a.Equals(6i)){
+			throw new Exception("Salut");
+		}
+	}
+}

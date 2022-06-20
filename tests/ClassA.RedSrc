@@ -1,0 +1,6 @@
+class ClassA{
+	Integer a = 1i;
+
+	static function ClassA(){
+	}
+}

@@ -1,0 +1,183 @@
+include "test2.RedSrc"
+include "ClassB.RedSrc"
+include "Cat.RedSrc"
+include "Dog.RedSrc"
+include "BoucleA.RedSrc"
+include "BoucleB.RedSrc"
+include "Generic.RedSrc"
+include "Pair.RedSrc"
+
+class test{
+
+	static Integer maxThreadFor = 10i;
+
+	static function void testIn(){
+		System.print("Enter a word:");
+		String word = System.getWord();
+		System.print("word:");
+		System.println(word);
+	}
+
+	static function void testerTerminal(){
+		System.println("allo".concat(" mon nom est ").concat("toto"));
+		String plus = new String(" + ");
+		String equal = " = ";
+		Integer a = new Integer(53i);
+		System.print(a);
+		Integer b = 120i;
+		System.print(plus);
+		System.print(b);
+		System.print(equal);
+		System.print(a.add(b));
+		String t = ";";
+		System.println(t);
+	}
+
+	static function void testerClass(){
+		test2 t1 = new test2(1i);
+		test2 t2 = new test2(3i);
+		System.println(t1);
+		System.println(t2);
+		while(true){
+			System.print("A:");
+			System.println(t1.getA());
+			t1.salut();
+			t2.salut();
+		}
+	}
+
+	static function void testerThrow(Integer i){
+		if(i.Equals(1i)){
+			throw "1";
+		}
+		throw 2i;
+	}
+
+	static function String testerCast(){
+		try {
+			Integer i = new String("allo");
+		} catch (CastException e) {
+			System.println(e);
+		}
+		return 1i;
+	}
+
+	static function void testerThread(Lock lock, String s){
+		for(Integer i = 0i;i.lt(test.maxThreadFor);i.add(1i)){
+			lock.lock();
+			System.println(s);
+			lock.unLock();
+		}
+	}
+
+	static function void preMain(){
+		try {
+			test.testerClass();
+		} catch (Exception e) {
+			System.println(e);
+		}
+
+		try {
+			test.testerClass();
+		} catch (Exception e) {
+			System.println(e);
+		}
+
+		test.testIn();
+		test.testerTerminal();
+
+		for(Integer i = 1i; i.lte(2i);i.add(1i)){
+			try {
+				test.testerThrow(i);
+			} catch (String e) {
+				System.print("String:");
+				System.println(e);
+			} catch (Integer e) {
+				System.print("Integer:");
+				System.println(e);
+			}
+		}
+
+		ClassB b = new ClassB();
+		b.test();
+
+		System.print("Met 1:");
+		String s = System.getWord();
+		while(s.Equals("1").not()){
+			System.print("NON. met 1:");
+			s = System.getWord();
+		}
+		System.print("Last was:");
+		System.println(s);
+
+
+		for(Integer i = 0i;i.lt(10i);i.add(1i)){
+			System.print(i);
+		}
+
+		System.println("");
+		Animal a = new Cat();
+		a.speak();
+		System.println("Les chats sont des animaux:".concat(a.getClass().instanceOf(Animal).toString()));
+		System.println("Les chats sont des chiens:".concat(a.getClass().instanceOf(Dog).toString()));
+		a = new Dog();
+		a.speak();
+		System.println("Les chiens sont des animaux:".concat(a.getClass().instanceOf(Animal).toString()));
+		System.println("Les chiens sont des chats:".concat(a.getClass().instanceOf(Cat).toString()));
+
+		try {
+			test.testerCast();
+		} catch (CastException e) {
+			System.println(e);
+		}
+
+		Class c = new Class("ExternalClass.RedSrc");
+		String wow = c.invoke("wow","Bonjour");
+		System.println(wow);
+
+		Integer life = c.statVar("life");
+		System.println(life);
+
+		Lock lock = new Lock();
+
+		Thread t1 = new Thread(test.testerThread<Lock,String>, lock, "allo");
+		Thread t2 = new Thread(test.testerThread<Lock,String>, lock, "bonjour");
+
+		t1.start();
+		t2.start();
+
+		for(Integer i = 0i;i.lt(test.maxThreadFor);i.add(1i)){
+			System.println("salut");
+		}
+
+		t1.join();
+		t2.join();
+
+		System.println("Is 32x:".concat(System.is32x.toString()));
+		System.println("Is 64x:".concat(System.is64x.toString()));
+
+		BoucleA ba = new BoucleA();
+		BoucleB bb = new BoucleB();
+
+		ba.test(bb,10i);
+
+		System.println(4.256f);
+	}
+
+	static function void main(){
+		test.preMain();
+
+		Generic<Integer> g = new Generic<Integer>(1i);
+		Generic<String> g2 = new Generic<String>("allo");
+
+		System.println(g.a);
+		System.println(g2.a);
+
+		Pair<Integer,String> p = new Pair<Integer,String>(1i,"allo");
+		System.println(p);
+		Pair<String,Integer> p2 = new Pair<String,Integer>("allo",2i);
+		System.println(p2);
+
+		throw new Exception("FINI");
+	}
+}

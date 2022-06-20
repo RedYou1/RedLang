@@ -1,0 +1,16 @@
+include "BoucleB.RedSrc"
+
+class BoucleA{
+    String s = "A";
+
+    static function BoucleA(){}
+
+    function void test(BoucleB b, Integer i){
+        if(i.Equals(0i)){
+            return;
+        }
+        System.println(this.s);
+        i.sub(1i);
+        b.test(this, i);
+    }
+}

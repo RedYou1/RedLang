@@ -1,0 +1,13 @@
+include "ClassA.RedSrc"
+
+class ClassB extends ClassA{
+	Integer b = 2i;
+
+	static function ClassB() {
+	}
+
+    function void test(){
+        System.println(this.a);
+        System.println(this.b);
+    }
+}

@@ -1,0 +1,10 @@
+include "Animal.RedSrc"
+
+class Cat implements Animal {
+    static function Cat(){
+    }
+
+    function void speak(){
+        System.println("meow");
+    }
+}

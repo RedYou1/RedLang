@@ -1,0 +1,10 @@
+include "Animal.RedSrc"
+
+class Dog implements Animal {
+    static function Dog(){
+    }
+
+    function void speak(){
+        System.println("woof");
+    }
+}
