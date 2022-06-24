@@ -19,100 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Array.h" />
-    <ClInclude Include="Boolean.h" />
-    <ClInclude Include="BreakPoint.h" />
-    <ClInclude Include="Byte.h" />
-    <ClInclude Include="CastException.h" />
-    <ClInclude Include="Char.h" />
-    <ClInclude Include="Class.h" />
-    <ClInclude Include="ClassClass.h" />
-    <ClInclude Include="Command.h" />
-    <ClInclude Include="Declaration.h" />
-    <ClInclude Include="Double.h" />
-    <ClInclude Include="Exception.h" />
-    <ClInclude Include="Float.h" />
-    <ClInclude Include="Function.h" />
-    <ClInclude Include="FunctionClass.h" />
-    <ClInclude Include="GarbageCollector.h" />
-    <ClInclude Include="Generic.h" />
-    <ClInclude Include="GetVar.h" />
-    <ClInclude Include="Global.h" />
-    <ClInclude Include="If.h" />
-    <ClInclude Include="IllegalArgumentException.h" />
-    <ClInclude Include="Integer.h" />
-    <ClInclude Include="Interface.h" />
-    <ClInclude Include="Lock.h" />
-    <ClInclude Include="Long.h" />
-    <ClInclude Include="MemoryFunction.h" />
-    <ClInclude Include="MemoryObject.h" />
-    <ClInclude Include="MemorySourceFile.h" />
-    <ClInclude Include="MemoryStatVar.h" />
-    <ClInclude Include="MemoryVar.h" />
-    <ClInclude Include="MemoryVariable.h" />
-    <ClInclude Include="myString.h" />
-    <ClInclude Include="NullException.h" />
-    <ClInclude Include="Number.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectClass.h" />
-    <ClInclude Include="RedLang.h" />
-    <ClInclude Include="ReplaceStatVar.h" />
-    <ClInclude Include="ReplaceVar.h" />
-    <ClInclude Include="ReplaceVarInOb.h" />
-    <ClInclude Include="Return.h" />
-    <ClInclude Include="Short.h" />
-    <ClInclude Include="Signature.h" />
-    <ClInclude Include="SourceFile.h" />
-    <ClInclude Include="StatVar.h" />
-    <ClInclude Include="String.h" />
-    <ClInclude Include="System.h" />
-    <ClInclude Include="Thread.h" />
-    <ClInclude Include="Try.h" />
-    <ClInclude Include="Var.h" />
-    <ClInclude Include="While.h" />
+    <ClInclude Include="GenericDef.h" />
+    <ClInclude Include="Parser.h" />
+    <ClInclude Include="FunctionDef.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Array.cpp" />
-    <ClCompile Include="BreakPoint.cpp" />
-    <ClCompile Include="Byte.cpp" />
-    <ClCompile Include="Class.cpp" />
-    <ClCompile Include="Command.cpp" />
-    <ClCompile Include="Declaration.cpp" />
-    <ClCompile Include="Double.cpp" />
-    <ClCompile Include="Float.cpp" />
-    <ClCompile Include="Function.cpp" />
-    <ClCompile Include="GarbageCollector.cpp" />
-    <ClCompile Include="Global.cpp" />
-    <ClCompile Include="If.cpp" />
-    <ClCompile Include="Integer.cpp" />
-    <ClCompile Include="Interface.cpp" />
-    <ClCompile Include="Long.cpp" />
-    <ClCompile Include="MemoryFunction.cpp" />
-    <ClCompile Include="MemoryObject.cpp" />
-    <ClCompile Include="MemorySourceFile.cpp" />
-    <ClCompile Include="MemoryStatVar.cpp" />
-    <ClCompile Include="MemoryVar.cpp" />
-    <ClCompile Include="MemoryVariable.cpp" />
-    <ClCompile Include="myString.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="ObjectClass.cpp" />
-    <ClCompile Include="RedLang.cpp" />
-    <ClCompile Include="ReplaceStatVar.cpp" />
-    <ClCompile Include="ReplaceVar.cpp" />
-    <ClCompile Include="ReplaceVarInOb.cpp" />
-    <ClCompile Include="Return.cpp" />
-    <ClCompile Include="Short.cpp" />
-    <ClCompile Include="Signature.cpp" />
-    <ClCompile Include="SourceFile.cpp" />
-    <ClCompile Include="String.cpp" />
-    <ClCompile Include="Try.cpp" />
-    <ClCompile Include="While.cpp" />
+    <ClCompile Include="FunctionDef.cpp" />
+    <ClCompile Include="GenericDef.cpp" />
+    <ClCompile Include="Parser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DTO\DTO.vcxproj">
+      <Project>{1eab63fc-00fe-4fd3-b8e9-d54069834b21}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1eab63fc-00fe-4fd3-b8e9-d54069834b21}</ProjectGuid>
-    <RootNamespace>DTO</RootNamespace>
+    <ProjectGuid>{3eb72f75-54c1-4faa-a599-fbfbc194279a}</ProjectGuid>
+    <RootNamespace>Parser</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

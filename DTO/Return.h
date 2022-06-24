@@ -18,8 +18,6 @@ namespace DTO {
 
 		CommandReturn* exec(MemoryObject& mem) override;
 		Command* clone()override;
-
-		static Command* parse(MemoryVariable& variables, std::string& s, MemorySourceFile& genTypes);
 	};
 
 	class ReturnCom :public Command {

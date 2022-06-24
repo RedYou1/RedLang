@@ -33,7 +33,5 @@ namespace DTO {
 		MemoryFunction* getStatFuncs() { return m_statFuncs; }
 		MemoryVar* getVars() { return m_vars; }
 		MemoryStatVar* getStatVars() { return m_statVars; }
-
-		static Class* parse(std::string path, std::string str, MemorySourceFile& genTypes);
 	};
 }

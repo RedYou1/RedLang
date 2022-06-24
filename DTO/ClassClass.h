@@ -42,17 +42,18 @@ namespace DTO {
 		class ClassConstruct :public Command {
 		public:
 			ClassClass* m_s;
-			ClassConstruct(ClassClass* s) :m_s(s) {}
+			SourceFile* (*m_parser)(std::string);
+			ClassConstruct(ClassClass* s, SourceFile* (*parser)(std::string)) :m_s(s), m_parser(parser) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				std::string a{ ((StringO*)mem.get("c"))->m_value };
 				if (mem.containKey(">workspace")) {
 					a = ((StringO*)mem.get(">workspace"))->m_value + "\\" + a;
 				}
-				Object* c{ new ClassO(m_s, SourceFile::loadFile(a)) };
+				Object* c{ new ClassO(m_s, m_parser(a)) };
 				mem.set("this", c);
 				return new CommandReturn(c, true, false);
 			}
-			Command* clone()override { return new ClassConstruct(m_s); }
+			Command* clone()override { return new ClassConstruct(m_s, m_parser); }
 		};
 
 		class ToString :public Command {

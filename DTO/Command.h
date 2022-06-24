@@ -36,7 +36,5 @@ namespace DTO {
 		virtual CommandReturn* exec(MemoryObject& mem) = 0;
 
 		virtual Command* clone() = 0;
-
-		static Command* parse(Class* preC, Command* pre, MemoryVariable& variables, std::string line, MemorySourceFile& genTypes);
 	};
 }

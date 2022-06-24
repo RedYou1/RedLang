@@ -87,9 +87,6 @@
     <ClInclude Include="Generic.h">
       <Filter>Fichiers d%27en-tête\Files</Filter>
     </ClInclude>
-    <ClInclude Include="GenericFile.h">
-      <Filter>Fichiers d%27en-tête\Files</Filter>
-    </ClInclude>
     <ClInclude Include="Interface.h">
       <Filter>Fichiers d%27en-tête\Files</Filter>
     </ClInclude>
@@ -204,9 +201,6 @@
     <ClInclude Include="Var.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakPoint.cpp">
@@ -237,9 +231,6 @@
       <Filter>Fichiers sources\Commands</Filter>
     </ClCompile>
     <ClCompile Include="Class.cpp">
-      <Filter>Fichiers sources\Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GenericFile.cpp">
       <Filter>Fichiers sources\Files</Filter>
     </ClCompile>
     <ClCompile Include="Interface.cpp">

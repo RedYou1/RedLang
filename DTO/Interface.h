@@ -33,7 +33,5 @@ namespace DTO {
 		bool containsAll(Class* _class);
 
 		virtual bool instanceOf(Interface* other);
-
-		static Interface* parse(std::string path, std::string str, MemorySourceFile& genTypes);
 	};
 }

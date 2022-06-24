@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../DTO/Class.h"
+#include "../Parser/Parser.h"
 #include "../DTO/RedLang.h"
 #include "../DTO/MemoryFunction.h"
 #include "../DTO/MemoryObject.h"
@@ -27,9 +27,9 @@ int main(int argc, char** argv)
 			return 0;
 		}
 
-		DTO::RedLang::importRedLang();
+		DTO::RedLang::importRedLang(Parser::Parser::loadFile);
 
-		DTO::Class* c1{ (DTO::Class*)DTO::SourceFile::loadFile(path) };
+		DTO::Class* c1{ (DTO::Class*)Parser::Parser::loadFile(path) };
 
 		DTO::MemoryObject* mem{ new DTO::MemoryObject {} };
 		DTO::CommandReturn* r{ c1->getStatFuncs()->get("main", nullptr, 0)->exec(*mem, (DTO::Command**)nullptr,0) };

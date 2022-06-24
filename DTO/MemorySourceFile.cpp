@@ -2,7 +2,7 @@
 #include "Command.h"
 #include "Class.h"
 #include "myString.h"
-#include "GenericFile.h"
+#include "Generic.h"
 
 DTO::MemorySourceFile::~MemorySourceFile() {
 	if (!m_delete)

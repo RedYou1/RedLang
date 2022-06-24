@@ -1,11 +1,6 @@
 #include <queue>
 #include "Function.h"
-#include "Var.h"
-#include "ReplaceVarInOb.h"
 #include "MemoryFunction.h"
-#include "myString.h"
-#include "Return.h"
-#include "Global.h"
 #include "CastException.h"
 
 DTO::FunctionCom::FunctionCom(Class* _class, std::string name, Command** args, size_t argsLen)
@@ -244,136 +239,12 @@ DTO::IFunction* DTO::PostFunction::clone()
 	return new PostFunction(m_signature->clone(), cmds, m_commandLen);
 }
 
-DTO::Function* DTO::Function::parseDef(bool isNotStatic, Class* methodeOf, std::string* name, std::string* str, MemorySourceFile& genTypes) {
-	MemoryVariable variables{ };
-	myString s{ str };
-
-	Interface* returnType{ nullptr };
-	std::string returnTypeName{ s.extractName() };
-	std::string methodeName{ std::string(methodeOf->getName()) };
-	if (returnTypeName == myString{ &methodeName }.extract2()) {
-		isNotStatic = true;
-		*name = returnTypeName;
-		returnType = methodeOf;
-		s.removeUseless();
-	}
-	else {
-		if (returnTypeName != "void") {
-			if (genTypes.containKey(&returnTypeName))
-				returnType = genTypes.getType(returnTypeName);
-			else if (GLOBAL::getClasses()->containKey(&returnTypeName, &genTypes))
-				returnType = GLOBAL::getClasses()->getType(returnTypeName);
-			else
-				throw "??";
-			if (returnType == nullptr)
-				throw "??";
-		}
-		s.removeUseless();
-		*name = s.extractName();
-		s.removeUseless();
-	}
-
-
-	std::queue<std::string> args{ myString(&s.extractFunc2()).split2(',') };
-
-	size_t argsLen{ args.size() };
-	if (isNotStatic) {
-		argsLen++;
-	}
-	Interface** classes{ new Interface * [argsLen] };
-	std::string* argsName{ new std::string[argsLen] };
-	size_t argI{ 0 };
-	if (isNotStatic) {
-		argI++;
-		classes[0] = methodeOf;
-		argsName[0] = std::string{ "this" };
-		variables.add(argsName[0], classes[0]);
-	}
-
-	while (!args.empty() && argI < argsLen) {
-		std::string current = args.front();
-		myString m{ &current };
-		m.removeUseless();
-		std::string typeName{ m.extractName() };
-		if (genTypes.containKey(&typeName))
-			classes[argI] = genTypes.getType(typeName);
-		else if (GLOBAL::getClasses()->containKey(&typeName, &genTypes))
-			classes[argI] = GLOBAL::getClasses()->getType(typeName);
-		else
-			throw "??";
-		m.removeUseless();
-		argsName[argI] = current;
-
-		variables.add(argsName[argI], classes[argI]);
-
-		args.pop();
-		argI++;
-	}
-
-	if (!args.empty() || argI < argsLen)
-		throw "?";
-
-	s.removeUseless();
-
-	Signature* sig{ new Signature(methodeOf->getPath(),returnType, classes, argsName, argsLen) };
-	return new Function(sig, new PreFunction(*name, methodeOf, sig, s.extractFunc2(), &genTypes));
-}
-
 DTO::Command* DTO::FunctionBlock::clone()
 {
 	Command** cmds{ new Command * [m_commandLen] };
 	for (size_t c(0); c < m_commandLen; c++)
 		cmds[c] = m_commands[c]->clone();
 	return new FunctionBlock(cmds, m_commandLen);
-}
-
-DTO::FunctionBlock* DTO::FunctionBlock::parse(MemoryVariable& variables, std::string* str, MemorySourceFile& genTypes) {
-	myString s{ str };
-	std::queue<Command*> commands{};
-	std::queue<std::string> func{ myString(&s.extractFunc2()).split2(';') };
-
-	if (!func.empty()) {
-		std::string a{ func.front() };
-		myString m{ &a };
-		func.pop();
-
-		while (!func.empty()) {
-
-			m.removeUseless();
-			if (m.startWith("try")) {
-				while (true) {
-					std::string n{ func.front() };
-					myString m2{ &n };
-					m2.removeUseless();
-					if (m2.startWith("catch")) {
-						a += n;
-						func.pop();
-						continue;
-					}
-					break;
-				}
-			}
-
-			commands.push(Command::parse(nullptr, nullptr, variables, a, genTypes));
-
-			a = func.front();
-			func.pop();
-		}
-	}
-
-	size_t len{ commands.size() };
-	Command** cmds{ new Command * [len] };
-	size_t i{ 0 };
-	while (!commands.empty() && i < len) {
-		cmds[i] = commands.front();
-		commands.pop();
-		i++;
-	}
-	if (i < len - 1)
-		throw "?";
-
-	s.removeUseless();
-	return new FunctionBlock(cmds, len);
 }
 
 DTO::FunctionDynCom::FunctionDynCom(Command* ob, std::string name, Command** args, size_t argsLen)
@@ -425,101 +296,6 @@ DTO::Command* DTO::FunctionDynCom::clone()
 	for (size_t c(0); c < m_argsLen; c++)
 		cmds[c] = m_args[c]->clone();
 	return new FunctionDynCom(m_ob->clone(), m_name, cmds, m_argsLen);
-}
-
-DTO::PreFunction::PreFunction(std::string name, Class* functionOf, Signature* signature, std::string definition, MemorySourceFile* genTypes)
-	:IFunction(signature), m_name(name), m_functionOf(functionOf), m_definition(definition), m_genTypes(genTypes)
-{
-}
-
-DTO::PostFunction* DTO::PreFunction::convert(Function* _f)
-{
-	MemoryVariable variables{};
-	for (size_t i{ 0 }; i < m_signature->getArgsLen(); i++)
-		variables.add(m_signature->getArgsName()[i], m_signature->getArgsType()[i]);
-
-	myString s{ &m_definition };
-	std::queue<Command*> commands{};
-
-	s.removeUseless();
-
-	bool constructor{ false };
-	{
-		std::string sss{ m_functionOf->getName() };
-		constructor = myString{ &sss }.startWith(m_name);
-	}
-
-
-	if (constructor) {
-		//only classes
-		if (m_definition.at(0) == ':') {
-			s.extract(1);
-			s.removeUseless();
-			MemoryVariable var{};
-			commands.push(Command::parse(m_functionOf->extends(), nullptr, var, m_definition, *m_genTypes));
-			s.removeUseless();
-		}
-		else {
-			Class* parent{ m_functionOf->extends() };
-			if (!parent->getName()._Equal("Object")) {
-				Interface** cc{ new Interface * [1]{parent} };
-				if (Function * func{ parent->getStatFuncs()->get(parent->getName(), cc, 1) }) {
-					Command** cc2{ new Command * [1]{new Return("this", m_functionOf)} };
-					commands.push(new FunctionKnownCom(func, cc2, 1));
-				}
-				else {
-					throw "no default parent constructor";
-				}
-				delete[] cc;
-			}
-		}
-	}
-
-	std::queue<std::string> func{ myString(&s.extractFunc2()).split2(';') };
-
-	if (!func.empty()) {
-		std::string a{ func.front() };
-		myString m{ &a };
-		func.pop();
-
-		while (!func.empty()) {
-			m.removeUseless();
-			if (m.startWith("try")) {
-				while (true) {
-					std::string n{ func.front() };
-					myString m2{ &n };
-					m2.removeUseless();
-					if (m2.startWith("catch")) {
-						a += n;
-						func.pop();
-						continue;
-					}
-					break;
-				}
-			}
-			commands.push(Command::parse(nullptr, nullptr, variables, a, *m_genTypes));
-
-			a = func.front();
-			func.pop();
-		}
-	}
-
-	if (constructor) {
-		commands.push(new Return("this", m_signature->getReturnType()));
-	}
-
-	size_t len{ commands.size() };
-	Command** cmds{ new Command * [len] };
-	size_t i{ 0 };
-	while (!commands.empty() && i < len) {
-		cmds[i] = commands.front();
-		commands.pop();
-		i++;
-	}
-	if (i < len - 1)
-		throw "?";
-
-	return new PostFunction(m_signature, cmds, len);
 }
 
 void DTO::Function::swap()

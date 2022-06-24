@@ -26,7 +26,7 @@
 #include "IllegalArgumentException.h"
 #include "Array.h"
 
-void DTO::RedLang::importRedLang() {
+void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	ObjectClass* object{ new ObjectClass() };
 	GLOBAL::getClasses()->add(Paths::Object, object);
 
@@ -233,7 +233,7 @@ void DTO::RedLang::importRedLang() {
 	Double->getFuncs()->add("div", new Function(new Signature("", number, new Interface * [2]{ Double,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new DoubleC::Div(Double,argExcept) }, 1));
 	Double->getFuncs()->add("mod", new Function(new Signature("", number, new Interface * [2]{ Double,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new DoubleC::Mod(Double,argExcept) }, 1));
 
-	classClass->getStatFuncs()->add("Class", new Function(new Signature("", classClass, new Interface * [2]{ classClass,String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ClassClass::ClassConstruct(classClass) }, 1));
+	classClass->getStatFuncs()->add("Class", new Function(new Signature("", classClass, new Interface * [2]{ classClass,String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ClassClass::ClassConstruct(classClass,parser) }, 1));
 	classClass->getFuncs()->add("name", new Function(new Signature("", String, new Interface * [1]{ classClass }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ClassClass::GetName(String) }, 1));
 	classClass->getFuncs()->add("statVar", new Function(new Signature("", nullptr, new Interface * [2]{ classClass,String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ClassClass::GetStatVar(String) }, 1));
 	classClass->getFuncs()->add("invoke", new Function(new Signature("", nullptr, new Interface * [2]{ classClass,String }, new std::string[2]{ "this","func" }, 2, true), new Command * [1]{ new ClassClass::Invoke(String) }, 1));

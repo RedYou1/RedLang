@@ -12,7 +12,5 @@ namespace DTO {
 
 		std::string getPath() { return m_path; }
 		std::string getName() { return m_name; }
-
-		static SourceFile* loadFile(std::string path);
 	};
 }

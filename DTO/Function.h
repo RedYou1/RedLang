@@ -75,18 +75,12 @@ namespace DTO {
 		CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args, size_t size);
 
 		Function* clone();
-
-		static Function* parseDef(bool isNotStatic, Class* methodeOf, std::string* name, std::string* str, MemorySourceFile& genTypes);
 	};
 
 	class PreFunction :public IFunction {
-	private:
-		std::string m_name;
-		Class* m_functionOf;
-		std::string m_definition;
-		MemorySourceFile* m_genTypes;
 	public:
-		PreFunction(std::string name, Class* functionOf, Signature* signature, std::string definition, MemorySourceFile* genTypes);
+		PreFunction(Signature* signature)
+			:IFunction(signature) {}
 
 		CommandReturn* exec(MemoryObject& pre_mem, Command** args) override { throw "not converted"; }
 		CommandReturn* exec(MemoryObject& pre_mem, Command** args, size_t size) override { throw "not converted"; }
@@ -97,9 +91,7 @@ namespace DTO {
 
 		IFunction* clone() override { throw "not converted"; }
 
-		std::string getDefinition() { return m_definition; }
-
-		PostFunction* convert(Function* func);
+		virtual PostFunction* convert(Function* func) = 0;
 	};
 
 	class FunctionBlock : public Command {
@@ -117,8 +109,6 @@ namespace DTO {
 		size_t getcommandLen() { return m_commandLen; }
 
 		Command* clone() override;
-
-		static FunctionBlock* parse(MemoryVariable& variables, std::string* str, MemorySourceFile& genTypes);
 	};
 
 	class FunctionKnownCom :public Command {
