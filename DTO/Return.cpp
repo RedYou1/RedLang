@@ -1,4 +1,5 @@
 #include "Return.h"
+#include "myString.h"
 #include "MemoryFunction.h"
 #include "GarbageCollector.h"
 
