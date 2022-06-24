@@ -14,7 +14,7 @@ MemorySourceFile::~MemorySourceFile() {
 
 void MemorySourceFile::add(std::string name, SourceFile* o) {
 	if (m_vars.find(name) != m_vars.end())
-		return;
+		throw "variable already exists";
 	m_vars.insert(std::pair<std::string, SourceFile*>(name, o));
 }
 

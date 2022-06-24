@@ -8,7 +8,7 @@ BreakPoint::BreakPoint()
 
 CommandReturn* BreakPoint::exec(MemoryObject& mem)
 {
-	return new CommandReturn(new NullObject(GLOBAL::getClasses()->getClass(Paths::Object)), false, false);
+	return new CommandReturn(new NullObject(), false, false);
 }
 
 Command* BreakPoint::clone()
