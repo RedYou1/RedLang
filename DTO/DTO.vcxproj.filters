@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Commands">
+      <UniqueIdentifier>{851ac2a3-a506-4516-bce8-67756da4eb3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Files">
+      <UniqueIdentifier>{1ece2a3b-510c-4cbc-9696-9c3a0395e58e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Memories">
+      <UniqueIdentifier>{c31fc8a7-63e6-489a-9542-966cc3bee198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\RedLang">
+      <UniqueIdentifier>{a8a9c116-a6ba-4904-8861-27a4aa36f965}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\RedLang\Exceptions">
+      <UniqueIdentifier>{5d42856f-24e2-48be-8b2b-df43a68cc6f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\RedLang\Number">
+      <UniqueIdentifier>{30bdabb7-e5ce-462b-aaea-e5b73cd641aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Commands">
+      <UniqueIdentifier>{4401573d-ecb0-4a32-b1bf-11846e948faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Files">
+      <UniqueIdentifier>{91c0a5fb-0ea0-4c37-90c2-3a18ef5572b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Memories">
+      <UniqueIdentifier>{b59a02f3-4f43-4b02-b096-81b19e7ab0bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\RedLang">
+      <UniqueIdentifier>{f8c35471-15e5-4869-81c5-9f85ad6d00d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\RedLang\Number">
+      <UniqueIdentifier>{e6839c3a-69fc-4d3e-890d-77d1095bd5e6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BreakPoint.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Declaration.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Function.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="GetVar.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="If.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplaceStatVar.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplaceVar.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplaceVarInOb.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Return.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Try.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="While.h">
+      <Filter>Fichiers d%27en-tête\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Class.h">
+      <Filter>Fichiers d%27en-tête\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Generic.h">
+      <Filter>Fichiers d%27en-tête\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GenericFile.h">
+      <Filter>Fichiers d%27en-tête\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>Fichiers d%27en-tête\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceFile.h">
+      <Filter>Fichiers d%27en-tête\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryObject.h">
+      <Filter>Fichiers d%27en-tête\Memories</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryFunction.h">
+      <Filter>Fichiers d%27en-tête\Memories</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySourceFile.h">
+      <Filter>Fichiers d%27en-tête\Memories</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryStatVar.h">
+      <Filter>Fichiers d%27en-tête\Memories</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryVar.h">
+      <Filter>Fichiers d%27en-tête\Memories</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryVariable.h">
+      <Filter>Fichiers d%27en-tête\Memories</Filter>
+    </ClInclude>
+    <ClInclude Include="Array.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="Boolean.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="Char.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassClass.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="Exception.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionClass.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="Lock.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectClass.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="String.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
+    <ClInclude Include="CastException.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="NullException.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="IllegalArgumentException.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Byte.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Double.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Float.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Integer.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Long.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Number.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Short.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="GarbageCollector.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="myString.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="RedLang.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Signature.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="StatVar.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Var.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BreakPoint.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Declaration.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Function.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="If.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceStatVar.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceVar.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceVarInOb.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Return.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="While.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Class.cpp">
+      <Filter>Fichiers sources\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GenericFile.cpp">
+      <Filter>Fichiers sources\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface.cpp">
+      <Filter>Fichiers sources\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile.cpp">
+      <Filter>Fichiers sources\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryObject.cpp">
+      <Filter>Fichiers sources\Memories</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryFunction.cpp">
+      <Filter>Fichiers sources\Memories</Filter>
+    </ClCompile>
+    <ClCompile Include="MemorySourceFile.cpp">
+      <Filter>Fichiers sources\Memories</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryStatVar.cpp">
+      <Filter>Fichiers sources\Memories</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryVar.cpp">
+      <Filter>Fichiers sources\Memories</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryVariable.cpp">
+      <Filter>Fichiers sources\Memories</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectClass.cpp">
+      <Filter>Fichiers sources\RedLang</Filter>
+    </ClCompile>
+    <ClCompile Include="String.cpp">
+      <Filter>Fichiers sources\RedLang</Filter>
+    </ClCompile>
+    <ClCompile Include="Byte.cpp">
+      <Filter>Fichiers sources\RedLang\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Double.cpp">
+      <Filter>Fichiers sources\RedLang\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Float.cpp">
+      <Filter>Fichiers sources\RedLang\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Integer.cpp">
+      <Filter>Fichiers sources\RedLang\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Long.cpp">
+      <Filter>Fichiers sources\RedLang\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Short.cpp">
+      <Filter>Fichiers sources\RedLang\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Array.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GarbageCollector.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="myString.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="RedLang.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Signature.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Try.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
