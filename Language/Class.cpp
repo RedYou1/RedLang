@@ -130,10 +130,11 @@ Class* Class::parse(std::string path, std::string str, MemorySourceFile& genType
 			}
 			continue;
 		}
-		if (genTypes.containKey(word))
-			type = genTypes.getClass(word);
-		else if (GLOBAL::getClasses()->containKey(word))
-			type = GLOBAL::getClasses()->getClass(word);
+
+		if (genTypes.containKey(&word))
+			type = genTypes.getInterface(word);
+		else if (GLOBAL::getClasses()->containKey(&word, &genTypes))
+			type = GLOBAL::getClasses()->getInterface(word);
 		else
 			throw "??";
 		if (type == nullptr)

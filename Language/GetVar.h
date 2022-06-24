@@ -35,7 +35,7 @@ public:
 	virtual ~GetVar() override { GarbageCollector::Remove(m_o); }
 
 	CommandReturn* exec(MemoryObject& mem) override {
-		Object* cc{ m_o->get(m_name) };
+		IObject* cc{ m_o->get(m_name) };
 		return new CommandReturn(cc, true, false);
 	}
 	Command* clone()override { return new GetVar((Object*)m_o->clone(), m_name); }
@@ -51,11 +51,11 @@ public:
 
 	CommandReturn* exec(MemoryObject& mem) override {
 		CommandReturn* a{ m_o->exec(mem) };
-		if (a->getObject() == nullptr) {
+		if (dynamic_cast<NullObject*>(a->getObject()) != nullptr) {
 			delete a;
 			return new CommandReturn(new ExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), "GetVarFunc"), false, true);
 		}
-		Object* cc{ a->getObject()->get(m_name) };
+		IObject* cc{ ((Object*)a->getObject())->get(m_name) };
 		CommandReturn* r{ new CommandReturn(cc,true,false) };
 		delete a;
 		return r;

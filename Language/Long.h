@@ -15,7 +15,7 @@ class IntegerC;
 class FloatC;
 class DoubleC;
 
-class LongO : public Object {
+class LongO : public NumberO {
 public:
 	int64_t m_value;
 
@@ -24,6 +24,10 @@ public:
 	LongO(Class* type, int64_t value);
 
 	Object* clone()override;
+
+	int64_t toLong() override { return (int64_t)m_value; }
+	double_t toDouble() override { return (double_t)m_value; }
+	bool isInteger() override { return true; }
 };
 
 class LongC : public Class {

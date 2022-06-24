@@ -24,6 +24,7 @@
 #include "FunctionClass.h"
 #include "Number.h"
 #include "IllegalArgumentException.h"
+#include "Array.h"
 
 void RedLang::importRedLang() {
 	ObjectClass* object{ new ObjectClass() };
@@ -72,6 +73,9 @@ void RedLang::importRedLang() {
 	GLOBAL::getClasses()->add(Paths::NullException, nullExcept);
 	IllegalArgumentExceptionC* argExcept{ new IllegalArgumentExceptionC() };
 	GLOBAL::getClasses()->add(Paths::IllegalArgumentException, argExcept);
+
+	Array* array{ new Array() };
+	GLOBAL::getClasses()->add(Paths::Array, array);
 
 	object->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ object, object }, new std::string[]{ "this","c" }, 2), new Command * [1]{ new ObjectClass::Equals(Bool) }, 1));
 	object->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ object }, new std::string[]{ "this" }, 1), new Command * [1]{ new ObjectClass::ToString(String) }, 1));

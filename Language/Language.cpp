@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 			Interface** cc{ new Interface * [1] {r->getObject()->getClass()} };
 			Function* func{ r->getObject()->getClass()->getFuncs()->get("toString",cc,1) };
 			delete[] cc;
-			Object** cmds{ new Object * [1] {r->getObject()} };
+			IObject** cmds{ new IObject * [1] {r->getObject()} };
 			MemoryObject _mem{ };
 			CommandReturn* r2{ func->exec(_mem, cmds) };
 			delete[] cmds;

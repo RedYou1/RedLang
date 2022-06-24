@@ -22,8 +22,8 @@ public:
 		BooleanC* m_s;
 		Equals(BooleanC* s) :m_s(s) {}
 		CommandReturn* exec(MemoryObject& mem) override {
-			Object* o{ mem.get("this") };
-			Object* c{ mem.get("c") };
+			IObject* o{ mem.get("this") };
+			IObject* c{ mem.get("c") };
 			return new CommandReturn(new BooleanO(m_s, o == c), true, false);
 		}
 		Command* clone()override { return new Equals(m_s); }
@@ -33,10 +33,17 @@ public:
 		StringC* m_s;
 		ToString(StringC* s) :m_s(s) {}
 		CommandReturn* exec(MemoryObject& mem) override {
-			Object* o{ (Object*)mem.get("this") };
+			IObject* o{ mem.get("this") };
 			std::stringstream ss;
 
-			ss << o->getClass()->getName() << "@" << std::hex << (void*)o;
+
+			ss << o->getClass()->getName() << "@";
+			if (dynamic_cast<NullObject*>(o) != nullptr) {
+				ss << "NULL";
+			}
+			else {
+				ss << std::hex << (void*)o;
+			}
 
 			return new CommandReturn(new StringO(m_s, ss.str()), true, false);
 		}

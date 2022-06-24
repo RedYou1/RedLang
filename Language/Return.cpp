@@ -29,7 +29,7 @@ Command* Return::parse(MemoryVariable& variables, std::string& s, MemorySourceFi
 	ms.removeUseless();
 
 	if (s._Equal("NULL")) {
-		return nullptr;
+		return new ReturnObj(new NullObject());
 	}
 
 	Command* pre{ nullptr };
@@ -38,6 +38,8 @@ Command* Return::parse(MemoryVariable& variables, std::string& s, MemorySourceFi
 		ms.extract(3);
 		ms.removeUseless();
 		std::string className{ ms.extractName() };
+		if (!GLOBAL::getClasses()->containKey(&className, &genTypes))
+			throw "??";
 		Class* sc{ GLOBAL::getClasses()->getClass(className) };//TODO new on interface when declaring the missing function
 		if (sc == nullptr)
 			throw "??";
@@ -76,7 +78,7 @@ Command* Return::parse(MemoryVariable& variables, std::string& s, MemorySourceFi
 		Interface** in{ new Interface * [2]{string,string} };
 		Function* f{ string->getStatFuncs()->get("String",in,2) };
 		delete[] in;
-		pre = new ObjectCreator(f, new Object * [2]{ nullptr, new StringO(string,v) }, 2);
+		pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new StringO(string,v) }, 2);
 	}
 
 	else if (s.at(0) == '\'') {
@@ -92,7 +94,7 @@ Command* Return::parse(MemoryVariable& variables, std::string& s, MemorySourceFi
 		Interface** in{ new Interface * [2]{_char,_char} };
 		Function* f{ _char->getStatFuncs()->get("Char",in,2) };
 		delete[] in;
-		pre = new ObjectCreator(f, new Object * [2]{ nullptr, new CharO(_char,temp) }, 2);
+		pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new CharO(_char,temp) }, 2);
 	}
 	else {
 		std::string temp{ ms.extractName() };
@@ -105,42 +107,42 @@ Command* Return::parse(MemoryVariable& variables, std::string& s, MemorySourceFi
 				Interface** in{ new Interface * [2]{Byte,Byte} };
 				Function* f{ Byte->getStatFuncs()->get("Byte",in,2) };
 				delete[] in;
-				pre = new ObjectCreator(f, new Object * [2]{ nullptr, new ByteO(Byte,(int8_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
+				pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new ByteO(Byte,(int8_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 's': {
 				Class* Short{ GLOBAL::getClasses()->getClass(Paths::Short) };
 				Interface** in{ new Interface * [2]{Short,Short} };
 				Function* f{ Short->getStatFuncs()->get("Short",in,2) };
 				delete[] in;
-				pre = new ObjectCreator(f, new Object * [2]{ nullptr, new ShortO(Short,(int16_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
+				pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new ShortO(Short,(int16_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'i': {
 				Class* Integer{ GLOBAL::getClasses()->getClass(Paths::Interger) };
 				Interface** in{ new Interface * [2]{Integer,Integer} };
 				Function* f{ Integer->getStatFuncs()->get("Integer",in,2) };
 				delete[] in;
-				pre = new ObjectCreator(f, new Object * [2]{ nullptr, new IntegerO(Integer,(int32_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
+				pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new IntegerO(Integer,(int32_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'f': {
 				Class* Float{ GLOBAL::getClasses()->getClass(Paths::Float) };
 				Interface** in{ new Interface * [2]{Float,Float} };
 				Function* f{ Float->getStatFuncs()->get("Float",in,2) };
 				delete[] in;
-				pre = new ObjectCreator(f, new Object * [2]{ nullptr, new FloatO(Float,(float_t)std::strtod(temp.c_str(),NULL)) }, 2);
+				pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new FloatO(Float,(float_t)std::strtod(temp.c_str(),NULL)) }, 2);
 				break;
 			}case 'l': {
 				Class* Long{ GLOBAL::getClasses()->getClass(Paths::Long) };
 				Interface** in{ new Interface * [2]{Long,Long} };
 				Function* f{ Long->getStatFuncs()->get("Long",in,2) };
 				delete[] in;
-				pre = new ObjectCreator(f, new Object * [2]{ nullptr,new LongO(Long,(int64_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
+				pre = new ObjectCreator(f, new IObject * [2]{ nullptr,new LongO(Long,(int64_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'd': {
 				Class* Double{ GLOBAL::getClasses()->getClass(Paths::Double) };
 				Interface** in{ new Interface * [2]{Double,Double} };
 				Function* f{ Double->getStatFuncs()->get("Double",in,2) };
 				delete[] in;
-				pre = new ObjectCreator(f, new Object * [2]{ nullptr, new DoubleO(Double,(double_t)std::strtod(temp.c_str(),NULL)) }, 2);
+				pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new DoubleO(Double,(double_t)std::strtod(temp.c_str(),NULL)) }, 2);
 				break;
 			}default: {
 				throw "??";
@@ -152,14 +154,14 @@ Command* Return::parse(MemoryVariable& variables, std::string& s, MemorySourceFi
 			Interface** in{ new Interface * [2]{Bool,Bool} };
 			Function* f{ Bool->getStatFuncs()->get("Boolean",in,2) };
 			delete[] in;
-			pre = new ObjectCreator(f, new Object * [2]{ nullptr, new BooleanO(Bool, true) }, 2);
+			pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new BooleanO(Bool, true) }, 2);
 		}
 		else if (temp._Equal("false")) {
 			Class* Bool{ GLOBAL::getClasses()->getClass(Paths::Boolean) };
 			Interface** in{ new Interface * [2]{Bool,Bool} };
 			Function* f{ Bool->getStatFuncs()->get("Boolean",in,2) };
 			delete[] in;
-			pre = new ObjectCreator(f, new Object * [2]{ nullptr, new BooleanO(Bool, false) }, 2);
+			pre = new ObjectCreator(f, new IObject * [2]{ nullptr, new BooleanO(Bool, false) }, 2);
 		}
 		else
 			s = temp + s;
@@ -172,7 +174,7 @@ Command* Return::parse(MemoryVariable& variables, std::string& s, MemorySourceFi
 		if (variables.containKey(arg1)) {
 			pre = new Return(arg1, variables.get(arg1));
 		}
-		else if (genTypes.containKey(arg1)) {
+		else if (genTypes.containKey(&arg1)) {
 			ms.extract(1);
 			SourceFile* c{ genTypes.get(arg1) };
 			if (dynamic_cast<Class*>(c))
@@ -183,7 +185,7 @@ Command* Return::parse(MemoryVariable& variables, std::string& s, MemorySourceFi
 				return new ReturnObj(new ClassO(GLOBAL::getClasses()->getClass(Paths::Class), c));
 			}
 		}
-		else if (GLOBAL::getClasses()->containKey(arg1)) {
+		else if (GLOBAL::getClasses()->containKey(&arg1, &genTypes)) {
 			ms.extract(1);
 			SourceFile* c{ GLOBAL::getClasses()->get(arg1) };
 			if (dynamic_cast<Class*>(c))
@@ -316,9 +318,8 @@ CommandReturn* InstanceFunc::exec(MemoryObject& pre_mem) {
 	}
 	delete[] args;
 	delete[] argsType;
-	CommandReturn* c{ new CommandReturn(r->getObject(), false, false) };
-	delete r;
-	return c;
+	r->setReturn(false);
+	return r;
 }
 
 Command* InstanceFunc::clone()
@@ -332,7 +333,10 @@ Command* InstanceFunc::clone()
 
 ReturnCom::ReturnCom(Command* cmd)
 	:m_cmd(cmd)
-{}
+{
+	if (m_cmd == nullptr)
+		throw "??";
+}
 
 ReturnCom::~ReturnCom()
 {
@@ -341,8 +345,6 @@ ReturnCom::~ReturnCom()
 
 CommandReturn* ReturnCom::exec(MemoryObject& mem)
 {
-	if (m_cmd == nullptr)
-		return new CommandReturn(nullptr, true, false);
 	CommandReturn* r{ m_cmd->exec(mem) };
 	r->setReturn(true);
 	return r;
@@ -353,9 +355,11 @@ Command* ReturnCom::clone()
 	return new ReturnCom(m_cmd->clone());
 }
 
-ReturnObj::ReturnObj(Object* cmd)
+ReturnObj::ReturnObj(IObject* cmd)
 	:m_cmd(cmd)
 {
+	if (m_cmd == nullptr)
+		throw "??";
 	GarbageCollector::Add(m_cmd);
 }
 
@@ -371,7 +375,7 @@ CommandReturn* ReturnObj::exec(MemoryObject& mem)
 
 Command* ReturnObj::clone()
 {
-	return new ReturnObj((Object*)m_cmd->clone());
+	return new ReturnObj(m_cmd->clone());
 }
 
 
@@ -397,7 +401,7 @@ Command* Throw::clone()
 	return new Throw(m_cmd->clone());
 }
 
-ObjectCreator::ObjectCreator(Function* func, Object** args, size_t argsLen)
+ObjectCreator::ObjectCreator(Function* func, IObject** args, size_t argsLen)
 	:m_func(func), m_args(args), m_argsLen(argsLen)
 {
 	for (size_t c(1); c < m_argsLen; c++)
@@ -413,10 +417,10 @@ ObjectCreator::~ObjectCreator()
 
 CommandReturn* ObjectCreator::exec(MemoryObject& pre_mem)
 {
-	Object** cmds{ new Object * [m_argsLen] };
+	IObject** cmds{ new IObject * [m_argsLen] };
 	cmds[0] = nullptr;
 	for (size_t c(1); c < m_argsLen; c++) {
-		cmds[c] = (Object*)m_args[c]->clone();
+		cmds[c] = m_args[c]->clone();
 		GarbageCollector::Add(cmds[c]);
 	}
 	CommandReturn* r{ m_func->exec(pre_mem, cmds, m_argsLen) };
@@ -429,7 +433,7 @@ CommandReturn* ObjectCreator::exec(MemoryObject& pre_mem)
 
 Command* ObjectCreator::clone()
 {
-	Object** cmds{ new Object * [m_argsLen] };
+	IObject** cmds{ new IObject * [m_argsLen] };
 	cmds[0] = nullptr;
 	for (size_t c(1); c < m_argsLen; c++)
 		cmds[c] = m_args[c]->clone();

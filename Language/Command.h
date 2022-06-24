@@ -5,19 +5,20 @@ class MemoryObject;
 class MemoryVariable;
 class MemorySourceFile;
 class Object;
+class IObject;
 
 class Command;
 
 class CommandReturn {
 private:
-	Object* m_object;
+	IObject* m_object;
 	bool m_return;
 	bool m_throw;
 public:
-	CommandReturn(Object* object, bool _return, bool _throw);
+	CommandReturn(IObject* object, bool _return, bool _throw);
 	CommandReturn(CommandReturn* value);
 	~CommandReturn();
-	Object* getObject();
+	IObject* getObject();
 	bool exitFunction();
 	bool isReturn();
 	void setReturn(bool _return);

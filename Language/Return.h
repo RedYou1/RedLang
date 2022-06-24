@@ -34,9 +34,9 @@ public:
 
 class ReturnObj :public Command {
 private:
-	Object* m_cmd;
+	IObject* m_cmd;
 public:
-	ReturnObj(Object* cmd);
+	ReturnObj(IObject* cmd);
 	~ReturnObj();
 
 	CommandReturn* exec(MemoryObject& mem) override;
@@ -57,10 +57,10 @@ public:
 class ObjectCreator :public Command {
 public:
 	Function* m_func;
-	Object** m_args;
+	IObject** m_args;
 	size_t m_argsLen;
 public:
-	ObjectCreator(Function* func, Object** args, size_t argsLen);
+	ObjectCreator(Function* func, IObject** args, size_t argsLen);
 	virtual ~ObjectCreator() override;
 	CommandReturn* exec(MemoryObject& pre_mem) override;
 	Command* clone()override;

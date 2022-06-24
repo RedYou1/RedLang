@@ -1,12 +1,11 @@
-#include "Generic.h"
+#include "GenericFile.h"
 #include "myString.h"
 #include "MemorySourceFile.h"
 #include "Class.h"
 #include "Global.h"
 
-Generic::Generic(std::string name, std::string path, std::string type, std::queue<std::string> genTypes, std::string content)
-	:SourceFile(name, path),
-	m_path(path),
+GenericFile::GenericFile(std::string name, std::string path, std::string type, std::queue<std::string> genTypes, std::string content)
+	:Generic(name, path),
 	m_type(type),
 	m_genSize(genTypes.size()),
 	m_genTypes(),
@@ -20,7 +19,7 @@ Generic::Generic(std::string name, std::string path, std::string type, std::queu
 	}
 }
 
-SourceFile* Generic::create(std::string newName, SourceFile** gens, size_t genSize)
+SourceFile* GenericFile::create(std::string newName, SourceFile** gens, size_t genSize)
 {
 	if (genSize != m_genSize)
 		throw "??";
@@ -34,10 +33,10 @@ SourceFile* Generic::create(std::string newName, SourceFile** gens, size_t genSi
 
 	SourceFile* r{ nullptr };
 	if (m_type == "class") {
-		r = Class::parse(m_path, str, *genTypes);
+		r = Class::parse(getPath(), str, *genTypes);
 	}
 	else if (m_type == "interface") {
-		r = Interface::parse(m_path, str, *genTypes);
+		r = Interface::parse(getPath(), str, *genTypes);
 	}
 	else {
 		throw "??";
@@ -48,9 +47,9 @@ SourceFile* Generic::create(std::string newName, SourceFile** gens, size_t genSi
 	return r;
 }
 
-Generic* Generic::parse(std::string path, std::string type, std::string name, std::queue<std::string> genTypes, std::string content)
+GenericFile* GenericFile::parse(std::string path, std::string type, std::string name, std::queue<std::string> genTypes, std::string content)
 {
-	Generic* g{ new Generic(name,path, type, genTypes, content) };
+	GenericFile* g{ new GenericFile(name,path, type, genTypes, content) };
 	GLOBAL::getClasses()->set(name, g);
 	return g;
 }

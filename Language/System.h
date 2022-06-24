@@ -29,32 +29,32 @@ public:
 	class print :public Command {
 	public:
 		CommandReturn* exec(MemoryObject& mem) {
-			Object* s{ mem.get("s") };
+			IObject* s{ mem.get("s") };
 			Interface** cc{ new Interface * [1] {s->getClass()} };
 			Function* func{ s->getClass()->getFuncs()->get("toString",cc,1) };
 			delete[] cc;
-			Object** cmds{ new Object * [1] {s} };
+			IObject** cmds{ new IObject * [1] {s} };
 			CommandReturn* r{ func->exec(mem, cmds,1) };
 			delete[] cmds;
 			std::cout << ((StringO*)r->getObject())->m_value;
 			delete r;
-			return new CommandReturn(nullptr, true, false);
+			return new CommandReturn(new NullObject(), true, false);
 		}
 		Command* clone()override { return new print(); }
 	};
 	class println :public Command {
 	public:
 		CommandReturn* exec(MemoryObject& mem) {
-			Object* s{ mem.get("s") };
+			IObject* s{ mem.get("s") };
 			Interface** cc{ new Interface * [1] {s->getClass()} };
 			Function* func{ s->getClass()->getFuncs()->get("toString",cc,1) };
 			delete[] cc;
-			Object** cmds{ new Object * [1] {s} };
+			IObject** cmds{ new IObject * [1] {s} };
 			CommandReturn* r{ func->exec(mem, cmds,1) };
 			delete[] cmds;
 			std::cout << ((StringO*)r->getObject())->m_value << std::endl;
 			delete r;
-			return new CommandReturn(nullptr, true, false);
+			return new CommandReturn(new NullObject(), true, false);
 		}
 		Command* clone()override { return new println(); }
 	};

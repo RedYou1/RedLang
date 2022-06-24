@@ -6,6 +6,7 @@ include "BoucleA.RedSrc"
 include "BoucleB.RedSrc"
 include "Generic.RedSrc"
 include "Pair.RedSrc"
+include "HeatMap.RedSrc"
 
 class test{
 
@@ -162,10 +163,6 @@ class test{
 		ba.test(bb,10i);
 
 		System.println(4.256f);
-	}
-
-	static function void main(){
-		test.preMain();
 
 		Generic<Integer> g = new Generic<Integer>(1i);
 		Generic<String> g2 = new Generic<String>("allo");
@@ -177,6 +174,22 @@ class test{
 		System.println(p);
 		Pair<String,Integer> p2 = new Pair<String,Integer>("allo",2i);
 		System.println(p2);
+	}
+
+	static function void main(){
+		test.preMain();
+
+		HeatMap<Integer> heatMap = new HeatMap<Integer>(3i,3i);
+		heatMap.Set(10i,0i,0i);
+		heatMap.Set(3i,1i,0i);
+		heatMap.Set(99i,2i,0i);
+		heatMap.Set(13i,0i,1i);
+		heatMap.Set(43i,1i,1i);
+		heatMap.Set(70i,2i,1i);
+		heatMap.Set(-1i,0i,2i);
+		heatMap.Set(20i,1i,2i);
+		heatMap.Set(51i,2i,2i);
+		System.println(heatMap);
 
 		throw new Exception("FINI");
 	}

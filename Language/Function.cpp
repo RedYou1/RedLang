@@ -63,10 +63,10 @@ CommandReturn* FunctionBlock::exec(MemoryObject& pre_mem) {
 			return r;
 		delete r;
 	}
-	return new CommandReturn(nullptr, false, false);
+	return new CommandReturn(new NullObject(), false, false);
 }
 
-CommandReturn* FunctionBlock::exec2(MemoryObject& pre_mem, std::string* name, Object** args, size_t argsLen) {
+CommandReturn* FunctionBlock::exec2(MemoryObject& pre_mem, std::string* name, IObject** args, size_t argsLen) {
 	MemoryObject mem(&pre_mem);
 
 	for (size_t c(0); c < argsLen; c++)
@@ -78,7 +78,7 @@ CommandReturn* FunctionBlock::exec2(MemoryObject& pre_mem, std::string* name, Ob
 			return r;
 		delete r;
 	}
-	return new CommandReturn(nullptr, false, false);
+	return new CommandReturn(new NullObject(), false, false);
 }
 
 CommandReturn* PostFunction::exec(MemoryObject& mem)
@@ -90,9 +90,11 @@ CommandReturn* PostFunction::exec(MemoryObject& mem)
 	for (size_t c{ 0 }; c < m_commandLen; c++) {
 		CommandReturn* r{ m_commands[c]->exec(mem) };
 		if (r->exitFunction()) {
-			if (r->getObject() == nullptr)
+			if (r->isThrow()) {
 				return r;
-			if (r->getObject()->getClass()->instanceOf(m_signature->getReturnType())) {
+			}
+			if (dynamic_cast<NullObject*>(r->getObject()) != nullptr ||
+				r->getObject()->getClass()->instanceOf(m_signature->getReturnType())) {
 				return r;
 			}
 			else
@@ -100,7 +102,7 @@ CommandReturn* PostFunction::exec(MemoryObject& mem)
 		}
 		delete r;
 	}
-	return new CommandReturn(nullptr, false, false);
+	return new CommandReturn(new NullObject(m_signature->getReturnType()), false, false);
 }
 
 PostFunction::PostFunction(Signature* signature, Command** commands, size_t commandLen)
@@ -129,7 +131,8 @@ CommandReturn* PostFunction::exec(MemoryObject& pre_mem, Command** args, size_t 
 			if (ob->isThrow())
 				return ob;
 
-			if (!ob->getObject()->getClass()->instanceOf(m_signature->getArgsType()[c]))
+			if (dynamic_cast<Object*>(ob->getObject()) != nullptr &&
+				!ob->getObject()->getClass()->instanceOf(m_signature->getArgsType()[c]))
 				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "FunctionArgs", ob, m_signature->getArgsType()[c]), false, true);
 
 			mem.add(m_signature->getArgsName()[c], ob->getObject(), m_signature->getArgsType()[c]);
@@ -155,21 +158,22 @@ CommandReturn* PostFunction::exec(MemoryObject& pre_mem, Command** args, size_t 
 	return exec(mem);
 }
 
-CommandReturn* PostFunction::exec(MemoryObject& pre_mem, Object** args)
+CommandReturn* PostFunction::exec(MemoryObject& pre_mem, IObject** args)
 {
 	return exec(pre_mem, args, m_signature->getArgsLen());
 }
 
-CommandReturn* PostFunction::exec(MemoryObject& pre_mem, Object** args, size_t args_size) {
+CommandReturn* PostFunction::exec(MemoryObject& pre_mem, IObject** args, size_t args_size) {
 	MemoryObject mem{ &pre_mem };
 	for (size_t c{ 0 }; c < m_signature->getArgsLen(); c++) {
 		if (args[c] == nullptr) {
 			mem.add(m_signature->getArgsName()[c], nullptr, m_signature->getArgsType()[c]);
 		}
 		else {
-			Object* ob{ args[c] };
+			IObject* ob{ args[c] };
 
-			if (!ob->getClass()->instanceOf(m_signature->getArgsType()[c]))
+			if (dynamic_cast<Object*>(ob) != nullptr &&
+				!ob->getClass()->instanceOf(m_signature->getArgsType()[c]))
 				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "FunctionArgs", new CommandReturn(ob, false, false), m_signature->getArgsType()[c]), false, true);
 
 			mem.add(m_signature->getArgsName()[c], ob, m_signature->getArgsType()[c]);
@@ -181,7 +185,7 @@ CommandReturn* PostFunction::exec(MemoryObject& pre_mem, Object** args, size_t a
 			mem.add(std::to_string(c - m_signature->getArgsLen()), nullptr, nullptr);
 		}
 		else {
-			Object* ob{ args[c] };
+			IObject* ob{ args[c] };
 
 			mem.add(std::to_string(c - m_signature->getArgsLen()), ob, nullptr);
 		}
@@ -207,7 +211,8 @@ CommandReturn* PostFunction::exec(MemoryObject& pre_mem, CommandReturn** args, s
 			if (ob->isThrow())
 				return ob;
 
-			if (!ob->getObject()->getClass()->instanceOf(m_signature->getArgsType()[c]))
+			if (dynamic_cast<Object*>(ob->getObject()) != nullptr &&
+				!ob->getObject()->getClass()->instanceOf(m_signature->getArgsType()[c]))
 				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "FunctionArgs", ob, m_signature->getArgsType()[c]), false, true);
 
 			mem.add(m_signature->getArgsName()[c], ob->getObject(), m_signature->getArgsType()[c]);
@@ -254,9 +259,9 @@ Function* Function::parseDef(bool isNotStatic, Class* methodeOf, std::string* na
 	}
 	else {
 		if (returnTypeName != "void") {
-			if (genTypes.containKey(returnTypeName))
+			if (genTypes.containKey(&returnTypeName))
 				returnType = genTypes.getType(returnTypeName);
-			else if (GLOBAL::getClasses()->containKey(returnTypeName))
+			else if (GLOBAL::getClasses()->containKey(&returnTypeName, &genTypes))
 				returnType = GLOBAL::getClasses()->getType(returnTypeName);
 			else
 				throw "??";
@@ -290,9 +295,9 @@ Function* Function::parseDef(bool isNotStatic, Class* methodeOf, std::string* na
 		myString m{ &current };
 		m.removeUseless();
 		std::string typeName{ m.extractName() };
-		if (genTypes.containKey(typeName))
+		if (genTypes.containKey(&typeName))
 			classes[argI] = genTypes.getType(typeName);
-		else if (GLOBAL::getClasses()->containKey(typeName))
+		else if (GLOBAL::getClasses()->containKey(&typeName, &genTypes))
 			classes[argI] = GLOBAL::getClasses()->getType(typeName);
 		else
 			throw "??";
@@ -539,13 +544,13 @@ CommandReturn* Function::exec(MemoryObject& pre_mem, Command** args, size_t size
 	return m_function->exec(pre_mem, args, size);
 }
 
-CommandReturn* Function::exec(MemoryObject& pre_mem, Object** args)
+CommandReturn* Function::exec(MemoryObject& pre_mem, IObject** args)
 {
 	swap();
 	return m_function->exec(pre_mem, args);
 }
 
-CommandReturn* Function::exec(MemoryObject& pre_mem, Object** args, size_t size)
+CommandReturn* Function::exec(MemoryObject& pre_mem, IObject** args, size_t size)
 {
 	swap();
 	return m_function->exec(pre_mem, args, size);

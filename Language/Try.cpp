@@ -22,7 +22,7 @@ CommandReturn* Try::exec(MemoryObject& mem)
 		for (size_t c(0); c < m_catchLen; c++) {
 			if (r->getObject()->getClass()->instanceOf(m_catchKeys[c])) {
 				std::string* name{ new std::string[1]{m_names[c]} };
-				Object** coms{ new Object * [1]{r->getObject()} };
+				IObject** coms{ new IObject * [1]{r->getObject()} };
 				CommandReturn* r2{ m_catchs[c]->exec2(mem,name,coms,1) };
 				delete[] coms;
 				delete[] name;

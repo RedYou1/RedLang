@@ -6,7 +6,10 @@ Declaration::Declaration(Interface* type, std::string name, Command* cmd)
 
 CommandReturn* Declaration::exec(MemoryObject& mem) {
 	CommandReturn* obj{ m_cmd->exec(mem) };
-	if (!obj->getObject()->getClass()->instanceOf(m_type))
+	if (obj->isThrow())
+		return obj;
+	if (dynamic_cast<Object*>(obj->getObject()) != nullptr &&
+		!obj->getObject()->getClass()->instanceOf(m_type))
 		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "Declaration", obj, m_type), false, true);
 	mem.add(m_name, obj->getObject(), m_type);
 	obj->setReturn(false);

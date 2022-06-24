@@ -9,16 +9,16 @@ private:
 
 	class Memory {
 	private:
-		Object* m_object;
+		IObject* m_object;
 		Interface* m_type;
 	public:
-		Memory(Object* object, Interface* type);
+		Memory(IObject* object, Interface* type);
 		~Memory();
 
-		Object* getObject();
+		IObject* getObject();
 		Interface* getType();
 
-		void setObject(Object* object);
+		void setObject(IObject* object);
 	};
 
 	MemoryObject* m_parent;
@@ -28,12 +28,12 @@ public:
 	MemoryObject(MemoryObject* parent);
 	~MemoryObject();
 
-	void add(std::string name, Object* object, Interface* type);
-	void set(std::string name, Object* object);
+	void add(std::string name, IObject* object, Interface* type);
+	void set(std::string name, IObject* object);
 
 	bool containKey(std::string name);
 
-	Object* get(std::string name);
+	IObject* get(std::string name);
 
 	size_t size();
 };

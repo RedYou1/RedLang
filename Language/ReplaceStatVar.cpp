@@ -9,7 +9,8 @@ ReplaceStatVar::ReplaceStatVar(Class* _class, std::string name, Command* value)
 CommandReturn* ReplaceStatVar::exec(MemoryObject& mem) {
 	CommandReturn* r{ m_value->exec(mem) };
 	StatVar* var{ m_class->getStatVars()->get(m_name) };
-	if (!r->getObject()->getClass()->instanceOf(var->GetType()))
+	if (dynamic_cast<Object*>(r->getObject()) != nullptr &&
+		!r->getObject()->getClass()->instanceOf(var->GetType()))
 		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "ReplaceStatVar", r, var->GetType()), false, true);
 	m_class->getStatVars()->set(m_name, r->getObject());
 	return r;

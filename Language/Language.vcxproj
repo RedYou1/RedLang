@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Array.cpp" />
     <ClCompile Include="BreakPoint.cpp" />
     <ClCompile Include="Byte.cpp" />
     <ClCompile Include="Class.cpp" />
@@ -149,7 +150,7 @@
     <ClCompile Include="Float.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="GarbageCollector.cpp" />
-    <ClCompile Include="Generic.cpp" />
+    <ClCompile Include="GenericFile.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="If.cpp" />
     <ClCompile Include="Integer.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="While.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Array.h" />
     <ClInclude Include="Boolean.h" />
     <ClInclude Include="BreakPoint.h" />
     <ClInclude Include="Byte.h" />
@@ -194,6 +196,7 @@
     <ClInclude Include="FunctionClass.h" />
     <ClInclude Include="GarbageCollector.h" />
     <ClInclude Include="Generic.h" />
+    <ClInclude Include="GenericFile.h" />
     <ClInclude Include="GetVar.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="If.h" />

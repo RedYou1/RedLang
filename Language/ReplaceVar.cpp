@@ -6,7 +6,8 @@ ReplaceVar::ReplaceVar(Interface* type, std::string name, Command* cmd)
 
 CommandReturn* ReplaceVar::exec(MemoryObject& mem) {
 	CommandReturn* obj{ m_cmd->exec(mem) };
-	if (!obj->getObject()->getClass()->instanceOf(m_type))
+	if (dynamic_cast<Object*>(obj->getObject()) != nullptr &&
+		!obj->getObject()->getClass()->instanceOf(m_type))
 		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "ReplaceVar", obj, m_type), false, true);
 	mem.set(m_name, obj->getObject());
 	obj->setReturn(false);

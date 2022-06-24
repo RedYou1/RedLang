@@ -11,13 +11,12 @@ private:
 	bool m_delete;
 public:
 	MemorySourceFile(bool _delete) : m_delete(_delete), m_vars(std::map<std::string, SourceFile*>()) {}
-	MemorySourceFile(MemorySourceFile& dub);
 	~MemorySourceFile();
 
 	void add(std::string name, SourceFile* o);
 	void set(std::string name, SourceFile* o);
 
-	bool containKey(std::string name);
+	bool containKey(std::string* name, MemorySourceFile* _genTypes = nullptr);
 
 	SourceFile* get(std::string name);
 	Interface* getType(std::string name);

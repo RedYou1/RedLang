@@ -2,7 +2,7 @@
 #include "SourceFile.h"
 #include "myString.h"
 #include "Global.h"
-#include "Generic.h"
+#include "GenericFile.h"
 
 SourceFile::SourceFile(std::string name, std::string path)
 	:m_name(name), m_path(path)
@@ -25,7 +25,7 @@ SourceFile* SourceFile::loadFile(std::string filePath) {
 			std::string p{ filePath };
 			p = myString{ &p }.split("\\").back();
 			p = myString{ &p }.extract(".");
-			if (GLOBAL::getClasses()->containKey(p)) {
+			if (GLOBAL::getClasses()->containKey(&p)) {
 				file.close();
 				return GLOBAL::getClasses()->get(p);
 			}
@@ -67,7 +67,7 @@ SourceFile* SourceFile::loadFile(std::string filePath) {
 		s.removeUseless();
 		if (content.at(0) == '<') {
 			std::queue<std::string> q{ myString(&s.extractFunc2()).split2(',') };
-			return Generic::parse(path, instru, name, q, content);
+			return GenericFile::parse(path, instru, name, q, content);
 		}
 		else {
 			MemorySourceFile* g{ new MemorySourceFile {false} };

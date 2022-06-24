@@ -76,7 +76,7 @@ public:
 		CommandReturn* exec(MemoryObject& mem) override {
 			LockO* a{ (LockO*)mem.get("this") };
 			a->m_lock = new std::lock_guard<std::mutex>(*a->m_mutex);
-			return new CommandReturn(nullptr, true, false);
+			return new CommandReturn(new NullObject(), true, false);
 		}
 		Command* clone()override { return new Lock(m_s); }
 	};
@@ -92,7 +92,7 @@ public:
 				return new CommandReturn(new StringO(m_s, "Not locked"), false, true);
 			a->m_lock = nullptr;
 			delete b;
-			return new CommandReturn(nullptr, true, false);
+			return new CommandReturn(new NullObject(), true, false);
 		}
 		Command* clone()override { return new Unlock(m_s); }
 	};

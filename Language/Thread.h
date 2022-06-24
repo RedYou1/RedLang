@@ -16,13 +16,13 @@ class ThreadO : public Object {
 public:
 	Function* m_func;
 
-	Object** m_args;
+	IObject** m_args;
 	size_t m_argsLen;
 
 	std::thread* m_thread;
 	bool m_joined;
 
-	ThreadO(Class* type, Function* func, Object** args, size_t argsLen)
+	ThreadO(Class* type, Function* func, IObject** args, size_t argsLen)
 		:Object(type), m_func(func), m_thread(nullptr), m_joined(false),
 		m_args{ args }, m_argsLen(argsLen)
 	{}
@@ -39,9 +39,9 @@ public:
 	}
 
 	Object* clone()override {
-		Object** cmd{ new Object * [m_argsLen] };
+		IObject** cmd{ new IObject * [m_argsLen] };
 		for (size_t c{ 0 }; c < m_argsLen; c++) {
-			cmd[c] = (Object*)m_args[c]->clone();
+			cmd[c] = m_args[c]->clone();
 			GarbageCollector::Add(cmd[c]);
 		}
 		return new ThreadO(m_type, m_func, cmd, m_argsLen);
@@ -96,7 +96,7 @@ public:
 
 			size_t size{ mem.size() - 2 };
 
-			Object** args{ new Object * [size] };
+			IObject** args{ new IObject * [size] };
 			for (size_t i{ 0 }; i < size; i++) {
 				args[i] = mem.get(std::to_string(i));
 				GarbageCollector::Add(args[i]);
@@ -137,7 +137,7 @@ public:
 			a->m_joined = false;
 			a->m_thread = new std::thread(start, a);
 
-			return new CommandReturn(nullptr, true, false);
+			return new CommandReturn(new NullObject(), true, false);
 		}
 		Command* clone()override { return new Start(m_s); }
 	};
@@ -149,7 +149,7 @@ public:
 		CommandReturn* exec(MemoryObject& mem) override {
 			ThreadO* a{ (ThreadO*)mem.get("this") };
 			if (a->m_thread == nullptr)
-				return new CommandReturn(nullptr, true, false);
+				return new CommandReturn(new NullObject(), true, false);
 			if (!a->m_thread->joinable())
 				return new CommandReturn(new StringO(m_s, "Thread not joinable"), true, true);
 			a->m_joined = true;
@@ -159,7 +159,7 @@ public:
 			a->m_thread = nullptr;
 			delete t;
 
-			return new CommandReturn(nullptr, true, false);
+			return new CommandReturn(new NullObject(), true, false);
 		}
 		Command* clone()override { return new Join(m_s); }
 	};

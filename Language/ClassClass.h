@@ -98,7 +98,7 @@ public:
 			StringO* s{ (StringO*)mem.get("func") };
 
 			size_t size{ mem.size() - 2 };
-			Object** args{ new Object * [size] };
+			IObject** args{ new IObject * [size] };
 			Interface** argsT{ new Interface * [size] };
 			for (size_t i{ 0 }; i < size; i++) {
 				args[i] = mem.get(std::to_string(i));

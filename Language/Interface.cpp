@@ -148,9 +148,9 @@ Interface* Interface::parse(std::string path, std::string str, MemorySourceFile&
 		std::string typeName{ s.extractName() };
 		Interface* type{ nullptr };
 		if (typeName != "void") {
-			if (genTypes.containKey(typeName))
+			if (genTypes.containKey(&typeName))
 				type = genTypes.getType(typeName);
-			else if (genTypes.containKey(typeName))
+			else if (genTypes.containKey(&typeName))
 				type = GLOBAL::getClasses()->getType(typeName);
 			else
 				throw "??";
@@ -176,9 +176,9 @@ Interface* Interface::parse(std::string path, std::string str, MemorySourceFile&
 			myString m{ &current };
 
 			std::string argTypeName{ m.extractName() };
-			if (genTypes.containKey(argTypeName))
+			if (genTypes.containKey(&argTypeName))
 				classes[argI] = genTypes.getType(argTypeName);
-			else if (genTypes.containKey(argTypeName))
+			else if (genTypes.containKey(&argTypeName))
 				classes[argI] = GLOBAL::getClasses()->getType(argTypeName);
 			else
 				throw "??";

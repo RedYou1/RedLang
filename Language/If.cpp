@@ -12,13 +12,14 @@ CommandReturn* If::exec(MemoryObject& pre_mem)
 	MemoryObject mem{ &pre_mem };
 
 	CommandReturn* t{ m_cond->exec(mem) };
-	if (!t->getObject()->getClass()->instanceOf(GLOBAL::getClasses()->getClass(Paths::Boolean)))
+	if (dynamic_cast<Object*>(t->getObject()) != nullptr &&
+		!t->getObject()->getClass()->instanceOf(GLOBAL::getClasses()->getClass(Paths::Boolean)))
 		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "If", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
 	bool v{ ((BooleanO*)t->getObject())->m_value };
 	delete t;
 	if (v)
 		return m_block->exec(mem);
-	return new CommandReturn(nullptr, false, false);
+	return new CommandReturn(new NullObject(), false, false);
 }
 
 Command* If::clone()

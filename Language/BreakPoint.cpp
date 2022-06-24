@@ -1,4 +1,6 @@
 #include "BreakPoint.h"
+#include "Object.h"
+#include "Global.h"
 
 BreakPoint::BreakPoint()
 {
@@ -6,7 +8,7 @@ BreakPoint::BreakPoint()
 
 CommandReturn* BreakPoint::exec(MemoryObject& mem)
 {
-	return new CommandReturn(nullptr, false, false);
+	return new CommandReturn(new NullObject(GLOBAL::getClasses()->getClass(Paths::Object)), false, false);
 }
 
 Command* BreakPoint::clone()

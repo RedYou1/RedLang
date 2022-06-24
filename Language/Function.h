@@ -19,8 +19,8 @@ public:
 
 	virtual CommandReturn* exec(MemoryObject& pre_mem, Command** args) = 0;
 	virtual CommandReturn* exec(MemoryObject& pre_mem, Command** args, size_t size) = 0;
-	virtual CommandReturn* exec(MemoryObject& pre_mem, Object** args) = 0;
-	virtual CommandReturn* exec(MemoryObject& pre_mem, Object** args, size_t size) = 0;
+	virtual CommandReturn* exec(MemoryObject& pre_mem, IObject** args) = 0;
+	virtual CommandReturn* exec(MemoryObject& pre_mem, IObject** args, size_t size) = 0;
 	virtual CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args) = 0;
 	virtual CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args, size_t size) = 0;
 
@@ -41,8 +41,8 @@ public:
 
 	CommandReturn* exec(MemoryObject& pre_mem, Command** args) override;
 	CommandReturn* exec(MemoryObject& pre_mem, Command** args, size_t size) override;
-	CommandReturn* exec(MemoryObject& pre_mem, Object** args) override;
-	CommandReturn* exec(MemoryObject& pre_mem, Object** args, size_t size) override;
+	CommandReturn* exec(MemoryObject& pre_mem, IObject** args) override;
+	CommandReturn* exec(MemoryObject& pre_mem, IObject** args, size_t size) override;
 	CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args) override;
 	CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args, size_t size) override;
 
@@ -68,8 +68,8 @@ public:
 
 	CommandReturn* exec(MemoryObject& pre_mem, Command** args);
 	CommandReturn* exec(MemoryObject& pre_mem, Command** args, size_t size);
-	CommandReturn* exec(MemoryObject& pre_mem, Object** args);
-	CommandReturn* exec(MemoryObject& pre_mem, Object** args, size_t size);
+	CommandReturn* exec(MemoryObject& pre_mem, IObject** args);
+	CommandReturn* exec(MemoryObject& pre_mem, IObject** args, size_t size);
 	CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args);
 	CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args, size_t size);
 
@@ -89,8 +89,8 @@ public:
 
 	CommandReturn* exec(MemoryObject& pre_mem, Command** args) override { throw "not converted"; }
 	CommandReturn* exec(MemoryObject& pre_mem, Command** args, size_t size) override { throw "not converted"; }
-	CommandReturn* exec(MemoryObject& pre_mem, Object** args) override { throw "not converted"; }
-	CommandReturn* exec(MemoryObject& pre_mem, Object** args, size_t size) override { throw "not converted"; }
+	CommandReturn* exec(MemoryObject& pre_mem, IObject** args) override { throw "not converted"; }
+	CommandReturn* exec(MemoryObject& pre_mem, IObject** args, size_t size) override { throw "not converted"; }
 	CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args) override { throw "not converted"; }
 	CommandReturn* exec(MemoryObject& pre_mem, CommandReturn** args, size_t size) override { throw "not converted"; }
 
@@ -110,7 +110,7 @@ public:
 	virtual ~FunctionBlock();
 
 	CommandReturn* exec(MemoryObject& pre_mem) override;
-	CommandReturn* exec2(MemoryObject& pre_mem, std::string* name, Object** args, size_t argsLen);
+	CommandReturn* exec2(MemoryObject& pre_mem, std::string* name, IObject** args, size_t argsLen);
 
 	Command** getCommands() { return m_commands; }
 	size_t getcommandLen() { return m_commandLen; }

@@ -1,0 +1,43 @@
+class HeatMap<T>{
+
+    Array<Array<T>> heatMap;
+    Number width;
+    Number heigth;
+
+    static function HeatMap(Number width, Number heigth){
+        this.width = width;
+        this.heigth = heigth;
+        this.heatMap = new Array<Array<T>>(width);
+        for(Number x = 0l;x.lt(width);x.add(1l)){
+            Array<T> array = new Array<T>(heigth);
+            
+            for(Number y = 0l;y.lt(this.heigth);y.add(1l)){
+                array.Set(0i,y);
+            }
+
+            this.heatMap.Set(array,x);
+        }
+    }
+
+    function T Get(Number x,Number y){
+        return this.heatMap.Get(x).Get(y);
+    }
+
+    function void Set(T o,Number x, Number y){
+        this.heatMap.Get(x).Set(o,y);
+    }
+
+    function String toString(){
+        String s = "";
+        for(Number x = 0l;x.lt(this.width);x.add(1l)){
+            for(Number y = 0l;y.lt(this.heigth);y.add(1l)){
+                if(y.gt(0i)){
+                    s.concat(",");
+                }
+                s.concat(this.Get(x,y).toString());
+            }
+            s.concat("\n");
+        }
+        return s;
+    }
+}

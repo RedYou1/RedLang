@@ -52,7 +52,7 @@ public:
 
 		bool dot{ s.back() == 'f' || s.back() == 'd' };
 
-		for (std::string::const_iterator it{ s.begin() }; it != s.end() - 1; ++it) {
+		for (std::string::const_iterator it{ s.begin() + (s.at(0) == '-' ? 1 : 0) }; it != s.end() - 1; ++it) {
 			if (!std::isdigit(*it))
 				if (*it == '.' && dot) {
 					dot = false;

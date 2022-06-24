@@ -25,15 +25,19 @@
 
 #include "GarbageCollector.h"
 
-CommandReturn::CommandReturn(Object* object, bool _return, bool _throw)
+CommandReturn::CommandReturn(IObject* object, bool _return, bool _throw)
 	:m_object(object), m_return(_return), m_throw(_throw)
 {
+	if (m_object == nullptr)
+		throw "??";
 	GarbageCollector::Add(m_object);
 }
 
 CommandReturn::CommandReturn(CommandReturn* value)
 	: m_object(value->m_object), m_return(value->m_return), m_throw(value->m_throw)
 {
+	if (m_object == nullptr)
+		throw "??";
 	GarbageCollector::Add(m_object);
 }
 
@@ -42,7 +46,7 @@ CommandReturn::~CommandReturn()
 	GarbageCollector::Remove(m_object);
 }
 
-Object* CommandReturn::getObject() { return m_object; }
+IObject* CommandReturn::getObject() { return m_object; }
 bool CommandReturn::exitFunction()
 {
 	return m_return || m_throw;
@@ -77,7 +81,7 @@ Command* Command::parse(Class* preC, Command* pre, MemoryVariable& variables, st
 	if (word._Equal("return")) {
 		m.removeUseless();
 		if (line.empty())
-			return new ReturnObj(nullptr);
+			return new ReturnObj(new NullObject());
 		else
 			return new ReturnCom(Return::parse(variables, line, genTypes));
 	}
@@ -94,10 +98,11 @@ Command* Command::parse(Class* preC, Command* pre, MemoryVariable& variables, st
 			size_t i{ 0 };
 			while (!args.empty() && i < size) {
 				argsType[i] = nullptr;
-				if (genTypes.containKey(args.front()))
-					argsType[i] = genTypes.getType(args.front());
-				else if (GLOBAL::getClasses()->containKey(args.front()))
-					argsType[i] = GLOBAL::getClasses()->getType(args.front());
+				std::string argName{ args.front() };
+				if (genTypes.containKey(&argName))
+					argsType[i] = genTypes.getType(argName);
+				else if (GLOBAL::getClasses()->containKey(&argName, &genTypes))
+					argsType[i] = GLOBAL::getClasses()->getType(argName);
 				else
 					throw "??";
 				if (argsType[i] == nullptr)
@@ -180,9 +185,9 @@ Command* Command::parse(Class* preC, Command* pre, MemoryVariable& variables, st
 			Interface* type{ nullptr };
 
 			std::string typeName{ m2.extractName() };
-			if (genTypes.containKey(typeName))
+			if (genTypes.containKey(&typeName))
 				type = genTypes.getType(typeName);
-			else if (GLOBAL::getClasses()->containKey(typeName))
+			else if (GLOBAL::getClasses()->containKey(&typeName, &genTypes))
 				type = GLOBAL::getClasses()->getType(typeName);
 			else
 				throw "??";
@@ -246,10 +251,20 @@ Command* Command::parse(Class* preC, Command* pre, MemoryVariable& variables, st
 		if (!args.empty())
 			throw "?";
 
+		Command* cmd{ nullptr };
 		if (pre != nullptr)
-			return new FunctionDynCom(pre, word, commandsI, size);
+			cmd = new FunctionDynCom(pre, word, commandsI, size);
 		if (preC != nullptr)
-			return new FunctionCom(preC, word, commandsI, size);
+			cmd = new FunctionCom(preC, word, commandsI, size);
+
+		m.removeUseless();
+
+		if (line.empty())
+			return cmd;
+		else if (line.at(0) == '.') {
+			m.extract(1);
+			return parse(nullptr, cmd, variables, line, genTypes);
+		}
 
 		throw "??";
 	}
@@ -277,7 +292,7 @@ Command* Command::parse(Class* preC, Command* pre, MemoryVariable& variables, st
 			}
 			throw "??";
 		}
-		else if (genTypes.containKey(word)) {
+		else if (genTypes.containKey(&word)) {
 			Interface* cl{ genTypes.getType(word) };
 			m.removeUseless();
 			std::string name{ m.extractName() };
@@ -290,7 +305,7 @@ Command* Command::parse(Class* preC, Command* pre, MemoryVariable& variables, st
 			}
 			throw "?";
 		}
-		else if (GLOBAL::getClasses()->containKey(word)) {
+		else if (GLOBAL::getClasses()->containKey(&word, &genTypes)) {
 			Interface* cl{ GLOBAL::getClasses()->getType(word) };
 			m.removeUseless();
 			std::string name{ m.extractName() };
@@ -316,10 +331,10 @@ Command* Command::parse(Class* preC, Command* pre, MemoryVariable& variables, st
 		else if (variables.containKey(word)) {
 			return parse(nullptr, new Return(word, variables.get(word)), variables, line, genTypes);
 		}
-		else if (genTypes.containKey(word)) {
+		else if (genTypes.containKey(&word)) {
 			return parse(genTypes.getClass(word), nullptr, variables, line, genTypes);
 		}
-		else if (GLOBAL::getClasses()->containKey(word)) {
+		else if (GLOBAL::getClasses()->containKey(&word, &genTypes)) {
 			return parse(GLOBAL::getClasses()->getClass(word), nullptr, variables, line, genTypes);
 		}
 		throw "??";

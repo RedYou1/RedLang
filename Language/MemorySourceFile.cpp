@@ -2,15 +2,7 @@
 #include "Command.h"
 #include "Class.h"
 #include "myString.h"
-#include "Generic.h"
-
-MemorySourceFile::MemorySourceFile(MemorySourceFile& dup)
-	:m_delete(dup.m_delete), m_vars(std::map<std::string, SourceFile*>())
-{
-	for (typename std::map<std::string, SourceFile*>::iterator it = dup.m_vars.begin(); it != dup.m_vars.end(); ++it) {
-		m_vars.insert(std::pair< std::string, SourceFile*>(it->first, it->second));
-	}
-}
+#include "GenericFile.h"
 
 MemorySourceFile::~MemorySourceFile() {
 	if (!m_delete)
@@ -22,7 +14,7 @@ MemorySourceFile::~MemorySourceFile() {
 
 void MemorySourceFile::add(std::string name, SourceFile* o) {
 	if (m_vars.find(name) != m_vars.end())
-		throw "variable already exists";
+		return;
 	m_vars.insert(std::pair<std::string, SourceFile*>(name, o));
 }
 
@@ -35,11 +27,11 @@ void MemorySourceFile::set(std::string name, SourceFile* o) {
 	it->second = o;
 }
 
-bool MemorySourceFile::containKey(std::string name) {
+bool MemorySourceFile::containKey(std::string* name, MemorySourceFile* _genTypes) {
 	if (m_vars.empty())
 		return false;
 	bool s{ false };
-	size_t nameSize{ name.size() };
+	size_t nameSize{ name->size() };
 
 	for (typename std::map<std::string, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
 		size_t itSize{ it->first.size() };
@@ -47,7 +39,7 @@ bool MemorySourceFile::containKey(std::string name) {
 		if (itSize < nameSize)
 			continue;
 
-		if (0 == it->first.compare(it->first.length() - name.length(), name.length(), name) &&
+		if (0 == it->first.compare(it->first.length() - name->length(), name->length(), *name) &&
 			(itSize == nameSize || it->first.at(itSize - nameSize - 1) == '.')) {
 			if (s)
 				throw "multiple classes";
@@ -55,23 +47,48 @@ bool MemorySourceFile::containKey(std::string name) {
 		}
 	}
 
-	if (!s && name.at(nameSize - 1) == '>') {
-		myString ms{ &name };
-		std::string genTypes{ ms.split(".").back() };
-		SourceFile* gen{ get(myString{&genTypes}.extract2()) };
+	if (!s && name->at(nameSize - 1) == '>') {
+		std::string genTypes{ myString{ name }.split(".").back() };
+		std::string genName{ myString{&genTypes}.extract2() };
+		if (!containKey(&genName))
+			return false;
+		Generic* gen{ (Generic*)get(genName) };
 		std::queue<std::string> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
 		size_t size{ q.size() };
 		SourceFile** genTypesArr{ new SourceFile * [size] };
 		size_t i{ 0 };
+		size_t charIndex{ genName.size() + 1 };
+		bool a{ false };
 		while (i < size) {
-			genTypesArr[i] = get(q.front());
+			std::string genType{ q.front() };
+			if (containKey(&genType, _genTypes)) {
+				genTypesArr[i] = get(genType);
+				if (name->substr(charIndex).find(genType) != 0) {
+					a = true;
+					*name = name->substr(0, charIndex) + genType + name->substr(charIndex + q.front().size());
+					charIndex += genType.size() - q.front().size();
+				}
+			}
+			else if (_genTypes != nullptr && _genTypes->containKey(&genType)) {
+				genTypesArr[i] = _genTypes->get(genType);
+				a = true;
+				*name = name->substr(0, charIndex) + genTypesArr[i]->getName() + name->substr(charIndex + q.front().size());
+				charIndex += genTypesArr[i]->getName().size() - q.front().size();
+			}
+			else {
+				delete[] genTypesArr;
+				return false;
+			}
+			charIndex += q.front().size() + 1;
 			q.pop();
 			i++;
 		}
 		if (i < size || !q.empty())
 			throw "??";
-		add(name, nullptr);
-		((Generic*)gen)->create(name, genTypesArr, size);
+		if (!a || !containKey(name)) {
+			add(*name, nullptr);
+			gen->create(*name, genTypesArr, size);
+		}
 		delete[] genTypesArr;
 		return true;
 	}

@@ -14,9 +14,9 @@ private:
 	static void lock();
 	static void unLock();
 public:
-	static void Add(Object* cmd);
-	static void Remove(Object* cmd);
+	static void Add(IObject* cmd);
+	static void Remove(IObject* cmd);
 	static void Clear();
 	static size_t GetAmount();
-	static size_t GetAmountRef(Object* cmd);
+	static size_t GetAmountRef(IObject* cmd);
 };

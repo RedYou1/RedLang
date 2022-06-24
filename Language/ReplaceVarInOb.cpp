@@ -7,15 +7,16 @@ ReplaceVarInOb::ReplaceVarInOb(Command* ob, bool _delete, std::string name, Comm
 
 CommandReturn* ReplaceVarInOb::exec(MemoryObject& mem) {
 	CommandReturn* obj{ m_ob->exec(mem) };
-	if (obj->getObject() == nullptr) {
+	if (dynamic_cast<NullObject*>(obj->getObject()) != nullptr) {
 		delete obj;
 		return new CommandReturn(new ExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), "ReplaceVarInOb"), false, true);
 	}
 	Var* var{ obj->getObject()->getClass()->getVars()->get(m_name) };
 	CommandReturn* val{ m_value->exec(mem) };
-	if (!val->getObject()->getClass()->instanceOf(var->m_type))
+	if (dynamic_cast<Object*>(val->getObject()) != nullptr &&
+		!val->getObject()->getClass()->instanceOf(var->m_type))
 		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "ReplaceVarInOb", val, var->m_type), false, true);
-	obj->getObject()->set(var->m_index, val->getObject());
+	((Object*)obj->getObject())->set(var->m_index, val->getObject());
 	delete val;
 	obj->setReturn(false);
 	return obj;

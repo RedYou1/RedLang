@@ -8,6 +8,13 @@
 #include "Boolean.h"
 #include "Global.h"
 
+class NumberO : public Object {
+public:
+	NumberO(Class* type) :Object(type) {}
+	virtual int64_t toLong() = 0;
+	virtual double_t toDouble() = 0;
+	virtual bool isInteger() = 0;
+};
 class Number : public Interface {
 public:
 	Number() : Interface("Number", "") {
@@ -15,10 +22,10 @@ public:
 };
 
 #define Number_Constructor_A(name) \
-name::name(Class* type) :Object(type), m_value(0){}
+name::name(Class* type) :NumberO(type), m_value(0){}
 
 #define Number_Constructor_B(name,intType) \
-name::name(Class* type,intType value) :Object(type), m_value(value){}
+name::name(Class* type,intType value) :NumberO(type), m_value(value){}
 
 #define Number_Clone(name) \
 Object* name::clone() {return new name(m_type,m_value);}
@@ -46,116 +53,110 @@ CommandReturn* name::ToString::exec(MemoryObject& mem) {\
 #define Number_Methode_LessThan(name,name2,name3) \
 CommandReturn* name::LessThan::exec(MemoryObject& mem) {\
 	name2* a{ (name2*)mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		return new CommandReturn(new BooleanO(m_s, a->m_value < ((name2*)b)->m_value), true, false);\
+	if(a->isInteger() && b->isInteger())\
+		return new CommandReturn(new BooleanO(m_s, a->toLong() < b->toLong()), true, false);\
 	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".lt"), false, true);\
+		return new CommandReturn(new BooleanO(m_s, a->toDouble() < b->toDouble()), true, false);\
 }
 
 #define Number_Methode_LessThanEquals(name,name2,name3) \
 CommandReturn* name::LessThanEquals::exec(MemoryObject& mem) {\
 	name2* a{ (name2*)mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		return new CommandReturn(new BooleanO(m_s, a->m_value <= ((name2*)b)->m_value), true, false);\
+	if(a->isInteger() && b->isInteger())\
+		return new CommandReturn(new BooleanO(m_s, a->toLong() <= b->toLong()), true, false);\
 	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".lte"), false, true);\
+		return new CommandReturn(new BooleanO(m_s, a->toDouble() <= b->toDouble()), true, false);\
 }
 
 #define Number_Methode_GreaterThan(name,name2,name3) \
 CommandReturn* name::GreaterThan::exec(MemoryObject& mem) {\
 	name2* a{ (name2*)mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		return new CommandReturn(new BooleanO(m_s, a->m_value > ((name2*)b)->m_value), true, false); \
+	if(a->isInteger() && b->isInteger())\
+		return new CommandReturn(new BooleanO(m_s, a->toLong() > b->toLong()), true, false);\
 	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".gt"), false, true); \
+		return new CommandReturn(new BooleanO(m_s, a->toDouble() > b->toDouble()), true, false);\
 }
 
 #define Number_Methode_GreaterThanEquals(name,name2,name3)\
 CommandReturn* name::GreaterThanEquals::exec(MemoryObject& mem){\
 	name2* a{ (name2*)mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		return new CommandReturn(new BooleanO(m_s, a->m_value >= ((name2*)b)->m_value), true, false);\
+	if(a->isInteger() && b->isInteger())\
+		return new CommandReturn(new BooleanO(m_s, a->toLong() >= b->toLong()), true, false);\
 	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".gte"), false, true);\
+		return new CommandReturn(new BooleanO(m_s, a->toDouble() >= b->toDouble()), true, false);\
 }
 
-#define Number_Methode_Add(name,name2,name3) \
+#define Number_Methode_Add(name,name2,name3,type) \
 CommandReturn* name::Add::exec(MemoryObject& mem){\
-	Object* a{ mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* a{ (NumberO*)mem.get("this") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		((name2*)a)->m_value += ((name2*)b)->m_value;\
+	if(a->isInteger())\
+		((name2*)a)->m_value += (type)b->toLong();\
 	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".add"), false, true);\
+		((name2*)a)->m_value += (type)b->toDouble();\
 	return new CommandReturn(a, true, false);\
 }
 
-#define Number_Methode_Sub(name,name2,name3) \
+#define Number_Methode_Sub(name,name2,name3,type) \
 CommandReturn* name::Sub::exec(MemoryObject& mem){\
-	Object* a{ mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* a{ (NumberO*)mem.get("this") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		((name2*)a)->m_value -= ((name2*)b)->m_value;\
+	if(a->isInteger())\
+		((name2*)a)->m_value -= (type)b->toLong();\
 	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".sub"), false, true);\
+		((name2*)a)->m_value -= (type)b->toDouble();\
 	return new CommandReturn(a, true, false);\
 }
 
-#define Number_Methode_Mult(name,name2,name3) \
+#define Number_Methode_Mult(name,name2,name3,type) \
 CommandReturn* name::Mult::exec(MemoryObject& mem){\
-	Object* a{ mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* a{ (NumberO*)mem.get("this") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		((name2*)a)->m_value *= ((name2*)b)->m_value;\
+	if(a->isInteger())\
+		((name2*)a)->m_value *= (type)b->toLong();\
 	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".mult"), false, true);\
+		((name2*)a)->m_value *= (type)b->toDouble();\
 	return new CommandReturn(a, true, false);\
 }
 
-#define Number_Methode_Div(name,name2,name3) \
+#define Number_Methode_Div(name,name2,name3,type) \
 CommandReturn* name::Div::exec(MemoryObject& mem){\
-	Object* a{ mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* a{ (NumberO*)mem.get("this") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		((name2*)a)->m_value /= ((name2*)b)->m_value;\
+	if(a->isInteger())\
+		((name2*)a)->m_value /= (type)b->toLong();\
 	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".div"), false, true);\
+		((name2*)a)->m_value /= (type)b->toDouble();\
 	return new CommandReturn(a, true, false);\
 }
 
-#define Number_Methode_Mod(name,name2,name3) \
+#define Number_Methode_Mod(name,name2,name3,type) \
 CommandReturn* name::Mod::exec(MemoryObject& mem){\
-	Object* a{ mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* a{ (NumberO*)mem.get("this") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		((name2*)a)->m_value %= ((name2*)b)->m_value;\
-	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".mod"), false, true);\
+	((name2*)a)->m_value %= (type)b->toLong();\
 	return new CommandReturn(a, true, false);\
 }
 
-#define Number_Methode_fMod(name,name2,name3)\
+#define Number_Methode_fMod(name,name2,name3,type)\
 CommandReturn* name::Mod::exec(MemoryObject& mem){\
-	Object* a{ mem.get("this") };\
-	Object* b{ mem.get("other") };\
+	NumberO* a{ (NumberO*)mem.get("this") };\
+	NumberO* b{ (NumberO*)mem.get("other") };\
 \
-	if (dynamic_cast<name2*>(b))\
-		((name2*)a)->m_value = std::fmod(((name2*)a)->m_value, ((name2*)b)->m_value);\
-	else\
-		return new CommandReturn(new IllegalArgumentExceptionO(m_except, name3".mod"), false, true);\
+	((name2*)a)->m_value = (type)std::fmodl(((name2*)a)->m_value, b->toDouble());\
 	return new CommandReturn(a, true, false);\
 }
 

@@ -30,4 +30,5 @@ namespace Paths {
 	constexpr char CastException[] = "RedLang.Exceptions.CastException";
 	constexpr char IllegalArgumentException[] = "RedLang.Exceptions.IllegalArgumentException";
 	constexpr char NullException[] = "RedLang.Exceptions.NullException";
+	constexpr char Array[] = "RedLang.Array";
 }

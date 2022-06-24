@@ -56,7 +56,7 @@ public:
 		FunctionClass* m_s;
 		FunctionConstruct(FunctionClass* s) :m_s(s) {}
 		CommandReturn* exec(MemoryObject& mem) override {
-			Object* a{ mem.get("c") };
+			IObject* a{ mem.get("c") };
 			mem.set("this", a);
 			return new CommandReturn(a, true, false);
 		}
@@ -69,7 +69,7 @@ public:
 		CommandReturn* exec(MemoryObject& mem) override {
 			FunctionO* a{ (FunctionO*)mem.get("this") };
 			size_t size{ mem.size() - 1 };
-			Object** args{ new Object * [size] };
+			IObject** args{ new IObject * [size] };
 			for (size_t c{ 0 }; c < size; c++) {
 				args[c] = mem.get(std::to_string(c));
 			}

@@ -147,13 +147,16 @@
     <ClCompile Include="SourceFile.cpp">
       <Filter>Fichiers sources\Files</Filter>
     </ClCompile>
-    <ClCompile Include="Generic.cpp">
+    <ClCompile Include="GenericFile.cpp">
       <Filter>Fichiers sources\Files</Filter>
     </ClCompile>
     <ClCompile Include="MemorySourceFile.cpp">
       <Filter>Fichiers sources\Memories</Filter>
     </ClCompile>
     <ClCompile Include="GarbageCollector.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Array.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -299,7 +302,7 @@
     <ClInclude Include="SourceFile.h">
       <Filter>Fichiers d%27en-tête\Files</Filter>
     </ClInclude>
-    <ClInclude Include="Generic.h">
+    <ClInclude Include="GenericFile.h">
       <Filter>Fichiers d%27en-tête\Files</Filter>
     </ClInclude>
     <ClInclude Include="MemorySourceFile.h">
@@ -307,6 +310,12 @@
     </ClInclude>
     <ClInclude Include="GarbageCollector.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Generic.h">
+      <Filter>Fichiers d%27en-tête\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Array.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

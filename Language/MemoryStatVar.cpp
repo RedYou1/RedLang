@@ -1,6 +1,7 @@
 #include "MemoryStatVar.h"
 #include "StatVar.h"
 #include "Command.h"
+#include "Object.h"
 
 MemoryStatVar::MemoryStatVar()
 	: m_string{}
@@ -26,7 +27,7 @@ StatVar* MemoryStatVar::get(std::string name)
 	return m_string[name];
 }
 
-void MemoryStatVar::set(std::string name, Object* value)
+void MemoryStatVar::set(std::string name, IObject* value)
 {
 	StatVar* var{ get(name) };
 	if (!value->getClass()->instanceOf(var->GetType()))
