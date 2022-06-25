@@ -323,6 +323,8 @@ DTO::Class* Parser::Parser::parseClass(std::string path, std::string str, DTO::M
 		s.extract(7);
 		s.removeUseless();
 		std::string tname{ s.extractName() };
+		if (!DTO::GLOBAL::getClasses()->containKey(&tname, &genTypes))
+			throw "??";
 		parent = DTO::GLOBAL::getClasses()->getClass(tname);
 		if (parent == nullptr)
 			throw "??";
@@ -337,7 +339,10 @@ DTO::Class* Parser::Parser::parseClass(std::string path, std::string str, DTO::M
 			s.extract(10);
 			s.removeUseless();
 			do {
-				interfaces.push(DTO::GLOBAL::getClasses()->getInterface(s.extractName()));
+				std::string interfaceName{ s.extractName() };
+				if (!DTO::GLOBAL::getClasses()->containKey(&interfaceName, &genTypes))
+					throw "??";
+				interfaces.push(DTO::GLOBAL::getClasses()->getInterface(interfaceName));
 				s.removeUseless();
 			} while (str.at(0) != '{');
 		}
@@ -880,7 +885,10 @@ DTO::Interface* Parser::Parser::parseInterface(std::string path, std::string str
 			s.extract(7);
 			s.removeUseless();
 			do {
-				interfaces.push(DTO::GLOBAL::getClasses()->getInterface(s.extractName()));
+				std::string interfaceName{ s.extractName() };
+				if (!DTO::GLOBAL::getClasses()->containKey(&interfaceName, &genTypes))
+					throw "??";
+				interfaces.push(DTO::GLOBAL::getClasses()->getInterface(interfaceName));
 				s.removeUseless();
 			} while (str.at(0) != '{');
 		}
@@ -911,7 +919,7 @@ DTO::Interface* Parser::Parser::parseInterface(std::string path, std::string str
 		if (typeName != "void") {
 			if (genTypes.containKey(&typeName))
 				type = genTypes.getType(typeName);
-			else if (genTypes.containKey(&typeName))
+			else if (DTO::GLOBAL::getClasses()->containKey(&typeName, &genTypes))
 				type = DTO::GLOBAL::getClasses()->getType(typeName);
 			else
 				throw "??";

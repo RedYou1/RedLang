@@ -1,0 +1,16 @@
+include "Printer.RedSrc"
+
+class RealPrinter<T> implements Printer<T>{
+
+    T object;
+
+    static function RealPrinter(T object){
+        this.object = object;
+    }
+
+    function void print(T d){
+        System.print(this.object);
+        System.print(":");
+        System.println(d);
+    }
+}
