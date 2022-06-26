@@ -25,7 +25,7 @@ namespace DTO {
 
 	class ClassClass : public Class {
 	public:
-		ClassClass() : Class("Class", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		ClassClass() : Class("Class", Paths::Class, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {

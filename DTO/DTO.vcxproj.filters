@@ -201,6 +201,9 @@
     <ClInclude Include="Var.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="SizedArray.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakPoint.cpp">
@@ -216,9 +219,6 @@
       <Filter>Fichiers sources\Commands</Filter>
     </ClCompile>
     <ClCompile Include="ReplaceStatVar.cpp">
-      <Filter>Fichiers sources\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="ReplaceVar.cpp">
       <Filter>Fichiers sources\Commands</Filter>
     </ClCompile>
     <ClCompile Include="ReplaceVarInOb.cpp">
@@ -281,9 +281,6 @@
     <ClCompile Include="Short.cpp">
       <Filter>Fichiers sources\RedLang\Number</Filter>
     </ClCompile>
-    <ClCompile Include="Array.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -307,6 +304,15 @@
     </ClCompile>
     <ClCompile Include="Try.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceVar.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Array.cpp">
+      <Filter>Fichiers sources\RedLang</Filter>
+    </ClCompile>
+    <ClCompile Include="SizedArray.cpp">
+      <Filter>Fichiers sources\RedLang</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

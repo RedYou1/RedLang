@@ -23,7 +23,7 @@ namespace DTO {
 
 	class FunctionClass : public Class {
 	public:
-		FunctionClass() : Class("Function", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		FunctionClass() : Class("Function", Paths::Function, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {

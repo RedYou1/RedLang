@@ -21,7 +21,7 @@ namespace DTO {
 
 	class CastExceptionC : public Class {
 	public:
-		CastExceptionC() : Class("CastException", "", GLOBAL::getClasses()->getClass(Paths::Exception)) {
+		CastExceptionC() : Class("CastException", Paths::CastException, GLOBAL::getClasses()->getClass(Paths::Exception)) {
 		}
 
 		class ExceptionConstruct :public Command {

@@ -23,7 +23,7 @@ namespace DTO {
 
 	class ExceptionC : public Class {
 	public:
-		ExceptionC() : Class("Exception", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		ExceptionC() : Class("Exception", Paths::Exception, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {

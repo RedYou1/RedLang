@@ -34,7 +34,7 @@ namespace DTO {
 
 	class DoubleC : public Class {
 	public:
-		DoubleC(Number* number) : Class("Double", "", GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
+		DoubleC(Number* number) : Class("Double", Paths::Double, GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
 		}
 
 		class Equals :public Command {

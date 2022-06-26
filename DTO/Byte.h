@@ -34,7 +34,7 @@ namespace DTO {
 
 	class ByteC : public Class {
 	public:
-		ByteC(Number* number) : Class("Byte", "", GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
+		ByteC(Number* number) : Class("Byte", Paths::Byte, GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
 		}
 
 		class Equals :public Command {

@@ -28,7 +28,7 @@ namespace DTO {
 
 	class StringC : public Class {
 	public:
-		StringC() : Class("String", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		StringC() : Class("String", Paths::String, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {

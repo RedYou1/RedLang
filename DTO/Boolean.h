@@ -25,7 +25,7 @@ namespace DTO {
 
 	class BooleanC : public Class {
 	public:
-		BooleanC() : Class("Boolean", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		BooleanC() : Class("Boolean", Paths::Boolean, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Not : public Command {

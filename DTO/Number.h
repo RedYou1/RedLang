@@ -18,7 +18,7 @@ namespace DTO {
 	};
 	class Number : public Interface {
 	public:
-		Number() : Interface("Number", "") {
+		Number() : Interface("Number", Paths::Number) {
 		}
 	};
 }

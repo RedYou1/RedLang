@@ -20,7 +20,7 @@ namespace DTO {
 
 	class IllegalArgumentExceptionC : public Class {
 	public:
-		IllegalArgumentExceptionC() : Class("IllegalArgumentException", "", GLOBAL::getClasses()->getClass(Paths::Exception)) {
+		IllegalArgumentExceptionC() : Class("IllegalArgumentException", Paths::IllegalArgumentException, GLOBAL::getClasses()->getClass(Paths::Exception)) {
 		}
 
 		class ExceptionConstruct :public Command {

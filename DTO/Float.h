@@ -34,7 +34,7 @@ namespace DTO {
 
 	class FloatC : public Class {
 	public:
-		FloatC(Number* number) : Class("Float", "", GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
+		FloatC(Number* number) : Class("Float", Paths::Float, GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
 		}
 
 		class Equals :public Command {

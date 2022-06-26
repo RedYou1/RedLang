@@ -187,14 +187,37 @@ class test{
 		heatMap.Set(20i,1i,2i);
 		heatMap.Set(51i,2i,2i);
 		System.println(heatMap);
+
+		RealPrinter<Integer> rp = new RealPrinter<Integer>(1i);
+		rp.print(2i);
+		rp.print(3i);
 	}
 
 	static function void main(){
 		test.preMain();
 
-		RealPrinter<Integer> rp = new RealPrinter<Integer>(1i);
-		rp.print(2i);
-		rp.print(3i);
+		SizedArray<Integer> arr = new SizedArray<Integer>(2i);
+		arr.Set(1i,0i);
+		arr.Set(2i,1i);
+		System.println(arr.Size());
+		String s = "";
+		for(Number y = 0l;y.lt(arr.Size());y.add(1l)){
+            if(y.gt(0i)){
+                s.concat(",");
+            }
+            s.concat(arr.Get(y).toString());
+        }
+		System.println(s);
+		arr.Resize(3i);
+		System.println(arr.Size());
+		s = "";
+		for(Number y = 0l;y.lt(arr.Size());y.add(1l)){
+            if(y.gt(0i)){
+                s.concat(",");
+            }
+            s.concat(arr.Get(y).toString());
+        }
+		System.println(s);
 
 		throw new Exception("FINI");
 	}

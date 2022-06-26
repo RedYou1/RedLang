@@ -51,7 +51,7 @@ namespace DTO {
 
 	class ThreadC : public Class {
 	public:
-		ThreadC() : Class("Thread", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		ThreadC() : Class("Thread", Paths::Thread, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {

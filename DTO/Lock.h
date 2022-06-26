@@ -31,7 +31,7 @@ namespace DTO {
 
 	class LockC : public Class {
 	public:
-		LockC() : Class("Lock", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		LockC() : Class("Lock", Paths::Lock, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {

@@ -16,7 +16,7 @@ namespace DTO {
 
 	class ObjectClass : public Class {
 	public:
-		ObjectClass() : Class("Object", "", nullptr) {
+		ObjectClass() : Class("Object", Paths::Object, nullptr) {
 		}
 
 		class Equals :public Command {

@@ -25,6 +25,7 @@
 #include "Number.h"
 #include "IllegalArgumentException.h"
 #include "Array.h"
+#include "SizedArray.h"
 
 void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	ObjectClass* object{ new ObjectClass() };
@@ -76,6 +77,9 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 
 	Array* array{ new Array() };
 	GLOBAL::getClasses()->add(Paths::Array, array);
+
+	SizedArray* sizedArray{ new SizedArray() };
+	GLOBAL::getClasses()->add(Paths::SizedArray, sizedArray);
 
 	object->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ object, object }, new std::string[]{ "this","c" }, 2), new Command * [1]{ new ObjectClass::Equals(Bool) }, 1));
 	object->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ object }, new std::string[]{ "this" }, 1), new Command * [1]{ new ObjectClass::ToString(String) }, 1));

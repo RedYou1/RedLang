@@ -62,6 +62,7 @@
     <ClInclude Include="Return.h" />
     <ClInclude Include="Short.h" />
     <ClInclude Include="Signature.h" />
+    <ClInclude Include="SizedArray.h" />
     <ClInclude Include="SourceFile.h" />
     <ClInclude Include="StatVar.h" />
     <ClInclude Include="String.h" />
@@ -103,6 +104,7 @@
     <ClCompile Include="Return.cpp" />
     <ClCompile Include="Short.cpp" />
     <ClCompile Include="Signature.cpp" />
+    <ClCompile Include="SizedArray.cpp" />
     <ClCompile Include="SourceFile.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="Try.cpp" />

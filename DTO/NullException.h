@@ -13,7 +13,7 @@
 namespace DTO {
 	class NullException : public Class {
 	public:
-		NullException() : Class("NullException", "", GLOBAL::getClasses()->getClass(Paths::Exception)) {
+		NullException() : Class("NullException", Paths::NullException, GLOBAL::getClasses()->getClass(Paths::Exception)) {
 		}
 
 		class ExceptionConstruct :public Command {

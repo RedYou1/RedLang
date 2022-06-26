@@ -12,7 +12,7 @@
 namespace DTO {
 	class System :public Class {
 	public:
-		System() :Class("System", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		System() :Class("System", Paths::System, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class GetWord :public Command {

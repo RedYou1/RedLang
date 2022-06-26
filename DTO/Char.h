@@ -24,7 +24,7 @@ namespace DTO {
 
 	class CharC : public Class {
 	public:
-		CharC() : Class("Char", "", GLOBAL::getClasses()->getClass(Paths::Object)) {
+		CharC() : Class("Char", Paths::Char, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {

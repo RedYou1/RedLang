@@ -14,38 +14,37 @@
 #include "CastException.h"
 
 namespace DTO {
-	class ArrayO : public Object {
+	class SizedArrayO : public Object {
 	public:
 		IObject** m_value;
+		size_t m_size;
 
-		ArrayO(Class* type, size_t size) :Object(type) {
-			m_value = new IObject * [size];
+		SizedArrayO(Class* type, size_t size) :Object(type), m_size(size) {
+			m_value = new IObject * [m_size];
 			Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
-			for (size_t i{ 0 }; i < size; i++) {
+			for (size_t i{ 0 }; i < m_size; i++) {
 				m_value[i] = new NullObject(obj);
 			}
 		}
 	private:
-		ArrayO(Class* type, IObject** value) :Object(type) {
-			m_value = value;
+		SizedArrayO(Class* type, IObject** value, size_t size) :Object(type), m_value(value), m_size(size) {
 		}
 	public:
 
 		Object* clone()override {
-
-			return new ArrayO(m_type, m_value);
+			return new SizedArrayO(m_type, m_value, m_size);
 		}
 	};
 
-	class Array : public Generic {
+	class SizedArray : public Generic {
 	private:
-		class ArrayC : public Class {
+		class SizedArrayC : public Class {
 		public:
 			Interface* m_type;
-			ArrayC(std::string name, Interface* type);
+			SizedArrayC(std::string name, Interface* type);
 		};
 	public:
-		Array() : Generic("Array", Paths::Array) {
+		SizedArray() : Generic("SizedArray", Paths::SizedArray) {
 		}
 
 		SourceFile* create(std::string newName, SourceFile** gens, size_t genSize)override;
@@ -55,16 +54,16 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayO* o{ (ArrayO*)mem.get("this") };
-				ArrayO* c{ (ArrayO*)mem.get("c") };
+				SizedArrayO* o{ (SizedArrayO*)mem.get("this") };
+				SizedArrayO* c{ (SizedArrayO*)mem.get("c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_value == c->m_value), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
 		};
 		class ArrayConstruct :public Command {
 		public:
-			ArrayC* m_s;
-			ArrayConstruct(ArrayC* s) :m_s(s) {}
+			SizedArrayC* m_s;
+			ArrayConstruct(SizedArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
 				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
@@ -77,7 +76,7 @@ namespace DTO {
 				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				Object* c{ new ArrayO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
+				Object* c{ new SizedArrayO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
 				mem.set("this", c);
 				delete q;
 				return new CommandReturn(c, true, false);
@@ -86,8 +85,8 @@ namespace DTO {
 		};
 		class Get : public Command {
 		public:
-			ArrayC* m_s;
-			Get(ArrayC* s) :m_s(s) {}
+			SizedArrayC* m_s;
+			Get(SizedArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
 				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
@@ -100,7 +99,7 @@ namespace DTO {
 				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				ArrayO* arr{ (ArrayO*)mem.get("this") };
+				SizedArrayO* arr{ (SizedArrayO*)mem.get("this") };
 				IObject* arro{ arr->m_value[((NumberO*)q->getObject())->toLong()] };
 				delete q;
 				return new CommandReturn(arro, true, false);
@@ -109,8 +108,8 @@ namespace DTO {
 		};
 		class Set : public Command {
 		public:
-			ArrayC* m_s;
-			Set(ArrayC* s) :m_s(s) {}
+			SizedArrayC* m_s;
+			Set(SizedArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
 				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
@@ -123,7 +122,7 @@ namespace DTO {
 				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				ArrayO* arr{ (ArrayO*)mem.get("this") };
+				SizedArrayO* arr{ (SizedArrayO*)mem.get("this") };
 				GarbageCollector::Remove(arr->m_value[((NumberO*)q->getObject())->toLong()]);
 				arr->m_value[((NumberO*)q->getObject())->toLong()] = mem.get("o");
 				GarbageCollector::Add(arr->m_value[((NumberO*)q->getObject())->toLong()]);
@@ -131,6 +130,53 @@ namespace DTO {
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new Set(m_s); }
+		};
+		class Size :public Command {
+		public:
+			LongC* m_s;
+			Size(LongC* s) :m_s(s) {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				SizedArrayO* arr{ (SizedArrayO*)mem.get("this") };
+				return new CommandReturn(new LongO(m_s, (int64_t)arr->m_size), true, false);
+			}
+			Command* clone()override { return new Size(m_s); }
+		};
+		class Resize :public Command {
+		public:
+			Resize() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				SizedArrayO* arr{ (SizedArrayO*)mem.get("this") };
+				IObject* a{ mem.get("c") };
+
+				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
+				if (!a->getClass()->instanceOf(i[0])) {
+					delete[] i;
+					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), arr->getClass()->getName() + ".Resize", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
+				}
+				IObject** o{ new IObject * [1]{a} };
+				MemoryObject mem2{};
+				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
+				delete[] i;
+				delete[] o;
+
+				uint64_t newSize{ (uint64_t)((LongO*)a)->m_value };
+
+				for (uint64_t i{ newSize }; i < arr->m_size; i++) {
+					GarbageCollector::Remove(arr->m_value[i]);
+				}
+				IObject** newArr{ new IObject * [newSize] };
+				memcpy(newArr, arr->m_value, std::min(arr->m_size, newSize) * sizeof(IObject*));
+				Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
+				for (uint64_t i{ arr->m_size }; i < newSize; i++) {
+					newArr[i] = new NullObject(obj);
+				}
+				delete[] arr->m_value;
+				arr->m_value = newArr;
+				arr->m_size = newSize;
+				delete q;
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new Resize(); }
 		};
 	};
 }
