@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
+    <ClInclude Include="ArrayList.h" />
     <ClInclude Include="Boolean.h" />
     <ClInclude Include="BreakPoint.h" />
     <ClInclude Include="Byte.h" />
@@ -74,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Array.cpp" />
+    <ClCompile Include="ArrayList.cpp" />
     <ClCompile Include="BreakPoint.cpp" />
     <ClCompile Include="Byte.cpp" />
     <ClCompile Include="Class.cpp" />

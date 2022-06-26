@@ -204,6 +204,9 @@
     <ClInclude Include="SizedArray.h">
       <Filter>Fichiers d%27en-tête\RedLang</Filter>
     </ClInclude>
+    <ClInclude Include="ArrayList.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakPoint.cpp">
@@ -312,6 +315,9 @@
       <Filter>Fichiers sources\RedLang</Filter>
     </ClCompile>
     <ClCompile Include="SizedArray.cpp">
+      <Filter>Fichiers sources\RedLang</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayList.cpp">
       <Filter>Fichiers sources\RedLang</Filter>
     </ClCompile>
   </ItemGroup>
