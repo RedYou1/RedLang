@@ -33,5 +33,6 @@ namespace DTO {
 		constexpr char NullException[] = "RedLang.Exceptions.NullException";
 		constexpr char Array[] = "RedLang.Array";
 		constexpr char SizedArray[] = "RedLang.SizedArray";
+		constexpr char ArrayList[] = "RedLang.ArrayList";
 	}
 }

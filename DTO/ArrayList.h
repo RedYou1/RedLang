@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "Object.h"
 #include "Command.h"
 #include "Generic.h"
@@ -14,37 +15,33 @@
 #include "CastException.h"
 
 namespace DTO {
-	class SizedArrayO : public Object {
+	class ArrayListO : public Object {
 	public:
-		IObject** m_value;
-		size_t m_size;
+		std::vector<IObject*> m_value;
 
-		SizedArrayO(Class* type, size_t size) :Object(type), m_size(size) {
-			m_value = new IObject * [m_size];
-			Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
-			for (size_t i{ 0 }; i < m_size; i++) {
-				m_value[i] = new NullObject(obj);
+		ArrayListO(Class* type) :Object(type), m_value() {}
+		ArrayListO(Class* type, size_t size) :Object(type), m_value(size) {}
+		ArrayListO(Class* type, std::vector<IObject*> value) :Object(type), m_value(value) {
+			for (IObject* var : m_value)
+			{
+				GarbageCollector::Add(var);
 			}
 		}
-	private:
-		SizedArrayO(Class* type, IObject** value, size_t size) :Object(type), m_value(value), m_size(size) {
-		}
-	public:
 
 		Object* clone()override {
-			return new SizedArrayO(m_type, m_value, m_size);
+			return new ArrayListO(m_type, m_value);
 		}
 	};
 
-	class SizedArray : public Generic {
+	class ArrayList : public Generic {
 	private:
-		class SizedArrayC : public Class {
+		class ArrayListC : public Class {
 		public:
 			Interface* m_type;
-			SizedArrayC(std::string name, Interface* type);
+			ArrayListC(std::string name, Interface* type);
 		};
 	public:
-		SizedArray() : Generic("SizedArray", Paths::SizedArray) {
+		ArrayList() : Generic("ArrayList", Paths::ArrayList) {
 		}
 
 		SourceFile* create(std::string newName, SourceFile** gens, size_t genSize)override;
@@ -54,16 +51,27 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				SizedArrayO* o{ (SizedArrayO*)mem.get("this") };
-				SizedArrayO* c{ (SizedArrayO*)mem.get("c") };
+				ArrayListO* o{ (ArrayListO*)mem.get("this") };
+				ArrayListO* c{ (ArrayListO*)mem.get("c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_value == c->m_value), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
 		};
-		class ArrayConstruct :public Command {
+		class ArrayConstructEmpty :public Command {
 		public:
-			SizedArrayC* m_s;
-			ArrayConstruct(SizedArrayC* s) :m_s(s) {}
+			ArrayListC* m_s;
+			ArrayConstructEmpty(ArrayListC* s) :m_s(s) {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				Object* c{ new ArrayListO(m_s) };
+				mem.set("this", c);
+				return new CommandReturn(c, true, false);
+			}
+			Command* clone()override { return new ArrayConstructEmpty(m_s); }
+		};
+		class ArrayConstructSize :public Command {
+		public:
+			ArrayListC* m_s;
+			ArrayConstructSize(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
 				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
@@ -76,17 +84,29 @@ namespace DTO {
 				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				Object* c{ new SizedArrayO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
+				Object* c{ new ArrayListO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
 				mem.set("this", c);
 				delete q;
 				return new CommandReturn(c, true, false);
 			}
-			Command* clone()override { return new ArrayConstruct(m_s); }
+			Command* clone()override { return new ArrayConstructSize(m_s); }
+		};
+		class ArrayConstructCopy :public Command {
+		public:
+			ArrayListC* m_s;
+			ArrayConstructCopy(ArrayListC* s) :m_s(s) {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* a{ (ArrayListO*)mem.get("c") };
+				Object* c{ new ArrayListO(m_s,a->m_value) };
+				mem.set("this", c);
+				return new CommandReturn(c, true, false);
+			}
+			Command* clone()override { return new ArrayConstructCopy(m_s); }
 		};
 		class Get : public Command {
 		public:
-			SizedArrayC* m_s;
-			Get(SizedArrayC* s) :m_s(s) {}
+			ArrayListC* m_s;
+			Get(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
 				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
@@ -99,7 +119,7 @@ namespace DTO {
 				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				SizedArrayO* arr{ (SizedArrayO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
 				IObject* arro{ arr->m_value[((NumberO*)q->getObject())->toLong()] };
 				delete q;
 				return new CommandReturn(arro, true, false);
@@ -108,8 +128,8 @@ namespace DTO {
 		};
 		class Set : public Command {
 		public:
-			SizedArrayC* m_s;
-			Set(SizedArrayC* s) :m_s(s) {}
+			ArrayListC* m_s;
+			Set(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
 				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
@@ -122,7 +142,7 @@ namespace DTO {
 				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				SizedArrayO* arr{ (SizedArrayO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
 				GarbageCollector::Remove(arr->m_value[((NumberO*)q->getObject())->toLong()]);
 				arr->m_value[((NumberO*)q->getObject())->toLong()] = mem.get("o");
 				GarbageCollector::Add(arr->m_value[((NumberO*)q->getObject())->toLong()]);
@@ -131,13 +151,34 @@ namespace DTO {
 			}
 			Command* clone()override { return new Set(m_s); }
 		};
+		class PushBack :public Command {
+		public:
+			PushBack() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* a{ (ArrayListO*)mem.get("this") };
+				IObject* b{ mem.get("c") };
+				a->m_value.push_back(b);
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new PushBack(); }
+		};
+		class PopBack :public Command {
+		public:
+			PopBack() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* a{ (ArrayListO*)mem.get("this") };
+				a->m_value.pop_back();
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new PopBack(); }
+		};
 		class Size :public Command {
 		public:
 			LongC* m_s;
 			Size(LongC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				SizedArrayO* arr{ (SizedArrayO*)mem.get("this") };
-				return new CommandReturn(new LongO(m_s, (int64_t)arr->m_size), true, false);
+				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				return new CommandReturn(new LongO(m_s, (int64_t)arr->m_value.size()), true, false);
 			}
 			Command* clone()override { return new Size(m_s); }
 		};
@@ -145,7 +186,7 @@ namespace DTO {
 		public:
 			Resize() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				SizedArrayO* arr{ (SizedArrayO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
 				IObject* a{ mem.get("c") };
 
 				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
@@ -161,18 +202,15 @@ namespace DTO {
 
 				uint64_t newSize{ (uint64_t)((LongO*)q->getObject())->m_value };
 
-				for (uint64_t i{ newSize }; i < arr->m_size; i++) {
+				for (uint64_t i{ newSize }; i < arr->m_value.size(); i++) {
 					GarbageCollector::Remove(arr->m_value[i]);
 				}
-				IObject** newArr{ new IObject * [newSize] };
-				memcpy(newArr, arr->m_value, std::min(arr->m_size, newSize) * sizeof(IObject*));
+				uint64_t lastSize{ arr->m_value.size() };
+				arr->m_value.resize(newSize);
 				Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
-				for (uint64_t i{ arr->m_size }; i < newSize; i++) {
-					newArr[i] = new NullObject(obj);
+				for (uint64_t i{ lastSize }; i < newSize; i++) {
+					arr->m_value[i] = new NullObject(obj);
 				}
-				delete[] arr->m_value;
-				arr->m_value = newArr;
-				arr->m_size = newSize;
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
 			}
