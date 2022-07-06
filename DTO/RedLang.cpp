@@ -88,22 +88,22 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 
 	Bool->getFuncs()->add("not", new Function(new Signature("", Bool, new Interface * [1]{ Bool }, new std::string[1]{ "this" }, 1), new Command * [1]{ new BooleanC::Not(Bool) }, 1));
 	Bool->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ Bool, Bool }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new BooleanC::Equals(Bool) }, 1));
-	Bool->getStatFuncs()->add("Boolean", new Function(new Signature("", Bool, new Interface * [2]{ Bool, Bool }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new BooleanC::BooleanConstruct(Bool) }, 1));
+	Bool->getFuncs()->add("Boolean", new Function(new Signature("", Bool, new Interface * [2]{ Bool, Bool }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new BooleanC::BooleanConstruct(Bool) }, 1));
 	Bool->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ Bool }, new std::string[1]{ "this" }, 1), new Command * [1]{ new BooleanC::ToString(String) }, 1));
 
 	Char->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ Char, Char }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new CharC::Equals(Bool) }, 1));
-	Char->getStatFuncs()->add("Char", new Function(new Signature("", Char, new Interface * [2]{ Char, Char }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new CharC::CharConstruct(Char) }, 1));
+	Char->getFuncs()->add("Char", new Function(new Signature("", Char, new Interface * [2]{ Char, Char }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new CharC::CharConstruct(Char) }, 1));
 	Char->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ Char }, new std::string[1]{ "this" }, 1), new Command * [1]{ new CharC::ToString(String) }, 1));
 
 	String->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ String, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new StringC::Equals(Bool) }, 1));
-	String->getStatFuncs()->add("String", new Function(new Signature("", String, new Interface * [2]{ String, Char }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new StringC::CharConstruct(String) }, 1));
-	String->getStatFuncs()->add("String", new Function(new Signature("", String, new Interface * [2]{ String, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new StringC::StringConstruct(String) }, 1));
+	String->getFuncs()->add("String", new Function(new Signature("", String, new Interface * [2]{ String, Char }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new StringC::CharConstruct(String) }, 1));
+	String->getFuncs()->add("String", new Function(new Signature("", String, new Interface * [2]{ String, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new StringC::StringConstruct(String) }, 1));
 	String->getFuncs()->add("concat", new Function(new Signature("", String, new Interface * [2]{ String,String }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new StringC::Concat(String) }, 1));
 	String->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ String }, new std::string[]{ "this" }, 1), new Command * [1]{ new StringC::ToString(String) }, 1));
 
-	system->getStatFuncs()->add("getWord", new Function(new Signature("", String, new Interface * [0]{ }, new std::string[0]{ }, 0), new Command * [1]{ new System::GetWord(String) }, 1));
-	system->getStatFuncs()->add("print", new Function(new Signature("", nullptr, new Interface * [1]{ object }, new std::string[1]{ "s" }, 1), new Command * [1]{ new System::print() }, 1));
-	system->getStatFuncs()->add("println", new Function(new Signature("", nullptr, new Interface * [1]{ object }, new std::string[1]{ "s" }, 1), new Command * [1]{ new System::println() }, 1));
+	system->getFuncs()->add("getWord", new Function(new Signature("", String, new Interface * [0]{ }, new std::string[0]{ }, 0), new Command * [1]{ new System::GetWord(String) }, 1));
+	system->getFuncs()->add("print", new Function(new Signature("", nullptr, new Interface * [1]{ object }, new std::string[1]{ "s" }, 1), new Command * [1]{ new System::print() }, 1));
+	system->getFuncs()->add("println", new Function(new Signature("", nullptr, new Interface * [1]{ object }, new std::string[1]{ "s" }, 1), new Command * [1]{ new System::println() }, 1));
 	system->getStatVars()->add("is32x", new StatVar(Bool, new BooleanO(Bool, sizeof(intptr_t) == 4)));
 	system->getStatVars()->add("is64x", new StatVar(Bool, new BooleanO(Bool, sizeof(intptr_t) == 8)));
 
@@ -124,7 +124,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	number->add("mod", new Signature("", number, new Interface * [2]{ number,number }, new std::string[2]{ "this","other" }, 2));
 
 	Byte->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ Byte, Byte }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ByteC::Equals(Bool) }, 1));
-	Byte->getStatFuncs()->add("Byte", new Function(new Signature("", Byte, new Interface * [2]{ Byte, Byte }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ByteC::ByteConstruct(Byte) }, 1));
+	Byte->getFuncs()->add("Byte", new Function(new Signature("", Byte, new Interface * [2]{ Byte, Byte }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ByteC::ByteConstruct(Byte) }, 1));
 	Byte->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ Byte }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ByteC::ToString(String) }, 1));
 	Byte->getFuncs()->add("toByte", new Function(new Signature("", Byte, new Interface * [1]{ Byte }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ByteC::toByte(Byte) }, 1));
 	Byte->getFuncs()->add("toShort", new Function(new Signature("", Short, new Interface * [1]{ Byte }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ByteC::toShort(Short) }, 1));
@@ -143,7 +143,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	Byte->getFuncs()->add("mod", new Function(new Signature("", number, new Interface * [2]{ Byte,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new ByteC::Mod(Byte,argExcept) }, 1));
 
 	Short->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ Short, Short }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ShortC::Equals(Bool) }, 1));
-	Short->getStatFuncs()->add("Short", new Function(new Signature("", Short, new Interface * [2]{ Short, Short }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ShortC::ShortConstruct(Short) }, 1));
+	Short->getFuncs()->add("Short", new Function(new Signature("", Short, new Interface * [2]{ Short, Short }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ShortC::ShortConstruct(Short) }, 1));
 	Short->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ Short }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ShortC::ToString(String) }, 1));
 	Short->getFuncs()->add("toByte", new Function(new Signature("", Byte, new Interface * [1]{ Short }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ShortC::toByte(Byte) }, 1));
 	Short->getFuncs()->add("toShort", new Function(new Signature("", Short, new Interface * [1]{ Short }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ShortC::toShort(Short) }, 1));
@@ -162,7 +162,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	Short->getFuncs()->add("mod", new Function(new Signature("", number, new Interface * [2]{ Short,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new ShortC::Mod(Short,argExcept) }, 1));
 
 	Integer->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ Integer, Integer }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new IntegerC::Equals(Bool) }, 1));
-	Integer->getStatFuncs()->add("Integer", new Function(new Signature("", Integer, new Interface * [2]{ Integer, Integer }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new IntegerC::IntegerConstruct(Integer) }, 1));
+	Integer->getFuncs()->add("Integer", new Function(new Signature("", Integer, new Interface * [2]{ Integer, Integer }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new IntegerC::IntegerConstruct(Integer) }, 1));
 	Integer->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ Integer }, new std::string[1]{ "this" }, 1), new Command * [1]{ new IntegerC::ToString(String) }, 1));
 	Integer->getFuncs()->add("toByte", new Function(new Signature("", Byte, new Interface * [1]{ Integer }, new std::string[1]{ "this" }, 1), new Command * [1]{ new IntegerC::toByte(Byte) }, 1));
 	Integer->getFuncs()->add("toShort", new Function(new Signature("", Short, new Interface * [1]{ Integer }, new std::string[1]{ "this" }, 1), new Command * [1]{ new IntegerC::toShort(Short) }, 1));
@@ -181,7 +181,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	Integer->getFuncs()->add("mod", new Function(new Signature("", number, new Interface * [2]{ Integer,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new IntegerC::Mod(Integer,argExcept) }, 1));
 
 	Float->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ Float, Float }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new FloatC::Equals(Bool) }, 1));
-	Float->getStatFuncs()->add("Float", new Function(new Signature("", Float, new Interface * [2]{ Float, Float }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new FloatC::FloatConstruct(Float) }, 1));
+	Float->getFuncs()->add("Float", new Function(new Signature("", Float, new Interface * [2]{ Float, Float }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new FloatC::FloatConstruct(Float) }, 1));
 	Float->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ Float }, new std::string[1]{ "this" }, 1), new Command * [1]{ new FloatC::ToString(String) }, 1));
 	Float->getFuncs()->add("toByte", new Function(new Signature("", Byte, new Interface * [1]{ Float }, new std::string[1]{ "this" }, 1), new Command * [1]{ new FloatC::toByte(Byte) }, 1));
 	Float->getFuncs()->add("toShort", new Function(new Signature("", Short, new Interface * [1]{ Float }, new std::string[1]{ "this" }, 1), new Command * [1]{ new FloatC::toShort(Short) }, 1));
@@ -200,7 +200,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	Float->getFuncs()->add("mod", new Function(new Signature("", number, new Interface * [2]{ Float,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new FloatC::Mod(Float,argExcept) }, 1));
 
 	Long->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ Long, Long }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new LongC::Equals(Bool) }, 1));
-	Long->getStatFuncs()->add("Long", new Function(new Signature("", Long, new Interface * [2]{ Long, Long }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new LongC::LongConstruct(Long) }, 1));
+	Long->getFuncs()->add("Long", new Function(new Signature("", Long, new Interface * [2]{ Long, Long }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new LongC::LongConstruct(Long) }, 1));
 	Long->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ Long }, new std::string[1]{ "this" }, 1), new Command * [1]{ new LongC::ToString(String) }, 1));
 	Long->getFuncs()->add("toByte", new Function(new Signature("", Byte, new Interface * [1]{ Long }, new std::string[1]{ "this" }, 1), new Command * [1]{ new LongC::toByte(Byte) }, 1));
 	Long->getFuncs()->add("toShort", new Function(new Signature("", Short, new Interface * [1]{ Long }, new std::string[1]{ "this" }, 1), new Command * [1]{ new LongC::toShort(Short) }, 1));
@@ -219,7 +219,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	Long->getFuncs()->add("mod", new Function(new Signature("", number, new Interface * [2]{ Long,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new LongC::Mod(Long,argExcept) }, 1));
 
 	Double->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ Double, Double }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new DoubleC::Equals(Bool) }, 1));
-	Double->getStatFuncs()->add("Double", new Function(new Signature("", Double, new Interface * [2]{ Double, Double }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new DoubleC::DoubleConstruct(Double) }, 1));
+	Double->getFuncs()->add("Double", new Function(new Signature("", Double, new Interface * [2]{ Double, Double }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new DoubleC::DoubleConstruct(Double) }, 1));
 	Double->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ Double }, new std::string[1]{ "this" }, 1), new Command * [1]{ new DoubleC::ToString(String) }, 1));
 	Double->getFuncs()->add("toByte", new Function(new Signature("", Byte, new Interface * [1]{ Double }, new std::string[1]{ "this" }, 1), new Command * [1]{ new DoubleC::toByte(Byte) }, 1));
 	Double->getFuncs()->add("toShort", new Function(new Signature("", Short, new Interface * [1]{ Double }, new std::string[1]{ "this" }, 1), new Command * [1]{ new DoubleC::toShort(Short) }, 1));
@@ -237,7 +237,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	Double->getFuncs()->add("div", new Function(new Signature("", number, new Interface * [2]{ Double,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new DoubleC::Div(Double,argExcept) }, 1));
 	Double->getFuncs()->add("mod", new Function(new Signature("", number, new Interface * [2]{ Double,number }, new std::string[2]{ "this","other" }, 2), new Command * [1]{ new DoubleC::Mod(Double,argExcept) }, 1));
 
-	classClass->getStatFuncs()->add("Class", new Function(new Signature("", classClass, new Interface * [2]{ classClass,String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ClassClass::ClassConstruct(classClass,parser) }, 1));
+	classClass->getFuncs()->add("Class", new Function(new Signature("", classClass, new Interface * [2]{ classClass,String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ClassClass::ClassConstruct(classClass,parser) }, 1));
 	classClass->getFuncs()->add("name", new Function(new Signature("", String, new Interface * [1]{ classClass }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ClassClass::GetName(String) }, 1));
 	classClass->getFuncs()->add("statVar", new Function(new Signature("", nullptr, new Interface * [2]{ classClass,String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ClassClass::GetStatVar(String) }, 1));
 	classClass->getFuncs()->add("invoke", new Function(new Signature("", nullptr, new Interface * [2]{ classClass,String }, new std::string[2]{ "this","func" }, 2, true), new Command * [1]{ new ClassClass::Invoke(String) }, 1));
@@ -245,30 +245,30 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	classClass->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ classClass, classClass }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ClassClass::Equals(Bool) }, 1));
 	classClass->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ classClass }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ClassClass::ToString(String) }, 1));
 
-	func->getStatFuncs()->add("Function", new Function(new Signature("", func, new Interface * [2]{ func,func }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new FunctionClass::FunctionConstruct(func) }, 1));
+	func->getFuncs()->add("Function", new Function(new Signature("", func, new Interface * [2]{ func,func }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new FunctionClass::FunctionConstruct(func) }, 1));
 	func->getFuncs()->add("execute", new Function(new Signature("", String, new Interface * [1]{ func }, new std::string[1]{ "this" }, 1, true), new Command * [1]{ new FunctionClass::Execute(func) }, 1));
 	func->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ func, func }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new FunctionClass::Equals(Bool) }, 1));
 	func->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ func }, new std::string[1]{ "this" }, 1), new Command * [1]{ new FunctionClass::ToString(String) }, 1));
 
-	thread->getStatFuncs()->add("Thread", new Function(new Signature("", thread, new Interface * [2]{ thread,func }, new std::string[2]{ "this","func" }, 2, true), new Command * [1]{ new ThreadC::ThreadConstruct(thread) }, 1));
-	thread->getStatFuncs()->add("hardware_concurrency", new Function(new Signature("", nullptr, new Interface * [0]{ }, new std::string[0]{  }, 0), new Command * [1]{ new ThreadC::HardwareConcurrency(Integer) }, 1));
+	thread->getFuncs()->add("Thread", new Function(new Signature("", thread, new Interface * [2]{ thread,func }, new std::string[2]{ "this","func" }, 2, true), new Command * [1]{ new ThreadC::ThreadConstruct(thread) }, 1));
+	thread->getFuncs()->add("hardware_concurrency", new Function(new Signature("", nullptr, new Interface * [0]{ }, new std::string[0]{  }, 0), new Command * [1]{ new ThreadC::HardwareConcurrency(Integer) }, 1));
 	thread->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ thread, thread }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ThreadC::Equals(Bool) }, 1));
 	thread->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ thread }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ThreadC::ToString(String) }, 1));
 	thread->getFuncs()->add("start", new Function(new Signature("", nullptr, new Interface * [1]{ thread }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ThreadC::Start(String) }, 1));
 	thread->getFuncs()->add("join", new Function(new Signature("", nullptr, new Interface * [1]{ thread }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ThreadC::Join(String) }, 1));
 	//thread->getFuncs()->add("detach", new Function(new Signature("",nullptr, new Interface * [1]{ thread }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ThreadC::Detach(String) }, 1));
 
-	lock->getStatFuncs()->add("Lock", new Function(new Signature("", lock, new Interface * [1]{ lock }, new std::string[1]{ "this" }, 1), new Command * [1]{ new LockC::LockConstruct(lock) }, 1));
+	lock->getFuncs()->add("Lock", new Function(new Signature("", lock, new Interface * [1]{ lock }, new std::string[1]{ "this" }, 1), new Command * [1]{ new LockC::LockConstruct(lock) }, 1));
 	lock->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ lock, lock }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new LockC::Equals(Bool) }, 1));
 	lock->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ lock }, new std::string[1]{ "this" }, 1), new Command * [1]{ new LockC::ToString(String) }, 1));
 	lock->getFuncs()->add("lock", new Function(new Signature("", nullptr, new Interface * [1]{ lock }, new std::string[1]{ "this" }, 1), new Command * [1]{ new LockC::Lock(String) }, 1));
 	lock->getFuncs()->add("unLock", new Function(new Signature("", nullptr, new Interface * [1]{ lock }, new std::string[1]{ "this" }, 1), new Command * [1]{ new LockC::Unlock(String) }, 1));
 
 	except->getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ except, except }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ExceptionC::Equals(Bool) }, 1));
-	except->getStatFuncs()->add("Exception", new Function(new Signature("", except, new Interface * [2]{ except, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ExceptionC::ExceptionConstruct(except) }, 1));
+	except->getFuncs()->add("Exception", new Function(new Signature("", except, new Interface * [2]{ except, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ExceptionC::ExceptionConstruct(except) }, 1));
 	except->getFuncs()->add("toString", new Function(new Signature("", String, new Interface * [1]{ except }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ExceptionC::ToString(String) }, 1));
 
-	castExcept->getStatFuncs()->add("CastException", new Function(new Signature("", castExcept, new Interface * [2]{ castExcept, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new CastExceptionC::ExceptionConstruct(castExcept) }, 1));
-	nullExcept->getStatFuncs()->add("NullException", new Function(new Signature("", nullExcept, new Interface * [2]{ nullExcept, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new NullException::ExceptionConstruct(nullExcept) }, 1));
-	argExcept->getStatFuncs()->add("IllegalArgumentException", new Function(new Signature("", argExcept, new Interface * [2]{ argExcept, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new IllegalArgumentExceptionC::ExceptionConstruct(argExcept) }, 1));
+	castExcept->getFuncs()->add("CastException", new Function(new Signature("", castExcept, new Interface * [2]{ castExcept, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new CastExceptionC::ExceptionConstruct(castExcept) }, 1));
+	nullExcept->getFuncs()->add("NullException", new Function(new Signature("", nullExcept, new Interface * [2]{ nullExcept, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new NullException::ExceptionConstruct(nullExcept) }, 1));
+	argExcept->getFuncs()->add("IllegalArgumentException", new Function(new Signature("", argExcept, new Interface * [2]{ argExcept, String }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new IllegalArgumentExceptionC::ExceptionConstruct(argExcept) }, 1));
 }

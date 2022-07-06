@@ -14,7 +14,6 @@ namespace DTO {
 		Class* m_parent;
 
 		MemoryFunction* m_funcs;
-		MemoryFunction* m_statFuncs;
 
 		MemoryVar* m_vars;
 		MemoryStatVar* m_statVars;
@@ -30,7 +29,6 @@ namespace DTO {
 		bool instanceOf(Interface* other) override;
 
 		MemoryFunction* getFuncs() { return m_funcs; }
-		MemoryFunction* getStatFuncs() { return m_statFuncs; }
 		MemoryVar* getVars() { return m_vars; }
 		MemoryStatVar* getStatVars() { return m_statVars; }
 	};

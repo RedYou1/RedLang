@@ -74,9 +74,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			if (!args.empty() || i < size)
 				throw "??";
 			DTO::FunctionO* func{ nullptr };
-			if (preC->getStatFuncs()->containsI(name, argsType, size))
-				func = new DTO::FunctionO(DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Function), preC->getStatFuncs()->get(name, argsType, size));
-			else if (preC->getFuncs()->containsI(name, argsType, size))
+			if (preC->getFuncs()->containsI(name, argsType, size))
 				func = new DTO::FunctionO(DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Function), preC->getFuncs()->get(name, argsType, size));
 			else
 				throw "??";
@@ -384,12 +382,7 @@ DTO::Class* Parser::Parser::parseClass(std::string path, std::string str, DTO::M
 		if (word == "function") {
 			std::string signature{};
 			DTO::Function* func{ parseFunction(!_static,_class,&signature, &str,genTypes) };
-			if (_static) {
-				_class->getStatFuncs()->add(signature, func);
-			}
-			else {
-				_class->getFuncs()->add(signature, func);
-			}
+			_class->getFuncs()->add(signature, func);
 			continue;
 		}
 
@@ -496,7 +489,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 		}
 		DTO::Class* string{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::String) };
 		DTO::Interface** in{ new DTO::Interface * [2]{string,string} };
-		DTO::Function* f{ string->getStatFuncs()->get("String",in,2) };
+		DTO::Function* f{ string->getFuncs()->get("String",in,2) };
 		delete[] in;
 		pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::StringO(string,v) }, 2);
 	}
@@ -512,7 +505,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 
 		DTO::Class* _char{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Char) };
 		DTO::Interface** in{ new DTO::Interface * [2]{_char,_char} };
-		DTO::Function* f{ _char->getStatFuncs()->get("Char",in,2) };
+		DTO::Function* f{ _char->getFuncs()->get("Char",in,2) };
 		delete[] in;
 		pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::CharO(_char,temp) }, 2);
 	}
@@ -525,42 +518,42 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 			case 'b': {
 				DTO::Class* Byte{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Byte) };
 				DTO::Interface** in{ new DTO::Interface * [2]{Byte,Byte} };
-				DTO::Function* f{ Byte->getStatFuncs()->get("Byte",in,2) };
+				DTO::Function* f{ Byte->getFuncs()->get("Byte",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::ByteO(Byte,(int8_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 's': {
 				DTO::Class* Short{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Short) };
 				DTO::Interface** in{ new DTO::Interface * [2]{Short,Short} };
-				DTO::Function* f{ Short->getStatFuncs()->get("Short",in,2) };
+				DTO::Function* f{ Short->getFuncs()->get("Short",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::ShortO(Short,(int16_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'i': {
 				DTO::Class* Integer{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Interger) };
 				DTO::Interface** in{ new DTO::Interface * [2]{Integer,Integer} };
-				DTO::Function* f{ Integer->getStatFuncs()->get("Integer",in,2) };
+				DTO::Function* f{ Integer->getFuncs()->get("Integer",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::IntegerO(Integer,(int32_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'f': {
 				DTO::Class* Float{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Float) };
 				DTO::Interface** in{ new DTO::Interface * [2]{Float,Float} };
-				DTO::Function* f{ Float->getStatFuncs()->get("Float",in,2) };
+				DTO::Function* f{ Float->getFuncs()->get("Float",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::FloatO(Float,(float_t)std::strtod(temp.c_str(),NULL)) }, 2);
 				break;
 			}case 'l': {
 				DTO::Class* Long{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Long) };
 				DTO::Interface** in{ new DTO::Interface * [2]{Long,Long} };
-				DTO::Function* f{ Long->getStatFuncs()->get("Long",in,2) };
+				DTO::Function* f{ Long->getFuncs()->get("Long",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr,new DTO::LongO(Long,(int64_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'd': {
 				DTO::Class* Double{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Double) };
 				DTO::Interface** in{ new DTO::Interface * [2]{Double,Double} };
-				DTO::Function* f{ Double->getStatFuncs()->get("Double",in,2) };
+				DTO::Function* f{ Double->getFuncs()->get("Double",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::DoubleO(Double,(double_t)std::strtod(temp.c_str(),NULL)) }, 2);
 				break;
@@ -572,14 +565,14 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 		else if (temp._Equal("true")) {
 			DTO::Class* Bool{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Boolean) };
 			DTO::Interface** in{ new DTO::Interface * [2]{Bool,Bool} };
-			DTO::Function* f{ Bool->getStatFuncs()->get("Boolean",in,2) };
+			DTO::Function* f{ Bool->getFuncs()->get("Boolean",in,2) };
 			delete[] in;
 			pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::BooleanO(Bool, true) }, 2);
 		}
 		else if (temp._Equal("false")) {
 			DTO::Class* Bool{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Boolean) };
 			DTO::Interface** in{ new DTO::Interface * [2]{Bool,Bool} };
-			DTO::Function* f{ Bool->getStatFuncs()->get("Boolean",in,2) };
+			DTO::Function* f{ Bool->getFuncs()->get("Boolean",in,2) };
 			delete[] in;
 			pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::BooleanO(Bool, false) }, 2);
 		}

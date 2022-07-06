@@ -6,9 +6,9 @@ DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
 	Number* number{ (Number*)GLOBAL::getClasses()->getInterface(Paths::Number) };
 	BooleanC* Bool{ (BooleanC*)GLOBAL::getClasses()->getInterface(Paths::Boolean) };
 	LongC* Long{ (LongC*)GLOBAL::getClasses()->getClass(Paths::Long) };
-	getStatFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ArrayConstructEmpty(this) }, 1));
-	getStatFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [2]{ this,number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayConstructSize(this) }, 1));
-	getStatFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayConstructCopy(this) }, 1));
+	getFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ArrayConstructEmpty(this) }, 1));
+	getFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [2]{ this,number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayConstructSize(this) }, 1));
+	getFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayConstructCopy(this) }, 1));
 	getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new Equals(Bool) }, 1));
 	getFuncs()->add("Get", new Function(new Signature("", m_type, new Interface * [2]{ this, number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new Get(this) }, 1));
 	getFuncs()->add("Set", new Function(new Signature("", nullptr, new Interface * [3]{ this, m_type,number }, new std::string[3]{ "this","o","c" }, 3), new Command * [1]{ new Set(this) }, 1));

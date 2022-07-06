@@ -109,7 +109,7 @@ namespace DTO {
 
 				Function* func;
 				try {
-					func = c->getStatFuncs()->get(s->m_value, argsT, size);
+					func = c->getFuncs()->get(s->m_value, argsT, size);
 				}
 				catch (std::string e) {
 					delete[] argsT;

@@ -23,7 +23,7 @@ DTO::CommandReturn* DTO::FunctionCom::exec(MemoryObject& mem) {
 		argsType[c] = args[c]->getObject()->getClass();
 	}
 
-	CommandReturn* r{ m_class->getStatFuncs()->get(m_name, argsType, m_argsLen)->exec(mem, args,m_argsLen) };
+	CommandReturn* r{ m_class->getFuncs()->get(m_name, argsType, m_argsLen)->exec(mem, args,m_argsLen) };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {
 		delete args[c];

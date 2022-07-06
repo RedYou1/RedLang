@@ -32,7 +32,7 @@ DTO::CommandReturn* DTO::ReturnFunc::exec(MemoryObject& mem) {
 		argsType[c] = args[c]->getObject()->getClass();
 	}
 
-	CommandReturn* r{ m_class->getStatFuncs()->get(m_name, argsType, m_argsLen)->exec(mem, args,m_argsLen) };
+	CommandReturn* r{ m_class->getFuncs()->get(m_name, argsType, m_argsLen)->exec(mem, args,m_argsLen) };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {
 		delete args[c];
@@ -76,7 +76,7 @@ DTO::CommandReturn* DTO::InstanceFunc::exec(MemoryObject& pre_mem) {
 		argsType[c] = args[c]->getObject()->getClass();
 	}
 	std::string name{ std::string(m_class->getName()) };
-	CommandReturn* r{ m_class->getStatFuncs()->get(myString{&name}.extract2(), argsType, m_argsLen)->exec(pre_mem, args,m_argsLen) };
+	CommandReturn* r{ m_class->getFuncs()->get(myString{&name}.extract2(), argsType, m_argsLen)->exec(pre_mem, args,m_argsLen) };
 
 	//TODO can return an exception
 	for (size_t c{ 0 }; c < m_argsLen; c++) {

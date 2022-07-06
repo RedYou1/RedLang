@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 		DTO::Class* c1{ (DTO::Class*)Parser::Parser::loadFile(path) };
 
 		DTO::MemoryObject* mem{ new DTO::MemoryObject {} };
-		DTO::CommandReturn* r{ c1->getStatFuncs()->get("main", nullptr, 0)->exec(*mem, (DTO::Command**)nullptr,0) };
+		DTO::CommandReturn* r{ c1->getFuncs()->get("main", nullptr, 0)->exec(*mem, (DTO::Command**)nullptr,0) };
 		if (r->isThrow()) {
 			DTO::Interface** cc{ new DTO::Interface * [1] {r->getObject()->getClass()} };
 			DTO::Function* func{ r->getObject()->getClass()->getFuncs()->get("toString",cc,1) };
