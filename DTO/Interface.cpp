@@ -14,6 +14,11 @@ DTO::Interface::Interface(std::string name, std::string path, MemorySourceFile* 
 {
 }
 
+DTO::Interface::Interface(std::string name, std::string path, Interface** implements, size_t implementsLen)
+	: SourceFile(name, path), m_genTypes(new MemorySourceFile{ false }), m_interfaces(implements), m_interfaceLen(implementsLen), m_signs()
+{
+}
+
 DTO::Interface::Interface(std::string name, std::string path, MemorySourceFile* genTypes, Interface** implements, size_t implementsLen)
 	: SourceFile(name, path), m_genTypes(genTypes), m_interfaces(implements), m_interfaceLen(implementsLen), m_signs()
 {

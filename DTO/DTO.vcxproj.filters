@@ -46,6 +46,18 @@
     <Filter Include="Fichiers sources\RedLang\Number">
       <UniqueIdentifier>{e6839c3a-69fc-4d3e-890d-77d1095bd5e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\RedLang\Iterable">
+      <UniqueIdentifier>{38a42164-771d-4c44-b9f9-998f93326087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\RedLang\Iterable">
+      <UniqueIdentifier>{c9300372-b0f6-4e7a-877e-d70a34bb4617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\RedLang\Iterable\Collection">
+      <UniqueIdentifier>{1402daaf-3c9a-4174-b17d-68300734f514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\RedLang\Iterable\Collection">
+      <UniqueIdentifier>{e6d99f1b-394b-4156-bb18-e1380ebef3b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BreakPoint.h">
@@ -207,6 +219,12 @@
     <ClInclude Include="ArrayList.h">
       <Filter>Fichiers d%27en-tête\RedLang</Filter>
     </ClInclude>
+    <ClInclude Include="Iterable.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Iterable</Filter>
+    </ClInclude>
+    <ClInclude Include="Collection.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Iterable\Collection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakPoint.cpp">
@@ -319,6 +337,12 @@
     </ClCompile>
     <ClCompile Include="ArrayList.cpp">
       <Filter>Fichiers sources\RedLang</Filter>
+    </ClCompile>
+    <ClCompile Include="Iterable.cpp">
+      <Filter>Fichiers sources\RedLang\Iterable</Filter>
+    </ClCompile>
+    <ClCompile Include="Collection.cpp">
+      <Filter>Fichiers sources\RedLang\Iterable\Collection</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

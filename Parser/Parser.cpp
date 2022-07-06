@@ -530,7 +530,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::ShortO(Short,(int16_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'i': {
-				DTO::Class* Integer{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Interger) };
+				DTO::Class* Integer{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Integer) };
 				DTO::Interface** in{ new DTO::Interface * [2]{Integer,Integer} };
 				DTO::Function* f{ Integer->getFuncs()->get("Integer",in,2) };
 				delete[] in;

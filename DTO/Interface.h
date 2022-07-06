@@ -18,6 +18,7 @@ namespace DTO {
 	public:
 		Interface(std::string name, std::string path);
 		Interface(std::string name, std::string path, MemorySourceFile* genTypes);
+		Interface(std::string name, std::string path, Interface** implements, size_t implementsLen);
 		Interface(std::string name, std::string path, MemorySourceFile* genTypes, Interface** implements, size_t implementsLen);
 		virtual ~Interface() override;
 

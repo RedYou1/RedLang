@@ -17,7 +17,7 @@ namespace DTO {
 		constexpr char Number[] = "RedLang.Numbers.Number";
 		constexpr char Byte[] = "RedLang.Numbers.Byte";
 		constexpr char Short[] = "RedLang.Numbers.Short";
-		constexpr char Interger[] = "RedLang.Numbers.Integer";
+		constexpr char Integer[] = "RedLang.Numbers.Integer";
 		constexpr char Long[] = "RedLang.Numbers.Long";
 		constexpr char Float[] = "RedLang.Numbers.Float";
 		constexpr char Double[] = "RedLang.Numbers.Double";
@@ -31,6 +31,8 @@ namespace DTO {
 		constexpr char CastException[] = "RedLang.Exceptions.CastException";
 		constexpr char IllegalArgumentException[] = "RedLang.Exceptions.IllegalArgumentException";
 		constexpr char NullException[] = "RedLang.Exceptions.NullException";
+		constexpr char Iterable[] = "RedLang.Iterable";
+		constexpr char Collection[] = "RedLang.Iterable.Collection";
 		constexpr char Array[] = "RedLang.Array";
 		constexpr char SizedArray[] = "RedLang.SizedArray";
 		constexpr char ArrayList[] = "RedLang.ArrayList";

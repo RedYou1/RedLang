@@ -28,6 +28,7 @@
     <ClInclude Include="Char.h" />
     <ClInclude Include="Class.h" />
     <ClInclude Include="ClassClass.h" />
+    <ClInclude Include="Collection.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Declaration.h" />
     <ClInclude Include="Double.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="IllegalArgumentException.h" />
     <ClInclude Include="Integer.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="Iterable.h" />
     <ClInclude Include="Lock.h" />
     <ClInclude Include="Long.h" />
     <ClInclude Include="MemoryFunction.h" />
@@ -79,6 +81,7 @@
     <ClCompile Include="BreakPoint.cpp" />
     <ClCompile Include="Byte.cpp" />
     <ClCompile Include="Class.cpp" />
+    <ClCompile Include="Collection.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="Declaration.cpp" />
     <ClCompile Include="Double.cpp" />
@@ -89,6 +92,7 @@
     <ClCompile Include="If.cpp" />
     <ClCompile Include="Integer.cpp" />
     <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="Iterable.cpp" />
     <ClCompile Include="Long.cpp" />
     <ClCompile Include="MemoryFunction.cpp" />
     <ClCompile Include="MemoryObject.cpp" />

@@ -24,6 +24,7 @@
 #include "FunctionClass.h"
 #include "Number.h"
 #include "IllegalArgumentException.h"
+#include "Iterable.h"
 #include "Array.h"
 #include "SizedArray.h"
 
@@ -47,7 +48,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	ShortC* Short{ new ShortC(number) };
 	GLOBAL::getClasses()->add(Paths::Short, Short);
 	IntegerC* Integer{ new IntegerC(number) };
-	GLOBAL::getClasses()->add(Paths::Interger, Integer);
+	GLOBAL::getClasses()->add(Paths::Integer, Integer);
 	FloatC* Float{ new FloatC(number) };
 	GLOBAL::getClasses()->add(Paths::Float, Float);
 	LongC* Long{ new LongC(number) };
@@ -74,6 +75,9 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	GLOBAL::getClasses()->add(Paths::NullException, nullExcept);
 	IllegalArgumentExceptionC* argExcept{ new IllegalArgumentExceptionC() };
 	GLOBAL::getClasses()->add(Paths::IllegalArgumentException, argExcept);
+
+	Iterable* iterable{ new Iterable() };
+	GLOBAL::getClasses()->add(Paths::Iterable, iterable);
 
 	Array* array{ new Array() };
 	GLOBAL::getClasses()->add(Paths::Array, array);
