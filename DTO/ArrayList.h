@@ -13,6 +13,8 @@
 #include "CastException.h"
 #include "GarbageCollector.h"
 #include "CastException.h"
+#include "Collection.h"
+#include "FunctionClass.h"
 
 namespace DTO {
 	class ArrayListO : public Object {
@@ -74,16 +76,7 @@ namespace DTO {
 			ArrayConstructSize(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
-				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
-				if (!a->getClass()->instanceOf(i[0])) {
-					delete[] i;
-					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Array", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
-				}
-				IObject** o{ new IObject * [1]{a} };
-				MemoryObject mem2{};
-				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
-				delete[] i;
-				delete[] o;
+				CommandReturn* q{ a->exec("toLong", a) };
 				Object* c{ new ArrayListO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
 				mem.set("this", c);
 				delete q;
@@ -92,56 +85,182 @@ namespace DTO {
 			Command* clone()override { return new ArrayConstructSize(m_s); }
 		};
 		class ArrayConstructCopy :public Command {
+		private:
+			class get :public Command {
+			public:
+				ArrayListO* m_array;
+				size_t m_index;
+				get(ArrayListO* array) :m_array(array), m_index(0) {}
+				get(ArrayListO* array, size_t index) :m_array(array), m_index(index) {}
+				CommandReturn* exec(MemoryObject& mem) override {
+					IObject* a{ mem.get("c") };
+					m_array->m_value[m_index] = a;
+					m_index++;
+					return new CommandReturn(new NullObject(), true, false);
+				}
+				Command* clone()override { return new get(m_array, m_index); }
+			};
 		public:
 			ArrayListC* m_s;
 			ArrayConstructCopy(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* a{ (ArrayListO*)mem.get("c") };
-				Object* c{ new ArrayListO(m_s,a->m_value) };
+				IObject* a{ mem.get("c") };
+				CommandReturn* q{ a->exec("size", a) };
+				size_t size{ (size_t)(((LongO*)q->getObject())->m_value) };
+				ArrayListO* c{ new ArrayListO(m_s, size) };
+				FunctionO* func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function),
+					new Function(new Signature("", nullptr, new Interface * [1]{ m_s->m_type }, new std::string[1]{ "c" }, 1),
+						new Command * [1]{ new get(c) }, 1)) };
+				IObject** i{ new IObject * [2]{a,func} };
+				CommandReturn* e{ a->exec("forEach", i, 2) };
+				delete[] i;
+				delete e;
+				delete q;
+				delete func->m_value;
+				delete func;
 				mem.set("this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new ArrayConstructCopy(m_s); }
 		};
-		class Get : public Command {
+
+		class forEach : public Command {
+		public:
+			forEach() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* array{ (ArrayListO*)mem.get("this") };
+				FunctionO* func{ (FunctionO*)mem.get("func") };
+				size_t size{ array->m_value.size() };
+				IObject** i{ new IObject * [1] };
+				for (size_t c{ 0 }; c < size; c++) {
+					MemoryObject mem{};
+					i[0] = array->m_value[c];
+					func->m_value->exec(mem, i, 1);
+				}
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new forEach(); }
+		};
+
+		class add : public Command {
+		public:
+			add() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* a{ (ArrayListO*)mem.get("this") };
+				IObject* b{ mem.get("c") };
+				a->m_value.push_back(b);
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new add(); }
+		};
+
+		class addI : public Command {
+		public:
+			addI() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* a{ (ArrayListO*)mem.get("this") };
+				IObject* i{ mem.get("i") };
+				IObject* b{ mem.get("c") };
+				CommandReturn* q{ i->exec("toLong",i) };
+				size_t index{ (size_t)(((LongO*)q->getObject())->m_value) };
+				delete q;
+				size_t size{ a->m_value.size() };
+				if (index > size) {
+					return new CommandReturn(new IllegalArgumentExceptionO(GLOBAL::getClasses()->getClass(Paths::IllegalArgumentException), "index too big"), true, true);
+				}
+				a->m_value.insert(a->m_value.begin() + index, b);
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new addI(); }
+		};
+
+		class addAll : public Command {
 		public:
 			ArrayListC* m_s;
-			Get(ArrayListC* s) :m_s(s) {}
+			FunctionO* m_func;
+			addAll(ArrayListC* s) :m_s{ s },
+				m_func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function), new Function(
+					new Signature("", nullptr,new Interface * [2]{ m_s,m_s->m_type }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new add() }, 1)) }{}
+			~addAll() override { delete m_func->m_value; delete m_func; }
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* a{ (ArrayListO*)mem.get("this") };
+				IObject* b{ mem.get("c") };
+				IObject** ob{ new IObject * [2]{a,m_func} };
+				CommandReturn* q{ b->exec("forEach",ob,2) };
+				delete[] ob;
+				delete q;
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new addAll(m_s); }
+		};
+
+		class addAllI :public Command {
+		private:
+			class addInside :public Command {
+			public:
+				ArrayListO* m_array;
+				size_t m_index;
+				addInside(ArrayListO* array, size_t index) :m_array(array), m_index(index) {}
+				CommandReturn* exec(MemoryObject& mem) override {
+					IObject* a{ mem.get("c") };
+					m_array->m_value[m_index] = a;
+					m_index++;
+					return new CommandReturn(new NullObject(), true, false);
+				}
+				Command* clone()override { return new addInside(m_array, m_index); }
+			};
+		public:
+			ArrayListC* m_s;
+			addAllI(ArrayListC* s) :m_s(s) {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* array{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get("c") };
+				IObject* i{ mem.get("i") };
+				CommandReturn* q{ a->exec("size", a) };
+				size_t size{ (size_t)(((LongO*)q->getObject())->m_value) };
+				delete q;
+				q = i->exec("toLong", i);
+				size_t index{ (size_t)(((LongO*)q->getObject())->m_value) };
+				delete q;
+
+				array->m_value.reserve(array->m_value.size() + size);
+				memmove(&array->m_value[index + size], &array->m_value[index], size);
+
+				FunctionO* func{
+				new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function),
+					new Function(new Signature("", nullptr, new Interface * [1]{ m_s->m_type }, new std::string[1]{ "c" }, 1),
+						new Command * [1]{ new addInside(array,index) }, 1))
+				};
+				IObject** ob{ new IObject * [2]{a,func} };
+				CommandReturn* e{ a->exec("forEach", ob, 2) };
+				delete[] ob;
+				delete e;
+				delete func->m_value;
+				delete func;
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new addAllI(m_s); }
+		};
+
+		class get : public Command {
+		public:
+			get() {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
-				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
-				if (!a->getClass()->instanceOf(i[0])) {
-					delete[] i;
-					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Get", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
-				}
-				IObject** o{ new IObject * [1]{a} };
-				MemoryObject mem2{};
-				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
-				delete[] i;
-				delete[] o;
+				CommandReturn* q{ a->exec("toLong", a) };
 				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
 				IObject* arro{ arr->m_value[((NumberO*)q->getObject())->toLong()] };
 				delete q;
 				return new CommandReturn(arro, true, false);
 			}
-			Command* clone()override { return new Get(m_s); }
+			Command* clone()override { return new get(); }
 		};
-		class Set : public Command {
+		class set : public Command {
 		public:
-			ArrayListC* m_s;
-			Set(ArrayListC* s) :m_s(s) {}
+			set() {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
-				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
-				if (!a->getClass()->instanceOf(i[0])) {
-					delete[] i;
-					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Set", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
-				}
-				IObject** o{ new IObject * [1]{a} };
-				MemoryObject mem2{};
-				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
-				delete[] i;
-				delete[] o;
+				CommandReturn* q{ a->exec("toLong", a) };
 				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
 				GarbageCollector::Remove(arr->m_value[((NumberO*)q->getObject())->toLong()]);
 				arr->m_value[((NumberO*)q->getObject())->toLong()] = mem.get("o");
@@ -149,7 +268,7 @@ namespace DTO {
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
 			}
-			Command* clone()override { return new Set(m_s); }
+			Command* clone()override { return new set(); }
 		};
 		class PushBack :public Command {
 		public:

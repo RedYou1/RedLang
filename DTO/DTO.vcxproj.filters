@@ -58,6 +58,12 @@
     <Filter Include="Fichiers sources\RedLang\Iterable\Collection">
       <UniqueIdentifier>{e6d99f1b-394b-4156-bb18-e1380ebef3b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\RedLang\Iterable\Collection\List">
+      <UniqueIdentifier>{e5809ae7-0013-47df-b7e8-35ef8ee3d467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\RedLang\Iterable\Collection\List">
+      <UniqueIdentifier>{2f9ef65d-3b3b-41a2-a11b-453d8db20712}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BreakPoint.h">
@@ -216,14 +222,17 @@
     <ClInclude Include="SizedArray.h">
       <Filter>Fichiers d%27en-tête\RedLang</Filter>
     </ClInclude>
-    <ClInclude Include="ArrayList.h">
-      <Filter>Fichiers d%27en-tête\RedLang</Filter>
-    </ClInclude>
     <ClInclude Include="Iterable.h">
       <Filter>Fichiers d%27en-tête\RedLang\Iterable</Filter>
     </ClInclude>
     <ClInclude Include="Collection.h">
       <Filter>Fichiers d%27en-tête\RedLang\Iterable\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrayList.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Iterable\Collection\List</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Iterable\Collection\List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -335,14 +344,17 @@
     <ClCompile Include="SizedArray.cpp">
       <Filter>Fichiers sources\RedLang</Filter>
     </ClCompile>
-    <ClCompile Include="ArrayList.cpp">
-      <Filter>Fichiers sources\RedLang</Filter>
-    </ClCompile>
     <ClCompile Include="Iterable.cpp">
       <Filter>Fichiers sources\RedLang\Iterable</Filter>
     </ClCompile>
     <ClCompile Include="Collection.cpp">
       <Filter>Fichiers sources\RedLang\Iterable\Collection</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayList.cpp">
+      <Filter>Fichiers sources\RedLang\Iterable\Collection\List</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Fichiers sources\RedLang\Iterable\Collection\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

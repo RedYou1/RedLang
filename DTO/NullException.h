@@ -11,6 +11,13 @@
 #include "Global.h"
 
 namespace DTO {
+	class NullExceptionO : public ExceptionO {
+	public:
+		NullExceptionO(Class* type, std::string message)
+			: ExceptionO(type, message) {
+		}
+	};
+
 	class NullException : public Class {
 	public:
 		NullException() : Class("NullException", Paths::NullException, GLOBAL::getClasses()->getClass(Paths::Exception)) {

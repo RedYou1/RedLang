@@ -4,6 +4,7 @@
 #include "Class.h"
 #include "Var.h"
 #include "GarbageCollector.h"
+#include "NullException.h"
 
 DTO::Object::Object(Class* type, IObject** vars, size_t size)
 	:IObject(type), m_vars(vars), m_size(size)
@@ -62,4 +63,37 @@ DTO::IObject* DTO::Object::clone()
 		GarbageCollector::Add(vars[c]);
 	}
 	return new Object(m_type, vars, m_size);
+}
+
+CommandReturn* DTO::Object::exec(std::string name, IObject** args, size_t argsSize)
+{
+	Interface** i{ new Interface * [argsSize] };
+	for (size_t c{ 0 }; c < argsSize; c++) {
+		i[c] = args[c]->getClass();
+	}
+	MemoryObject mem2{};
+	CommandReturn* q{ getClass()->getFuncs()->get(name, i, argsSize)->exec(mem2, args, argsSize) };
+	delete[] i;
+	return q;
+}
+
+CommandReturn* DTO::NullObject::exec(std::string name, IObject** args, size_t argsSize)
+{
+	return new CommandReturn(new NullExceptionO("Can't execute a function on a null object."), true, true);
+}
+
+CommandReturn* DTO::Object::exec(std::string name, IObject* arg)
+{
+	IObject** o{ new IObject * [1]{arg} };
+	Interface** i{ new Interface * [1]{arg->getClass()} };
+	MemoryObject mem2{};
+	CommandReturn* q{ getClass()->getFuncs()->get(name, i, 1)->exec(mem2, o, 1) };
+	delete[] i;
+	delete[] o;
+	return q;
+}
+
+CommandReturn* DTO::NullObject::exec(std::string name, IObject* arg)
+{
+	return new CommandReturn(new NullExceptionO("Can't execute a function on a null object."), true, true);
 }

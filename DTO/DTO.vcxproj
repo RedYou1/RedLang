@@ -45,6 +45,7 @@
     <ClInclude Include="Integer.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Iterable.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="Lock.h" />
     <ClInclude Include="Long.h" />
     <ClInclude Include="MemoryFunction.h" />
@@ -93,6 +94,7 @@
     <ClCompile Include="Integer.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="Iterable.cpp" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="Long.cpp" />
     <ClCompile Include="MemoryFunction.cpp" />
     <ClCompile Include="MemoryObject.cpp" />

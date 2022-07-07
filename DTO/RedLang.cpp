@@ -25,6 +25,7 @@
 #include "Number.h"
 #include "IllegalArgumentException.h"
 #include "Iterable.h"
+#include "Collection.h"
 #include "Array.h"
 #include "SizedArray.h"
 
@@ -78,6 +79,9 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 
 	Iterable* iterable{ new Iterable() };
 	GLOBAL::getClasses()->add(Paths::Iterable, iterable);
+
+	Collection* collection{ new Collection() };
+	GLOBAL::getClasses()->add(Paths::Collection, collection);
 
 	Array* array{ new Array() };
 	GLOBAL::getClasses()->add(Paths::Array, array);
