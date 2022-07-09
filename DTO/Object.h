@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
-#include "Command.h"
 #include "Global.h"
 
 namespace DTO {
 	class Class;
+	class CommandReturn;
 
 	class IObject {
 	protected:

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Arg.h" />
     <ClInclude Include="Array.h" />
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="Boolean.h" />

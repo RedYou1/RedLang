@@ -5,6 +5,9 @@
 #include "MemoryVar.h"
 #include "MemoryStatVar.h"
 #include "MemoryFunction.h"
+#include "Command.h"
+#include "Function.h"
+#include "Signature.h"
 
 DTO::Class::Class(std::string name, std::string path, Class* parent)
 	: Class(name, path, parent, new Interface* [0], 0) {}
@@ -41,4 +44,14 @@ bool DTO::Class::instanceOf(Interface* other)
 	if (m_parent)
 		return m_parent->instanceOf(other);
 	return false;
+}
+
+void DTO::Class::addFunc(std::string name, Interface* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity)
+{
+	m_funcs->add(name, new Function(new Signature("", returnType, args, argsLen, infinity), new Command * [1]{ cmd }, 1));
+}
+
+void DTO::Class::addFunc(std::string name, Interface* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity)
+{
+	m_funcs->add(name, new Function(new Signature("", returnType, args, argsLen, infinity), cmds, cmdsLen));
 }

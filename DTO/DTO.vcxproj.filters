@@ -234,6 +234,9 @@
     <ClInclude Include="List.h">
       <Filter>Fichiers d%27en-tête\RedLang\Iterable\Collection\List</Filter>
     </ClInclude>
+    <ClInclude Include="Arg.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakPoint.cpp">

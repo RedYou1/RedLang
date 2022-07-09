@@ -1,5 +1,6 @@
 #include "Command.h"
 #include "GarbageCollector.h"
+#include "Object.h"
 
 DTO::CommandReturn::CommandReturn(IObject* object, bool _return, bool _throw)
 	:m_object(object), m_return(_return), m_throw(_throw)

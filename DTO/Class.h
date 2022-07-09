@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
 #include "Interface.h"
+#include "Arg.h"
 
 namespace DTO {
 	class Command;
 	class MemoryVar;
 	class MemoryFunction;
-	class MemoryObject;
 	class MemoryStatVar;
 
 	class Class :public Interface {
@@ -31,5 +31,8 @@ namespace DTO {
 		MemoryFunction* getFuncs() { return m_funcs; }
 		MemoryVar* getVars() { return m_vars; }
 		MemoryStatVar* getStatVars() { return m_statVars; }
+
+		void addFunc(std::string name, Interface* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity = true);
+		void addFunc(std::string name, Interface* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity = true);
 	};
 }

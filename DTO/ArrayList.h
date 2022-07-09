@@ -109,7 +109,7 @@ namespace DTO {
 				size_t size{ (size_t)(((LongO*)q->getObject())->m_value) };
 				ArrayListO* c{ new ArrayListO(m_s, size) };
 				FunctionO* func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function),
-					new Function(new Signature("", nullptr, new Interface * [1]{ m_s->m_type }, new std::string[1]{ "c" }, 1),
+					new Function(new Signature("", nullptr, new Arg[1]{ m_s->m_type, "c" }, 1),
 						new Command * [1]{ new get(c) }, 1)) };
 				IObject** i{ new IObject * [2]{a,func} };
 				CommandReturn* e{ a->exec("forEach", i, 2) };
@@ -180,7 +180,7 @@ namespace DTO {
 			FunctionO* m_func;
 			addAll(ArrayListC* s) :m_s{ s },
 				m_func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function), new Function(
-					new Signature("", nullptr,new Interface * [2]{ m_s,m_s->m_type }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new add() }, 1)) }{}
+					new Signature("", nullptr,new Arg[2]{ m_s,"this", m_s->m_type,"c" }, 2), new Command * [1]{ new add() }, 1)) }{}
 			~addAll() override { delete m_func->m_value; delete m_func; }
 			CommandReturn* exec(MemoryObject& mem) override {
 				ArrayListO* a{ (ArrayListO*)mem.get("this") };
@@ -228,7 +228,7 @@ namespace DTO {
 
 				FunctionO* func{
 				new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function),
-					new Function(new Signature("", nullptr, new Interface * [1]{ m_s->m_type }, new std::string[1]{ "c" }, 1),
+					new Function(new Signature("", nullptr, new Arg[1]{ m_s->m_type, "c" }, 1),
 						new Command * [1]{ new addInside(array,index) }, 1))
 				};
 				IObject** ob{ new IObject * [2]{a,func} };

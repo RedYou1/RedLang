@@ -6,12 +6,12 @@ DTO::SizedArray::SizedArrayC::SizedArrayC(std::string name, Interface* type)
 	Number* number{ (Number*)GLOBAL::getClasses()->getInterface(Paths::Number) };
 	BooleanC* Bool{ (BooleanC*)GLOBAL::getClasses()->getInterface(Paths::Boolean) };
 	LongC* Long{ (LongC*)GLOBAL::getClasses()->getClass(Paths::Long) };
-	getFuncs()->add("SizedArray", new Function(new Signature("", this, new Interface * [2]{ this,number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayConstruct(this) }, 1));
-	getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new Equals(Bool) }, 1));
-	getFuncs()->add("Get", new Function(new Signature("", m_type, new Interface * [2]{ this, number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new Get(this) }, 1));
-	getFuncs()->add("Set", new Function(new Signature("", nullptr, new Interface * [3]{ this, m_type,number }, new std::string[3]{ "this","o","c" }, 3), new Command * [1]{ new Set(this) }, 1));
-	getFuncs()->add("Size", new Function(new Signature("", Long, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1), new Command * [1]{ new Size(Long) }, 1));
-	getFuncs()->add("Resize", new Function(new Signature("", nullptr, new Interface * [2]{ this,number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new Resize() }, 1));
+	addFunc("SizedArray", this, new Arg[2]{ this,"this", number,"c" }, 2, new ArrayConstruct(this));
+	addFunc("equals", Bool, new Arg[2]{ this,"this", this,"c" }, 2, new Equals(Bool));
+	addFunc("get", m_type, new Arg[2]{ this,"this", number,"c" }, 2, new Get(this));
+	addFunc("set", nullptr, new Arg[3]{ this,"this", m_type,"o", number,"c" }, 3, new Set(this));
+	addFunc("size", Long, new Arg[1]{ this,"this" }, 1, new Size(Long));
+	addFunc("resize", nullptr, new Arg[2]{ this,"this", number,"c" }, 2, new Resize());
 }
 
 DTO::SourceFile* DTO::SizedArray::create(std::string newName, SourceFile** gens, size_t genSize)

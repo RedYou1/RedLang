@@ -8,15 +8,15 @@ DTO::Collection::CollectionI::CollectionI(std::string name, Interface* type)
 {
 	Interface* Bool{ GLOBAL::getClasses()->getInterface(Paths::Boolean) };
 	Interface* Integer{ GLOBAL::getClasses()->getInterface(Paths::Integer) };
-	add("add", new Signature("", nullptr, new Interface * [2]{ this,type }, new std::string[2]{ "this","c" }, 2));
-	add("addAll", new Signature("", nullptr, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2));
-	add("clear", new Signature("", nullptr, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1));
-	add("contains", new Signature("", Bool, new Interface * [2]{ this,type }, new std::string[2]{ "this","c" }, 2));
-	add("containsAll", new Signature("", Bool, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2));
-	add("isEmpty", new Signature("", Bool, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1));
-	add("remove", new Signature("", nullptr, new Interface * [2]{ this,type }, new std::string[2]{ "this","c" }, 2));
-	add("removeAll", new Signature("", nullptr, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2));
-	add("size", new Signature("", Integer, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1));
+	add("add", new Signature("", nullptr, new Arg[2]{ this,"this", type,"c" }, 2));
+	add("addAll", new Signature("", nullptr, new Arg[2]{ this,"this", this,"c" }, 2));
+	add("clear", new Signature("", nullptr, new Arg[1]{ this,"this" }, 1));
+	add("contains", new Signature("", Bool, new Arg[2]{ this,"this", type,"c" }, 2));
+	add("containsAll", new Signature("", Bool, new Arg[2]{ this,"this", this,"c" }, 2));
+	add("isEmpty", new Signature("", Bool, new Arg[1]{ this,"this" }, 1));
+	add("remove", new Signature("", nullptr, new Arg[2]{ this,"this", type,"c" }, 2));
+	add("removeAll", new Signature("", nullptr, new Arg[2]{ this,"this", this,"c" }, 2));
+	add("size", new Signature("", Integer, new Arg[1]{ this,"this" }, 1));
 }
 
 DTO::SourceFile* DTO::Collection::create(std::string newName, SourceFile** gens, size_t genSize)

@@ -5,10 +5,10 @@ DTO::Array::ArrayC::ArrayC(std::string name, Interface* type)
 {
 	Number* number{ (Number*)GLOBAL::getClasses()->getInterface(Paths::Number) };
 	BooleanC* Bool{ (BooleanC*)GLOBAL::getClasses()->getInterface(Paths::Boolean) };
-	getFuncs()->add("Array", new Function(new Signature("", this, new Interface * [2]{ this,number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayConstruct(this) }, 1));
-	getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new Equals(Bool) }, 1));
-	getFuncs()->add("Get", new Function(new Signature("", m_type, new Interface * [2]{ this, number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new Get(this) }, 1));
-	getFuncs()->add("Set", new Function(new Signature("", nullptr, new Interface * [3]{ this, m_type,number }, new std::string[3]{ "this","o","c" }, 3), new Command * [1]{ new Set(this) }, 1));
+	addFunc("Array", this, new Arg[2]{ this,"this",number,"c" }, 2, new ArrayConstruct(this));
+	addFunc("equals", Bool, new Arg[2]{ this,"this",this,"c" }, 2, new Equals(Bool));
+	addFunc("get", m_type, new Arg[2]{ this,"this", number,"c" }, 2, new Get(this));
+	addFunc("set", nullptr, new Arg[3]{ this,"this", m_type,"o",number,"c" }, 3, new Set(this));
 }
 
 DTO::SourceFile* DTO::Array::create(std::string newName, SourceFile** gens, size_t genSize)

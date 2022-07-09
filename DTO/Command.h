@@ -3,12 +3,8 @@
 
 
 namespace DTO {
-	class Class;
-	class MemoryObject;
-	class MemoryVariable;
-	class MemorySourceFile;
-	class Object;
 	class IObject;
+	class MemoryObject;
 
 	class Command;
 

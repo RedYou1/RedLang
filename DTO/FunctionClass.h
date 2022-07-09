@@ -46,7 +46,7 @@ namespace DTO {
 				Signature* sig{ a->m_value->getSignature() };
 				std::string s{ "Function<" };
 				for (size_t c{ 0 }; c < sig->getArgsLen(); c++)
-					s += sig->getArgsType()[c]->getName() + ",";
+					s += sig->getArgs()[c].type->getName() + ",";
 				s += sig->getReturnType() == nullptr ? "void" : sig->getReturnType()->getName();
 				return new CommandReturn(new StringO(m_s, s + ">"), true, false);
 			}

@@ -19,7 +19,7 @@ namespace DTO {
 		std::list<Function*> get(std::string name);
 		Function* get(std::string name, Interface** argsType, size_t argsLen);
 
-		bool containsI(std::string name, Interface** argsType, size_t argsLen);
+		bool containsI(std::string name, Arg* args, size_t argsLen);
 
 		template <class K>
 		void forEach(K* global, void(*func)(K* global, std::string name, std::list<Function*> ob)) {

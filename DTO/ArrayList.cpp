@@ -1,8 +1,7 @@
 #include "ArrayList.h"
 
 DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
-	:Class(name, Paths::SizedArray, GLOBAL::getClasses()->getClass(Paths::Object)
-		, new Interface* [1]{ GLOBAL::getClasses()->getInterface(std::string(Paths::List) + "<" + type->getName() + ">") }, 1), m_type(type)
+	:Class(name, Paths::SizedArray, GLOBAL::getClasses()->getClass(Paths::Object)), m_type(type)
 {
 	Interface* Number{ GLOBAL::getClasses()->getInterface(Paths::Number) };
 	BooleanC* Bool{ (BooleanC*)GLOBAL::getClasses()->getInterface(Paths::Boolean) };
@@ -11,31 +10,31 @@ DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
 	Interface* function{ GLOBAL::getClasses()->getInterface(Paths::Function) };
 	Interface* Array{ GLOBAL::getClasses()->getInterface(Paths::Array) };
 	Interface* Class{ GLOBAL::getClasses()->getInterface(Paths::Class) };
-	getFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1), new Command * [1]{ new ArrayConstructEmpty(this) }, 1));
-	getFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [2]{ this,Number }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayConstructSize(this) }, 1));
-	getFuncs()->add("ArrayList", new Function(new Signature("", this, new Interface * [2]{ this,collection }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayConstructCopy(this) }, 1));
-	getFuncs()->add("Equals", new Function(new Signature("", Bool, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new Equals(Bool) }, 1));
+	addFunc("ArrayList", this, new Arg[1]{ this,"this" }, 1, new ArrayConstructEmpty(this));
+	addFunc("ArrayList", this, new Arg[2]{ this,"this", Number,"c" }, 2, new ArrayConstructSize(this));
+	addFunc("ArrayList", this, new Arg[2]{ this,"this", collection,"c" }, 2, new ArrayConstructCopy(this));
+	addFunc("equals", Bool, new Arg[2]{ this,"this", this,"c" }, 2, new Equals(Bool));
 
-	getFuncs()->add("forEach", new Function(new Signature("", nullptr, new Interface * [2]{ this,function }, new std::string[2]{ "this","func" }, 2), new Command * [1]{ new forEach() }, 1));
-	getFuncs()->add("add", new Function(new Signature("", nullptr, new Interface * [2]{ this,type }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new ArrayList::add() }, 1));
-	getFuncs()->add("add", new Function(new Signature("", nullptr, new Interface * [3]{ this,Number,type }, new std::string[3]{ "this","i","c" }, 3), new Command * [1]{ new addI() }, 1));
-	getFuncs()->add("addAll", new Function(new Signature("", nullptr, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new addAll(this) }, 1));
-	getFuncs()->add("addAll", new Function(new Signature("", nullptr, new Interface * [3]{ this,Number,this }, new std::string[3]{ "this","i","c" }, 3), new Command * [1]{ new addAllI(this) }, 1));
-	getFuncs()->add("get", new Function(new Signature("", type, new Interface * [2]{ this,Number }, new std::string[2]{ "this","i" }, 2), new Command * [1]{ new ArrayList::get() }, 1));
-	getFuncs()->add("indexOf", new Function(new Signature("", Number, new Interface * [2]{ this,type }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new indexOf() }, 1));
-	getFuncs()->add("lastIndexOf", new Function(new Signature("", Number, new Interface * [2]{ this,type }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new lastIndexOf() }, 1));
-	getFuncs()->add("clear", new Function(new Signature("", nullptr, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1), new Command * [1]{ new clear() }, 1));
-	getFuncs()->add("contains", new Function(new Signature("", Bool, new Interface * [2]{ this,type }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new contains() }, 1));
-	getFuncs()->add("containsAll", new Function(new Signature("", Bool, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new containsAll() }, 1));
-	getFuncs()->add("isEmpty", new Function(new Signature("", Bool, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1), new Command * [1]{ new isEmpty() }, 1));
-	getFuncs()->add("remove", new Function(new Signature("", nullptr, new Interface * [2]{ this,type }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new remove() }, 1));
-	getFuncs()->add("remove", new Function(new Signature("", type, new Interface * [2]{ this,Number }, new std::string[2]{ "this","i" }, 2), new Command * [1]{ new removeI() }, 1));
-	getFuncs()->add("removeAll", new Function(new Signature("", nullptr, new Interface * [2]{ this,this }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new removeAll() }, 1));
-	getFuncs()->add("size", new Function(new Signature("", Number, new Interface * [1]{ this }, new std::string[1]{ "this" }, 1), new Command * [1]{ new size() }, 1));
-	getFuncs()->add("set", new Function(new Signature("", nullptr, new Interface * [3]{ this,Number,type }, new std::string[3]{ "this","i","c" }, 3), new Command * [1]{ new set() }, 1));
-	getFuncs()->add("sort", new Function(new Signature("", nullptr, new Interface * [2]{ this,function }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new sort() }, 1));
-	getFuncs()->add("subList", new Function(new Signature("", this, new Interface * [3]{ this,Number,Number }, new std::string[3]{ "this","a","b" }, 3), new Command * [1]{ new subList() }, 1));
-	getFuncs()->add("toArray", new Function(new Signature("", Array, new Interface * [2]{ this,Class }, new std::string[2]{ "this","c" }, 2), new Command * [1]{ new toArray() }, 1));
+	addFunc("forEach", nullptr, new Arg[2]{ this,"this", function,"func" }, 2, new forEach());
+	addFunc("add", nullptr, new Arg[2]{ this,"this", type,"c" }, 2, new ArrayList::add());
+	addFunc("add", nullptr, new Arg[3]{ this,"this", Number,"i", type,"c" }, 3, new addI());
+	addFunc("addAll", nullptr, new Arg[2]{ this,"this", this,"c" }, 2, new addAll(this));
+	addFunc("addAll", nullptr, new Arg[3]{ this,"this", Number,"i", this,"c" }, 3, new addAllI(this));
+	addFunc("get", type, new Arg[2]{ this,"this", Number,"i" }, 2, new ArrayList::get());
+	addFunc("indexOf", Number, new Arg[2]{ this,"this", type,"c" }, 2, new indexOf());
+	addFunc("lastIndexOf", Number, new Arg[2]{ this,"this", type,"c" }, 2, new lastIndexOf());
+	addFunc("clear", nullptr, new Arg[1]{ this,"this" }, 1, new clear());
+	addFunc("contains", Bool, new Arg[2]{ this,"this", type,"c" }, 2, new contains());
+	addFunc("containsAll", Bool, new Arg[2]{ this,"this", this,"c" }, 2, new containsAll());
+	addFunc("isEmpty", Bool, new Arg[1]{ this,"this" }, 1, new isEmpty());
+	addFunc("remove", nullptr, new Arg[2]{ this,"this", type,"c" }, 2, new remove());
+	addFunc("remove", type, new Arg[2]{ this,"this", Number,"i" }, 2, new removeI());
+	addFunc("removeAll", nullptr, new Arg[2]{ this,"this", this,"c" }, 2, new removeAll());
+	addFunc("size", Number, new Arg[1]{ this,"this" }, 1, new size());
+	addFunc("set", nullptr, new Arg[3]{ this,"this", Number,"i", type,"c" }, 3, new set());
+	addFunc("sort", nullptr, new Arg[2]{ this,"this", function,"c" }, 2, new sort());
+	addFunc("subList", this, new Arg[3]{ this,"this", Number,"a", Number,"b" }, 3, new subList());
+	addFunc("toArray", Array, new Arg[2]{ this,"this", Class,"c" }, 2, new toArray());
 }
 
 DTO::SourceFile* DTO::ArrayList::create(std::string newName, SourceFile** gens, size_t genSize)

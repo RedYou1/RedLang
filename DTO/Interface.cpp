@@ -80,7 +80,7 @@ bool DTO::Interface::containsAll(Class* _class)
 {
 	for (std::map<std::string, std::list<Signature*>>::iterator it(m_signs.begin()); it != m_signs.end(); ++it) {
 		for (std::list<Signature*>::iterator it2(it->second.begin()); it2 != it->second.end(); ++it2) {
-			if (!_class->getFuncs()->containsI(it->first, (*it2)->getArgsType(), (*it2)->getArgsLen()))
+			if (!_class->getFuncs()->containsI(it->first, (*it2)->getArgs(), (*it2)->getArgsLen()))
 				return false;
 		}
 	}

@@ -1,5 +1,7 @@
 #include "Object.h"
+#include "Command.h"
 #include "MemoryObject.h"
+#include "MemoryFunction.h"
 #include "MemoryVar.h"
 #include "Class.h"
 #include "Var.h"
@@ -65,7 +67,7 @@ DTO::IObject* DTO::Object::clone()
 	return new Object(m_type, vars, m_size);
 }
 
-CommandReturn* DTO::Object::exec(std::string name, IObject** args, size_t argsSize)
+DTO::CommandReturn* DTO::Object::exec(std::string name, IObject** args, size_t argsSize)
 {
 	Interface** i{ new Interface * [argsSize] };
 	for (size_t c{ 0 }; c < argsSize; c++) {
@@ -77,12 +79,12 @@ CommandReturn* DTO::Object::exec(std::string name, IObject** args, size_t argsSi
 	return q;
 }
 
-CommandReturn* DTO::NullObject::exec(std::string name, IObject** args, size_t argsSize)
+DTO::CommandReturn* DTO::NullObject::exec(std::string name, IObject** args, size_t argsSize)
 {
-	return new CommandReturn(new NullExceptionO("Can't execute a function on a null object."), true, true);
+	return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), "Can't execute a function on a null object."), true, true);
 }
 
-CommandReturn* DTO::Object::exec(std::string name, IObject* arg)
+DTO::CommandReturn* DTO::Object::exec(std::string name, IObject* arg)
 {
 	IObject** o{ new IObject * [1]{arg} };
 	Interface** i{ new Interface * [1]{arg->getClass()} };
@@ -93,7 +95,7 @@ CommandReturn* DTO::Object::exec(std::string name, IObject* arg)
 	return q;
 }
 
-CommandReturn* DTO::NullObject::exec(std::string name, IObject* arg)
+DTO::CommandReturn* DTO::NullObject::exec(std::string name, IObject* arg)
 {
-	return new CommandReturn(new NullExceptionO("Can't execute a function on a null object."), true, true);
+	return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), "Can't execute a function on a null object."), true, true);
 }
