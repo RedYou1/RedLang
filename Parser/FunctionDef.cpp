@@ -13,7 +13,7 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 {
 	DTO::MemoryVariable variables{};
 	for (size_t i{ 0 }; i < m_signature->getArgsLen(); i++)
-		variables.add(m_signature->getArgsName()[i], m_signature->getArgsType()[i]);
+		variables.add(m_signature->getArgs()[i].name, m_signature->getArgs()[i].type);
 
 	DTO::myString s{ &m_definition };
 	std::queue<DTO::Command*> commands{};

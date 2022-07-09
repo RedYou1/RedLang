@@ -49,7 +49,7 @@ class test{
 	}
 
 	static function void testerThrow(Integer i){
-		if(i.Equals(1i)){
+		if(i.equals(1i)){
 			throw "1";
 		}
 		throw 2i;
@@ -105,7 +105,7 @@ class test{
 
 		System.print("Met 1:");
 		String s = System.getWord();
-		while(s.Equals("1").not()){
+		while(s.equals("1").not()){
 			System.print("NON. met 1:");
 			s = System.getWord();
 		}
@@ -177,15 +177,15 @@ class test{
 		System.println(p2);
 
 		HeatMap<Integer> heatMap = new HeatMap<Integer>(3i,3i);
-		heatMap.Set(10i,0i,0i);
-		heatMap.Set(3i,1i,0i);
-		heatMap.Set(99i,2i,0i);
-		heatMap.Set(13i,0i,1i);
-		heatMap.Set(43i,1i,1i);
-		heatMap.Set(70i,2i,1i);
-		heatMap.Set(-1i,0i,2i);
-		heatMap.Set(20i,1i,2i);
-		heatMap.Set(51i,2i,2i);
+		heatMap.set(10i,0i,0i);
+		heatMap.set(3i,1i,0i);
+		heatMap.set(99i,2i,0i);
+		heatMap.set(13i,0i,1i);
+		heatMap.set(43i,1i,1i);
+		heatMap.set(70i,2i,1i);
+		heatMap.set(-1i,0i,2i);
+		heatMap.set(20i,1i,2i);
+		heatMap.set(51i,2i,2i);
 		System.println(heatMap);
 
 		RealPrinter<Integer> rp = new RealPrinter<Integer>(1i);
@@ -197,25 +197,25 @@ class test{
 		test.preMain();
 
 		SizedArray<Integer> arr = new SizedArray<Integer>(2i);
-		arr.Set(1i,0i);
-		arr.Set(2i,1i);
-		System.println(arr.Size());
+		arr.set(1i,0i);
+		arr.set(2i,1i);
+		System.println(arr.size());
 		String s = "";
-		for(Number y = 0l;y.lt(arr.Size());y.add(1l)){
+		for(Number y = 0l;y.lt(arr.size());y.add(1l)){
             if(y.gt(0i)){
                 s.concat(",");
             }
-            s.concat(arr.Get(y).toString());
+            s.concat(arr.get(y).toString());
         }
 		System.println(s);
-		arr.Resize(3i);
-		System.println(arr.Size());
+		arr.resize(3i);
+		System.println(arr.size());
 		s = "";
-		for(Number y = 0l;y.lt(arr.Size());y.add(1l)){
+		for(Number y = 0l;y.lt(arr.size());y.add(1l)){
             if(y.gt(0i)){
                 s.concat(",");
             }
-            s.concat(arr.Get(y).toString());
+            s.concat(arr.get(y).toString());
         }
 		System.println(s);
 

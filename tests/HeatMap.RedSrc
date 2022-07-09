@@ -12,19 +12,19 @@ class HeatMap<T>{
             Array<T> array = new Array<T>(heigth);
             
             for(Number y = 0l;y.lt(this.heigth);y.add(1l)){
-                array.Set(0i,y);
+                array.set(0i,y);
             }
 
-            this.heatMap.Set(array,x);
+            this.heatMap.set(array,x);
         }
     }
 
-    function T Get(Number x,Number y){
-        return this.heatMap.Get(x).Get(y);
+    function T get(Number x,Number y){
+        return this.heatMap.get(x).get(y);
     }
 
-    function void Set(T o,Number x, Number y){
-        this.heatMap.Get(x).Set(o,y);
+    function void set(T o,Number x, Number y){
+        this.heatMap.get(x).set(o,y);
     }
 
     function String toString(){
@@ -34,7 +34,7 @@ class HeatMap<T>{
                 if(y.gt(0i)){
                     s.concat(",");
                 }
-                s.concat(this.Get(x,y).toString());
+                s.concat(this.get(x,y).toString());
             }
             s.concat("\n");
         }

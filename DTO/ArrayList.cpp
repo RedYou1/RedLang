@@ -25,7 +25,7 @@ DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
 	addFunc("lastIndexOf", Number, new Arg[2]{ this,"this", type,"c" }, 2, new lastIndexOf());
 	addFunc("clear", nullptr, new Arg[1]{ this,"this" }, 1, new clear());
 	addFunc("contains", Bool, new Arg[2]{ this,"this", type,"c" }, 2, new contains());
-	addFunc("containsAll", Bool, new Arg[2]{ this,"this", this,"c" }, 2, new containsAll());
+	addFunc("containsAll", Bool, new Arg[2]{ this,"this", this,"c" }, 2, new ArrayList::containsAll());
 	addFunc("isEmpty", Bool, new Arg[1]{ this,"this" }, 1, new isEmpty());
 	addFunc("remove", nullptr, new Arg[2]{ this,"this", type,"c" }, 2, new remove());
 	addFunc("remove", type, new Arg[2]{ this,"this", Number,"i" }, 2, new removeI());
@@ -33,8 +33,10 @@ DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
 	addFunc("size", Number, new Arg[1]{ this,"this" }, 1, new size());
 	addFunc("set", nullptr, new Arg[3]{ this,"this", Number,"i", type,"c" }, 3, new set());
 	addFunc("sort", nullptr, new Arg[2]{ this,"this", function,"c" }, 2, new sort());
-	addFunc("subList", this, new Arg[3]{ this,"this", Number,"a", Number,"b" }, 3, new subList());
-	addFunc("toArray", Array, new Arg[2]{ this,"this", Class,"c" }, 2, new toArray());
+	addFunc("subList", this, new Arg[3]{ this,"this", Number,"a", Number,"b" }, 3, new subList(this));
+	addFunc("toArray", Array, new Arg[2]{ this,"this", Class,"c" }, 2, new toArray(m_type));
+	addFunc("ensureCapacity", nullptr, new Arg[2]{ this,"this",Number,"c" }, 2, new ensureCapacity());
+	addFunc("trimToSize", nullptr, new Arg[1]{ this,"this" }, 1, new trimToSize());
 }
 
 DTO::SourceFile* DTO::ArrayList::create(std::string newName, SourceFile** gens, size_t genSize)

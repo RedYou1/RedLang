@@ -691,48 +691,47 @@ DTO::Function* Parser::Parser::parseFunction(bool isNotStatic, DTO::Class* metho
 	}
 
 
-	std::queue<std::string> args{ DTO::myString(&s.extractFunc2()).split2(',') };
+	std::queue<std::string> argsQueue{ DTO::myString(&s.extractFunc2()).split2(',') };
 
-	size_t argsLen{ args.size() };
+	size_t argsLen{ argsQueue.size() };
 	if (isNotStatic) {
 		argsLen++;
 	}
-	DTO::Interface** classes{ new DTO::Interface * [argsLen] };
-	std::string* argsName{ new std::string[argsLen] };
+	DTO::Arg* args{ new DTO::Arg[argsLen] };
 	size_t argI{ 0 };
 	if (isNotStatic) {
 		argI++;
-		classes[0] = methodeOf;
-		argsName[0] = std::string{ "this" };
-		variables.add(argsName[0], classes[0]);
+		args[0].type = methodeOf;
+		args[0].name = std::string{ "this" };
+		variables.add(args[0].name, args[0].type);
 	}
 
-	while (!args.empty() && argI < argsLen) {
-		std::string current = args.front();
+	while (!argsQueue.empty() && argI < argsLen) {
+		std::string current = argsQueue.front();
 		DTO::myString m{ &current };
 		m.removeUseless();
 		std::string typeName{ m.extractName() };
 		if (genTypes.containKey(&typeName))
-			classes[argI] = genTypes.getType(typeName);
+			args[argI].type = genTypes.getType(typeName);
 		else if (DTO::GLOBAL::getClasses()->containKey(&typeName, &genTypes))
-			classes[argI] = DTO::GLOBAL::getClasses()->getType(typeName);
+			args[argI].type = DTO::GLOBAL::getClasses()->getType(typeName);
 		else
 			throw "??";
 		m.removeUseless();
-		argsName[argI] = current;
+		args[argI].name = current;
 
-		variables.add(argsName[argI], classes[argI]);
+		variables.add(args[argI].name, args[argI].type);
 
-		args.pop();
+		argsQueue.pop();
 		argI++;
 	}
 
-	if (!args.empty() || argI < argsLen)
+	if (!argsQueue.empty() || argI < argsLen)
 		throw "?";
 
 	s.removeUseless();
 
-	DTO::Signature* sig{ new DTO::Signature(methodeOf->getPath(),returnType, classes, argsName, argsLen) };
+	DTO::Signature* sig{ new DTO::Signature(methodeOf->getPath(),returnType, args, argsLen) };
 	return new DTO::Function(sig, new FunctionDef(*name, methodeOf, sig, s.extractFunc2(), &genTypes));
 }
 
@@ -923,39 +922,38 @@ DTO::Interface* Parser::Parser::parseInterface(std::string path, std::string str
 		std::string name{ s.extractName() };
 		s.removeUseless();
 
-		std::queue<std::string> args{ DTO::myString(&s.extractFunc2()).split2(',') };
+		std::queue<std::string> argsQueue{ DTO::myString(&s.extractFunc2()).split2(',') };
 
-		size_t argsLen{ args.size() + 1 };
-		DTO::Interface** classes{ new DTO::Interface * [argsLen] };
-		std::string* argsName{ new std::string[argsLen] };
+		size_t argsLen{ argsQueue.size() + 1 };
+		DTO::Arg* args{ new DTO::Arg[argsLen] };
 		size_t argI{ 1 };
 
-		classes[0] = _interface;
-		argsName[0] = std::string{ "this" };
+		args[0].type = _interface;
+		args[0].name = std::string{ "this" };
 
-		while (!args.empty() && argI < argsLen) {
-			std::string current = args.front();
+		while (!argsQueue.empty() && argI < argsLen) {
+			std::string current = argsQueue.front();
 			DTO::myString m{ &current };
 
 			std::string argTypeName{ m.extractName() };
 			if (genTypes.containKey(&argTypeName))
-				classes[argI] = genTypes.getType(argTypeName);
+				args[argI].type = genTypes.getType(argTypeName);
 			else if (genTypes.containKey(&argTypeName))
-				classes[argI] = DTO::GLOBAL::getClasses()->getType(argTypeName);
+				args[argI].type = DTO::GLOBAL::getClasses()->getType(argTypeName);
 			else
 				throw "??";
 
 			m.removeUseless();
-			argsName[argI] = current;
+			args[argI].name = current;
 
-			args.pop();
+			argsQueue.pop();
 			argI++;
 		}
 
-		if (!args.empty() || argI < argsLen)
+		if (!argsQueue.empty() || argI < argsLen)
 			throw "?";
 
-		_interface->add(name, new DTO::Signature(path, type, classes, argsName, argsLen));
+		_interface->add(name, new DTO::Signature(path, type, args, argsLen));
 		s.extract(1);
 	}
 

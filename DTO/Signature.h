@@ -18,6 +18,7 @@ namespace DTO {
 		Signature(std::string path, Interface* returnType, Arg* args, size_t argsLen, bool infinity);
 		~Signature();
 
+		bool equalsI(Interface** argsType, size_t argsLen);
 		bool equalsI(Arg* args, size_t argsLen);
 		bool similarI(Interface** argsType, size_t argsLen);
 		bool similar(Interface** argsType, size_t argsLen);

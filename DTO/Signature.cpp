@@ -12,6 +12,22 @@ DTO::Signature::~Signature() {
 	delete[] m_args;
 }
 
+bool DTO::Signature::equalsI(Interface** argsType, size_t argsLen)
+{
+	if (m_argsLen == argsLen || (m_infinite && m_argsLen <= argsLen)) {
+		if (m_argsLen == 0)
+			return true;
+
+		if (!m_args[0].type->instanceOf(argsType[0]))
+			return false;
+		for (size_t c(1); c < m_argsLen; c++)
+			if (argsType[c] != m_args[c].type)
+				return false;
+		return true;
+	}
+	return false;
+}
+
 bool DTO::Signature::equalsI(Arg* args, size_t argsLen)
 {
 	if (m_argsLen == argsLen || (m_infinite && m_argsLen <= argsLen)) {

@@ -36,6 +36,17 @@ DTO::Function* DTO::MemoryFunction::get(std::string name, Interface** argsType, 
 	throw "not found";
 }
 
+bool DTO::MemoryFunction::containsI(std::string name, Interface** argsType, size_t argsLen) {
+	std::list<Function*> li(get(name));
+	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {
+		if ((*it)->getSignature()->equalsI(argsType, argsLen))
+			return true;
+	}
+	if (m_parent)
+		return m_parent->containsI(name, argsType, argsLen);
+	return false;
+}
+
 bool DTO::MemoryFunction::containsI(std::string name, Arg* args, size_t argsLen) {
 	std::list<Function*> li(get(name));
 	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {

@@ -12,14 +12,14 @@ class test2{
 	}
 
 	function void salut(){
-		if(this.a.Equals(5i)){
+		if(this.a.equals(5i)){
 			System.println("Parfait");
 		}
 		System.print(this.a);
 		System.print(" et ");
 		System.println(test2.b);
 		this.a.add(1i);
-		if(this.a.Equals(6i)){
+		if(this.a.equals(6i)){
 			throw new Exception("Salut");
 		}
 	}
