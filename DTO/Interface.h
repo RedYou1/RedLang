@@ -24,6 +24,7 @@ namespace DTO {
 
 		Interface** getInterfaces() { return m_interfaces; }
 		size_t getInterfaceLen() { return m_interfaceLen; }
+		MemorySourceFile* getGenTypes() { return m_genTypes; }
 		std::map<std::string, std::list<Signature*>>* getSignatures() { return &m_signs; }
 
 		void add(std::string name, Signature* o);

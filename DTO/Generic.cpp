@@ -1,4 +1,6 @@
 #include "Generic.h"
+#include "Interface.h"
+#include "MemorySourceFile.h"
 
 void DTO::GenericDynamic::add(GenPossibility* gens, size_t genSize, SourceFile* _class)
 {
@@ -103,11 +105,25 @@ DTO::SourceFile* DTO::GenericStatic::get(Instanciable** gens, size_t genSize)
 	throw "??";
 }
 
-bool DTO::GenericI::instanceOf(Instanciable* _class)
+bool DTO::GenericI::instanceOf(Instanciable* other)
 {
-	for (size_t i{ 0 }; i < m_possSize; i++) {
-		if (!m_possibilities[i].isOk(_class))
-			return false;
+	if (getPath() != other->getPath())
+		return false;
+	if (GenericI * o{ dynamic_cast<GenericI*>(other) }) {
+		for (size_t i{ 0 }; i < m_possSize; i++) {
+			if (!m_possibilities[i].isOk(o->m_possibilities[i]))
+				return false;
+		}
+		return true;
 	}
-	return true;
+	else if (Interface * o2{ dynamic_cast<Interface*>(other) }) {
+		for (size_t i{ 0 }; i < m_possSize; i++) {
+			if (!m_possibilities[i].isOk(o2->getGenTypes()->getType(m_names[i])))
+				return false;
+		}
+		return true;
+	}
+	else {
+		throw "??";
+	}
 }

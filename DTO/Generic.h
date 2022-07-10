@@ -32,6 +32,21 @@ namespace DTO {
 				return true;
 			}
 		}
+		bool isOk(GenPossibility& type) {
+			if (type.m_possibilitiesLen == 0) {
+				if (m_possibilities != 0)
+					return false;
+				return type.m_type == m_type;
+			}
+			else {
+				if (m_possibilitiesLen == 0) {
+					return type.isOk(m_type);
+				}
+				else {
+					throw "IDK really complicated";
+				}
+			}
+		}
 	};
 
 	class Generic : public SourceFile {
@@ -70,10 +85,11 @@ namespace DTO {
 
 	class GenericI : public Instanciable {
 	private:
+		std::string* m_names;
 		GenPossibility* m_possibilities;
 		size_t m_possSize;
 	public:
-		GenericI(std::string name, std::string path, GenPossibility* possibilities, size_t possSize) :Instanciable(name, path), m_possibilities{ possibilities }, m_possSize{ possSize } {}
+		GenericI(std::string name, std::string path, GenPossibility* possibilities, std::string* names, size_t possSize) :Instanciable(name, path), m_names(names), m_possibilities{ possibilities }, m_possSize{ possSize } {}
 		bool instanceOf(Instanciable* _class) override;
 	};
 }
