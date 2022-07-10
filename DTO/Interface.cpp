@@ -3,6 +3,7 @@
 #include "Class.h"
 #include "MemoryFunction.h"
 #include "MemorySourceFile.h"
+#include "Generic.h"
 
 DTO::Interface::Interface(std::string name, std::string path)
 	:SourceFile(name, path), m_genTypes(new MemorySourceFile{ false }), m_interfaces(new Interface* [0]), m_interfaceLen(0), m_signs()
@@ -99,6 +100,8 @@ bool DTO::Interface::instanceOf(Interface* other)
 		return true;
 	if (this == other)
 		return true;
+	if (GenericI * o{ dynamic_cast<GenericI*>(other) })
+		return o->isOk(this);
 	for (size_t c(0); c < m_interfaceLen; c++)
 		if (m_interfaces[c]->instanceOf(other))
 			return true;

@@ -14,7 +14,7 @@ DTO::SizedArray::SizedArrayC::SizedArrayC(std::string name, Interface* type)
 	addFunc("resize", nullptr, new Arg[2]{ this,"this", number,"c" }, 2, new Resize());
 }
 
-DTO::SourceFile* DTO::SizedArray::create(std::string newName, SourceFile** gens, size_t genSize)
+DTO::SourceFile* DTO::SizedArray::create(std::string newName, Interface** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";
@@ -25,7 +25,7 @@ DTO::SourceFile* DTO::SizedArray::create(std::string newName, SourceFile** gens,
 	if (dynamic_cast<Interface*>(gens[0]) == nullptr) {
 		throw "not an interface or class.";
 	}
-	SizedArrayC* g{ new SizedArrayC(newName, (Interface*)gens[0]) };
-	GLOBAL::getClasses()->set(newName, g);
+	SizedArrayC* g{ new SizedArrayC(newName, gens[0]) };
+	add(new GenPossibility[]{ gens[0] }, 1, g);
 	return g;
 }

@@ -90,6 +90,7 @@
     <ClCompile Include="Float.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="GarbageCollector.cpp" />
+    <ClCompile Include="Generic.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="If.cpp" />
     <ClCompile Include="Integer.cpp" />

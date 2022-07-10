@@ -9,7 +9,7 @@ DTO::Iterable::IterableI::IterableI(std::string name, Interface* type)
 	add("forEach", new Signature("", nullptr, new Arg[2]{ this,"this", function,"func" }, 2));
 }
 
-DTO::SourceFile* DTO::Iterable::create(std::string newName, SourceFile** gens, size_t genSize)
+DTO::SourceFile* DTO::Iterable::create(std::string newName, Interface** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";
@@ -20,7 +20,7 @@ DTO::SourceFile* DTO::Iterable::create(std::string newName, SourceFile** gens, s
 	if (dynamic_cast<Interface*>(gens[0]) == nullptr) {
 		throw "not an interface or class.";
 	}
-	IterableI* g{ new IterableI(newName, (Interface*)gens[0]) };
-	GLOBAL::getClasses()->set(newName, g);
+	IterableI* g{ new IterableI(newName, gens[0]) };
+	add(new GenPossibility[]{ gens[0] }, 1, g);
 	return g;
 }

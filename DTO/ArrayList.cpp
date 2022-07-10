@@ -1,7 +1,8 @@
 #include "ArrayList.h"
 
 DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
-	:Class(name, Paths::SizedArray, GLOBAL::getClasses()->getClass(Paths::Object)), m_type(type)
+	:Class(name, Paths::ArrayList, GLOBAL::getClasses()->getClass(Paths::Object),
+		new Interface* [1]{ GLOBAL::getClasses()->getInterface(std::string(Paths::List) + "<" + type->getName() + ">") }, 1), m_type(type)
 {
 	Interface* Number{ GLOBAL::getClasses()->getInterface(Paths::Number) };
 	BooleanC* Bool{ (BooleanC*)GLOBAL::getClasses()->getInterface(Paths::Boolean) };
@@ -39,7 +40,7 @@ DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
 	addFunc("trimToSize", nullptr, new Arg[1]{ this,"this" }, 1, new trimToSize());
 }
 
-DTO::SourceFile* DTO::ArrayList::create(std::string newName, SourceFile** gens, size_t genSize)
+DTO::SourceFile* DTO::ArrayList::create(std::string newName, Interface** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";
@@ -50,7 +51,7 @@ DTO::SourceFile* DTO::ArrayList::create(std::string newName, SourceFile** gens, 
 	if (dynamic_cast<Interface*>(gens[0]) == nullptr) {
 		throw "not an interface or class.";
 	}
-	ArrayListC* g{ new ArrayListC(newName, (Interface*)gens[0]) };
-	GLOBAL::getClasses()->set(newName, g);
+	ArrayListC* g{ new ArrayListC(newName, gens[0]) };
+	GenericStatic::add(new GenPossibility[]{ gens[0] }, 1, g);
 	return g;
 }

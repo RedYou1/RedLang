@@ -36,7 +36,7 @@ namespace DTO {
 		}
 	};
 
-	class SizedArray : public Generic {
+	class SizedArray : public GenericStatic {
 	private:
 		class SizedArrayC : public Class {
 		public:
@@ -44,10 +44,10 @@ namespace DTO {
 			SizedArrayC(std::string name, Interface* type);
 		};
 	public:
-		SizedArray() : Generic("SizedArray", Paths::SizedArray) {
+		SizedArray() : GenericStatic("SizedArray", Paths::SizedArray,1) {
 		}
 
-		SourceFile* create(std::string newName, SourceFile** gens, size_t genSize)override;
+		SourceFile* create(std::string newName, Interface** gens, size_t genSize)override;
 
 		class Equals :public Command {
 		public:

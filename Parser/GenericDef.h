@@ -6,7 +6,7 @@
 #include "../DTO/Generic.h"
 
 namespace Parser {
-	class GenericDef : public DTO::Generic {
+	class GenericDef : public DTO::GenericDynamic {
 	private:
 		std::string m_type;
 		std::string m_content;
@@ -16,6 +16,6 @@ namespace Parser {
 		GenericDef(std::string name, std::string path, std::string type, std::queue<std::string> genTypes, std::string content);
 		virtual ~GenericDef() override = default;
 
-		DTO::SourceFile* create(std::string newName, DTO::SourceFile** gens, size_t genSize) override;
+		DTO::SourceFile* create(std::string newName, DTO::Interface** gens, size_t genSize) override;
 	};
 }

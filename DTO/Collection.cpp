@@ -19,7 +19,7 @@ DTO::Collection::CollectionI::CollectionI(std::string name, Interface* type)
 	add("size", new Signature("", Integer, new Arg[1]{ this,"this" }, 1));
 }
 
-DTO::SourceFile* DTO::Collection::create(std::string newName, SourceFile** gens, size_t genSize)
+DTO::SourceFile* DTO::Collection::create(std::string newName, Interface** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";
@@ -30,7 +30,7 @@ DTO::SourceFile* DTO::Collection::create(std::string newName, SourceFile** gens,
 	if (dynamic_cast<Interface*>(gens[0]) == nullptr) {
 		throw "not an interface or class.";
 	}
-	CollectionI* g{ new CollectionI(newName, (Interface*)gens[0]) };
-	GLOBAL::getClasses()->set(newName, g);
+	CollectionI* g{ new CollectionI(newName, gens[0]) };
+	add(new GenPossibility[]{ gens[0] }, 1, g);
 	return g;
 }

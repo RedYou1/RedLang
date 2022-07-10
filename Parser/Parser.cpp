@@ -362,7 +362,8 @@ DTO::Class* Parser::Parser::parseClass(std::string path, std::string str, DTO::M
 	s2.removeUseless();
 
 	DTO::Class* _class{ new DTO::Class(name,path,parent,implements,implementsLen,&genTypes) };
-	DTO::GLOBAL::getClasses()->set(name, _class);
+	if (name.at(name.size() - 1) != '>')
+		DTO::GLOBAL::getClasses()->set(name, _class);
 
 	while (!str.empty()) {
 		s2.removeUseless();
@@ -902,7 +903,8 @@ DTO::Interface* Parser::Parser::parseInterface(std::string path, std::string str
 	s.removeUseless();
 
 	DTO::Interface* _interface{ new DTO::Interface(name,path,&genTypes,implements,implementsLen) };
-	DTO::GLOBAL::getClasses()->set(name, _interface);
+	if (name.at(name.size() - 1) != '>')
+		DTO::GLOBAL::getClasses()->set(name, _interface);
 
 	while (!str.empty()) {
 		s.removeUseless();

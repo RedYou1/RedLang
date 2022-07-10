@@ -359,5 +359,8 @@
     <ClCompile Include="List.cpp">
       <Filter>Fichiers sources\RedLang\Iterable\Collection\List</Filter>
     </ClCompile>
+    <ClCompile Include="Generic.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

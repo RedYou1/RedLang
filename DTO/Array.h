@@ -37,7 +37,7 @@ namespace DTO {
 		}
 	};
 
-	class Array : public Generic {
+	class Array : public GenericStatic {
 	private:
 		class ArrayC : public Class {
 		public:
@@ -45,10 +45,10 @@ namespace DTO {
 			ArrayC(std::string name, Interface* type);
 		};
 	public:
-		Array() : Generic("Array", Paths::Array) {
+		Array() : GenericStatic("Array", Paths::Array, 1) {
 		}
 
-		SourceFile* create(std::string newName, SourceFile** gens, size_t genSize)override;
+		SourceFile* create(std::string newName, Interface** gens, size_t genSize)override;
 
 		class Equals :public Command {
 		public:

@@ -37,7 +37,7 @@ namespace DTO {
 		}
 	};
 
-	class ArrayList : public Generic {
+	class ArrayList : public GenericStatic {
 	private:
 		class ArrayListC : public Class {
 		public:
@@ -45,10 +45,10 @@ namespace DTO {
 			ArrayListC(std::string name, Interface* type);
 		};
 	public:
-		ArrayList() : Generic("ArrayList", Paths::ArrayList) {
+		ArrayList() : GenericStatic("ArrayList", Paths::ArrayList, 1) {
 		}
 
-		SourceFile* create(std::string newName, SourceFile** gens, size_t genSize)override;
+		SourceFile* create(std::string newName, Interface** gens, size_t genSize)override;
 
 		class Equals :public Command {
 		public:

@@ -8,6 +8,7 @@
 #include "Command.h"
 #include "Function.h"
 #include "Signature.h"
+#include "Generic.h"
 
 DTO::Class::Class(std::string name, std::string path, Class* parent)
 	: Class(name, path, parent, new Interface* [0], 0) {}
@@ -39,6 +40,8 @@ DTO::Class* DTO::Class::extends() { return m_parent; }
 
 bool DTO::Class::instanceOf(Interface* other)
 {
+	if (GenericI * o{ dynamic_cast<GenericI*>(other) })
+		return o->isOk(this);
 	if (Interface::instanceOf(other))
 		return true;
 	if (m_parent)

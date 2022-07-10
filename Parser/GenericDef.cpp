@@ -6,7 +6,7 @@
 #include "../DTO/Global.h"
 
 Parser::GenericDef::GenericDef(std::string name, std::string path, std::string type, std::queue<std::string> genTypes, std::string content)
-	:DTO::Generic(name, path),
+	:DTO::GenericDynamic(name, path),
 	m_type(type),
 	m_genSize(genTypes.size()),
 	m_genTypes(),
@@ -20,7 +20,7 @@ Parser::GenericDef::GenericDef(std::string name, std::string path, std::string t
 	}
 }
 
-DTO::SourceFile* Parser::GenericDef::create(std::string newName, SourceFile** gens, size_t genSize)
+DTO::SourceFile* Parser::GenericDef::create(std::string newName, DTO::Interface** gens, size_t genSize)
 {
 	if (genSize != m_genSize)
 		throw "??";
@@ -44,6 +44,14 @@ DTO::SourceFile* Parser::GenericDef::create(std::string newName, SourceFile** ge
 	}
 	if (r == nullptr)
 		throw "??";
+
+	DTO::GenPossibility* poss{ new DTO::GenPossibility[genSize] };
+
+	for (size_t i{ 0 }; i < genSize; i++) {
+		poss[i] = DTO::GenPossibility{ gens[i] };
+	}
+
+	add(poss, genSize, r);
 
 	return r;
 }

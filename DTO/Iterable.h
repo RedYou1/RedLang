@@ -14,7 +14,7 @@
 #include "CastException.h"
 
 namespace DTO {
-	class Iterable : public Generic {
+	class Iterable : public GenericStatic {
 	private:
 		class IterableI : public Interface {
 		public:
@@ -22,9 +22,9 @@ namespace DTO {
 			IterableI(std::string name, Interface* type);
 		};
 	public:
-		Iterable() : Generic("Iterable", Paths::Iterable) {
+		Iterable() : GenericStatic("Iterable", Paths::Iterable, 1) {
 		}
 
-		SourceFile* create(std::string newName, SourceFile** gens, size_t genSize)override;
+		SourceFile* create(std::string newName, Interface** gens, size_t genSize)override;
 	};
 }

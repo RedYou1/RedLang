@@ -14,7 +14,7 @@
 #include "CastException.h"
 
 namespace DTO {
-	class List : public Generic {
+	class List : public GenericStatic {
 	private:
 		class ListI : public Interface {
 		public:
@@ -22,9 +22,9 @@ namespace DTO {
 			ListI(std::string name, Interface* type);
 		};
 	public:
-		List() : Generic("List", Paths::List) {
+		List() : GenericStatic("List", Paths::List, 1) {
 		}
 
-		SourceFile* create(std::string newName, SourceFile** gens, size_t genSize)override;
+		SourceFile* create(std::string newName, Interface** gens, size_t genSize)override;
 	};
 }
