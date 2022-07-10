@@ -25,7 +25,7 @@ std::list<DTO::Function*> DTO::MemoryFunction::get(std::string name) {
 	return it->second;
 }
 
-DTO::Function* DTO::MemoryFunction::get(std::string name, Interface** argsType, size_t argsLen) {
+DTO::Function* DTO::MemoryFunction::get(std::string name, Instanciable** argsType, size_t argsLen) {
 	std::list<Function*> li(get(name));
 	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {
 		if ((*it)->getSignature()->similarI(argsType, argsLen))
@@ -36,7 +36,7 @@ DTO::Function* DTO::MemoryFunction::get(std::string name, Interface** argsType, 
 	throw "not found";
 }
 
-bool DTO::MemoryFunction::containsI(std::string name, Interface** argsType, size_t argsLen) {
+bool DTO::MemoryFunction::containsI(std::string name, Instanciable** argsType, size_t argsLen) {
 	std::list<Function*> li(get(name));
 	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {
 		if ((*it)->getSignature()->equalsI(argsType, argsLen))

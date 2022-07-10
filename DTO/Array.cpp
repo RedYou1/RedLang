@@ -1,6 +1,6 @@
 #include "Array.h"
 
-DTO::Array::ArrayC::ArrayC(std::string name, Interface* type)
+DTO::Array::ArrayC::ArrayC(std::string name, Instanciable* type)
 	:Class(name, Paths::Array, GLOBAL::getClasses()->getClass(Paths::Object)), m_type(type)
 {
 	Number* number{ (Number*)GLOBAL::getClasses()->getInterface(Paths::Number) };
@@ -11,16 +11,13 @@ DTO::Array::ArrayC::ArrayC(std::string name, Interface* type)
 	addFunc("set", nullptr, new Arg[3]{ this,"this", m_type,"o",number,"c" }, 3, new Set(this));
 }
 
-DTO::SourceFile* DTO::Array::create(std::string newName, Interface** gens, size_t genSize)
+DTO::SourceFile* DTO::Array::create(std::string newName, Instanciable** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";
 	}
 	if (gens[0] == nullptr) {
 		throw "Null Class";
-	}
-	if (dynamic_cast<Interface*>(gens[0]) == nullptr) {
-		throw "not an interface or class.";
 	}
 	ArrayC* g{ new ArrayC(newName, gens[0]) };
 	add(new GenPossibility[]{ gens[0] }, 1, g);

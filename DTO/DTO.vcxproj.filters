@@ -237,6 +237,9 @@
     <ClInclude Include="Arg.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Instanciable.h">
+      <Filter>Fichiers d%27en-tête\Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakPoint.cpp">
@@ -360,7 +363,7 @@
       <Filter>Fichiers sources\RedLang\Iterable\Collection\List</Filter>
     </ClCompile>
     <ClCompile Include="Generic.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

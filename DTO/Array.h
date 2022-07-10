@@ -41,14 +41,14 @@ namespace DTO {
 	private:
 		class ArrayC : public Class {
 		public:
-			Interface* m_type;
-			ArrayC(std::string name, Interface* type);
+			Instanciable* m_type;
+			ArrayC(std::string name, Instanciable* type);
 		};
 	public:
 		Array() : GenericStatic("Array", Paths::Array, 1) {
 		}
 
-		SourceFile* create(std::string newName, Interface** gens, size_t genSize)override;
+		SourceFile* create(std::string newName, Instanciable** gens, size_t genSize)override;
 
 		class Equals :public Command {
 		public:
@@ -67,7 +67,7 @@ namespace DTO {
 			ArrayConstruct(ArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
-				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
+				Instanciable** i{ new Instanciable * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
 				if (!a->getClass()->instanceOf(i[0])) {
 					delete[] i;
 					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Array", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
@@ -90,7 +90,7 @@ namespace DTO {
 			Get(ArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
-				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
+				Instanciable** i{ new Instanciable * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
 				if (!a->getClass()->instanceOf(i[0])) {
 					delete[] i;
 					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Get", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
@@ -113,7 +113,7 @@ namespace DTO {
 			Set(ArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
-				Interface** i{ new Interface * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
+				Instanciable** i{ new Instanciable * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
 				if (!a->getClass()->instanceOf(i[0])) {
 					delete[] i;
 					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Set", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);

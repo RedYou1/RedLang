@@ -5,7 +5,7 @@ void DTO::GenericDynamic::add(GenPossibility* gens, size_t genSize, SourceFile* 
 	m_classes.push_front(std::pair<std::vector<GenPossibility>, SourceFile*>(std::vector<GenPossibility>(&gens[0], &gens[genSize]), _class));
 }
 
-bool DTO::GenericDynamic::contains(Interface** gens, size_t genSize)
+bool DTO::GenericDynamic::contains(Instanciable** gens, size_t genSize)
 {
 	for (std::forward_list<std::pair<std::vector<GenPossibility>, SourceFile*>>::iterator it = m_classes.begin(); it != m_classes.end(); it++) {
 		if (it->first.size() != genSize)
@@ -24,7 +24,7 @@ bool DTO::GenericDynamic::contains(Interface** gens, size_t genSize)
 	return false;
 }
 
-DTO::SourceFile* DTO::GenericDynamic::get(Interface** gens, size_t genSize)
+DTO::SourceFile* DTO::GenericDynamic::get(Instanciable** gens, size_t genSize)
 {
 	for (std::forward_list<std::pair<std::vector<GenPossibility>, SourceFile*>>::iterator it = m_classes.begin(); it != m_classes.end(); it++) {
 		if (it->first.size() != genSize)
@@ -65,7 +65,7 @@ DTO::GenericStatic::~GenericStatic()
 	}
 }
 
-bool DTO::GenericStatic::contains(Interface** gens, size_t genSize)
+bool DTO::GenericStatic::contains(Instanciable** gens, size_t genSize)
 {
 	if (m_genSize != genSize)
 		throw "??";
@@ -84,7 +84,7 @@ bool DTO::GenericStatic::contains(Interface** gens, size_t genSize)
 	return false;
 }
 
-DTO::SourceFile* DTO::GenericStatic::get(Interface** gens, size_t genSize)
+DTO::SourceFile* DTO::GenericStatic::get(Instanciable** gens, size_t genSize)
 {
 	if (m_genSize != genSize)
 		throw "??";
@@ -103,7 +103,7 @@ DTO::SourceFile* DTO::GenericStatic::get(Interface** gens, size_t genSize)
 	throw "??";
 }
 
-bool DTO::GenericI::isOk(Interface* _class)
+bool DTO::GenericI::instanceOf(Instanciable* _class)
 {
 	for (size_t i{ 0 }; i < m_possSize; i++) {
 		if (!m_possibilities[i].isOk(_class))

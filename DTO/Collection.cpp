@@ -2,7 +2,7 @@
 
 #include "FunctionClass.h"
 
-DTO::Collection::CollectionI::CollectionI(std::string name, Interface* type)
+DTO::Collection::CollectionI::CollectionI(std::string name, Instanciable* type)
 	:Interface(name, Paths::Collection,
 		new Interface* [1]{ GLOBAL::getClasses()->getInterface(std::string(Paths::Iterable) + "<" + type->getName() + ">") }, 1), m_type(type)
 {
@@ -19,16 +19,13 @@ DTO::Collection::CollectionI::CollectionI(std::string name, Interface* type)
 	add("size", new Signature("", Integer, new Arg[1]{ this,"this" }, 1));
 }
 
-DTO::SourceFile* DTO::Collection::create(std::string newName, Interface** gens, size_t genSize)
+DTO::SourceFile* DTO::Collection::create(std::string newName, Instanciable** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";
 	}
 	if (gens[0] == nullptr) {
 		throw "Null Class";
-	}
-	if (dynamic_cast<Interface*>(gens[0]) == nullptr) {
-		throw "not an interface or class.";
 	}
 	CollectionI* g{ new CollectionI(newName, gens[0]) };
 	add(new GenPossibility[]{ gens[0] }, 1, g);

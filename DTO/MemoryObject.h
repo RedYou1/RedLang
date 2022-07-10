@@ -11,13 +11,13 @@ namespace DTO {
 		class Memory {
 		private:
 			IObject* m_object;
-			Interface* m_type;
+			Instanciable* m_type;
 		public:
-			Memory(IObject* object, Interface* type);
+			Memory(IObject* object, Instanciable* type);
 			~Memory();
 
 			IObject* getObject();
-			Interface* getType();
+			Instanciable* getType();
 
 			void setObject(IObject* object);
 		};
@@ -29,7 +29,7 @@ namespace DTO {
 		MemoryObject(MemoryObject* parent);
 		~MemoryObject();
 
-		void add(std::string name, IObject* object, Interface* type);
+		void add(std::string name, IObject* object, Instanciable* type);
 		void set(std::string name, IObject* object);
 
 		bool containKey(std::string name);

@@ -23,7 +23,7 @@ namespace DTO {
 	class NullObject : public IObject {
 	public:
 		NullObject() :IObject(GLOBAL::getClasses()->getClass(Paths::Object)) {}
-		NullObject(Interface* _interface) :IObject(dynamic_cast<Class*>(_interface) == nullptr ? GLOBAL::getClasses()->getClass(Paths::Object) : (Class*)_interface) {}
+		NullObject(Instanciable* _interface) :IObject(dynamic_cast<Class*>(_interface) == nullptr ? GLOBAL::getClasses()->getClass(Paths::Object) : (Class*)_interface) {}
 		NullObject(Class* suposedType) : IObject(suposedType) {}
 		IObject* clone() override { return new NullObject(m_type); }
 		CommandReturn* exec(std::string name, IObject** args, size_t argsSize)override;

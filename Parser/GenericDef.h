@@ -15,6 +15,6 @@ namespace Parser {
 		GenericDef(std::string name, std::string path, std::string type, std::queue<std::string> genTypes, std::string content);
 		virtual ~GenericDef() override = default;
 
-		DTO::SourceFile* create(std::string newName, DTO::Interface** gens, size_t genSize) override;
+		DTO::SourceFile* create(std::string newName, DTO::Instanciable** gens, size_t genSize) override;
 	};
 }

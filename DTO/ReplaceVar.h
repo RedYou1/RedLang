@@ -8,11 +8,11 @@
 namespace DTO {
 	class ReplaceVar : public Command {
 	private:
-		Interface* m_type;
+		Instanciable* m_type;
 		std::string m_name;
 		Command* m_cmd;
 	public:
-		ReplaceVar(Interface* type, std::string name, Command* cmd);
+		ReplaceVar(Instanciable* type, std::string name, Command* cmd);
 		virtual ~ReplaceVar() override { delete m_cmd; }
 
 		CommandReturn* exec(MemoryObject& mem) override;

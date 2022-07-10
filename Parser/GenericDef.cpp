@@ -19,7 +19,7 @@ Parser::GenericDef::GenericDef(std::string name, std::string path, std::string t
 	}
 }
 
-DTO::SourceFile* Parser::GenericDef::create(std::string newName, DTO::Interface** gens, size_t genSize)
+DTO::SourceFile* Parser::GenericDef::create(std::string newName, DTO::Instanciable** gens, size_t genSize)
 {
 	if (genSize != this->genSize())
 		throw "??";
@@ -30,13 +30,13 @@ DTO::SourceFile* Parser::GenericDef::create(std::string newName, DTO::Interface*
 		genTypes->add(m_genTypes[i].substr(0, find), gens[i]);
 
 		while (find < m_genTypes[i].size()) {
-			size_t next{ m_genTypes[i].substr(find+1).find(' ') };
-			std::string name{ m_genTypes[i].substr(find+1,next) };
-			if (!gens[i]->instanceOf(DTO::GLOBAL::getClasses()->getInterface(name)))
+			size_t next{ m_genTypes[i].substr(find + 1).find(' ') };
+			std::string name{ m_genTypes[i].substr(find + 1,next) };
+			if (!gens[i]->instanceOf(DTO::GLOBAL::getClasses()->getType(name)))
 				throw "do not respect the heritance clause of a generic";
 			if (next >= m_genTypes[i].size())
 				break;
-			find += next+1;
+			find += next + 1;
 		}
 	}
 

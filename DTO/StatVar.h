@@ -6,13 +6,13 @@
 namespace DTO {
 	class StatVar {
 	private:
-		Interface* m_type;
+		Instanciable* m_type;
 		IObject* m_value;
 	public:
-		StatVar(Interface* type, IObject* value) :m_type(type), m_value(value) { GarbageCollector::Add(m_value); }
+		StatVar(Instanciable* type, IObject* value) :m_type(type), m_value(value) { GarbageCollector::Add(m_value); }
 		~StatVar() { GarbageCollector::Remove(m_value); }
 
-		Interface* GetType() { return m_type; }
+		Instanciable* GetType() { return m_type; }
 
 		IObject* GetValue() { return m_value; }
 

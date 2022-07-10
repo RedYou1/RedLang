@@ -18,13 +18,13 @@ namespace DTO {
 	private:
 		class ListI : public Interface {
 		public:
-			Interface* m_type;
-			ListI(std::string name, Interface* type);
+			Instanciable* m_type;
+			ListI(std::string name, Instanciable* type);
 		};
 	public:
 		List() : GenericStatic("List", Paths::List, 1) {
 		}
 
-		SourceFile* create(std::string newName, Interface** gens, size_t genSize)override;
+		SourceFile* create(std::string newName, Instanciable** gens, size_t genSize)override;
 	};
 }

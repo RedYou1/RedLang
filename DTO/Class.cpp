@@ -38,10 +38,8 @@ DTO::Class::~Class() {
 
 DTO::Class* DTO::Class::extends() { return m_parent; }
 
-bool DTO::Class::instanceOf(Interface* other)
+bool DTO::Class::instanceOf(Instanciable* other)
 {
-	if (GenericI * o{ dynamic_cast<GenericI*>(other) })
-		return o->isOk(this);
 	if (Interface::instanceOf(other))
 		return true;
 	if (m_parent)
@@ -49,12 +47,12 @@ bool DTO::Class::instanceOf(Interface* other)
 	return false;
 }
 
-void DTO::Class::addFunc(std::string name, Interface* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity)
+void DTO::Class::addFunc(std::string name, Instanciable* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity)
 {
 	m_funcs->add(name, new Function(new Signature("", returnType, args, argsLen, infinity), new Command * [1]{ cmd }, 1));
 }
 
-void DTO::Class::addFunc(std::string name, Interface* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity)
+void DTO::Class::addFunc(std::string name, Instanciable* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity)
 {
 	m_funcs->add(name, new Function(new Signature("", returnType, args, argsLen, infinity), cmds, cmdsLen));
 }

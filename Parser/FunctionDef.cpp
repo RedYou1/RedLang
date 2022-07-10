@@ -39,7 +39,7 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 		else {
 			DTO::Class* parent{ m_functionOf->extends() };
 			if (!parent->getName()._Equal("Object")) {
-				DTO::Interface** cc{ new DTO::Interface * [1]{parent} };
+				DTO::Instanciable** cc{ new DTO::Instanciable * [1]{parent} };
 				if (DTO::Function * func{ parent->getFuncs()->get(parent->getName(), cc, 1) }) {
 					DTO::Command** cc2{ new DTO::Command * [1]{new DTO::Return("this", m_functionOf)} };
 					commands.push(new DTO::FunctionKnownCom(func, cc2, 1));

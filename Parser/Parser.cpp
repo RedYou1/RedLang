@@ -55,7 +55,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			std::string name{ DTO::myString(&word).extract2() };
 			std::queue<std::string> args{ DTO::myString(&DTO::myString(&word).extractFunc2()).split2(',') };
 			size_t size{ args.size() };
-			DTO::Interface** argsType{ new DTO::Interface * [size] };
+			DTO::Instanciable** argsType{ new DTO::Instanciable * [size] };
 			size_t i{ 0 };
 			while (!args.empty() && i < size) {
 				argsType[i] = nullptr;
@@ -145,9 +145,9 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 
 			std::string typeName{ m2.extractName() };
 			if (genTypes.containKey(&typeName))
-				type = genTypes.getType(typeName);
+				type = genTypes.getInterface(typeName);
 			else if (DTO::GLOBAL::getClasses()->containKey(&typeName, &genTypes))
-				type = DTO::GLOBAL::getClasses()->getType(typeName);
+				type = DTO::GLOBAL::getClasses()->getInterface(typeName);
 			else
 				throw "??";
 
@@ -170,7 +170,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 		m.removeUseless();
 		size_t size{ catchs.size() };
 		std::string* names{ new std::string[size] };
-		DTO::Interface** types{ new DTO::Interface * [size] };
+		DTO::Instanciable** types{ new DTO::Instanciable * [size] };
 		DTO::FunctionBlock** catches{ new DTO::FunctionBlock * [size] };
 
 		size_t i{ 0 };
@@ -252,7 +252,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			throw "??";
 		}
 		else if (genTypes.containKey(&word)) {
-			DTO::Interface* cl{ genTypes.getType(word) };
+			DTO::Instanciable* cl{ genTypes.getType(word) };
 			m.removeUseless();
 			std::string name{ m.extractName() };
 			m.removeUseless();
@@ -265,7 +265,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			throw "?";
 		}
 		else if (DTO::GLOBAL::getClasses()->containKey(&word, &genTypes)) {
-			DTO::Interface* cl{ DTO::GLOBAL::getClasses()->getType(word) };
+			DTO::Instanciable* cl{ DTO::GLOBAL::getClasses()->getType(word) };
 			m.removeUseless();
 			std::string name{ m.extractName() };
 			m.removeUseless();
@@ -377,7 +377,7 @@ DTO::Class* Parser::Parser::parseClass(std::string path, std::string str, DTO::M
 			s2.removeUseless();
 		}
 
-		DTO::Interface* type{ nullptr };
+		DTO::Instanciable* type{ nullptr };
 
 
 		if (word == "function") {
@@ -388,9 +388,9 @@ DTO::Class* Parser::Parser::parseClass(std::string path, std::string str, DTO::M
 		}
 
 		if (genTypes.containKey(&word))
-			type = genTypes.getInterface(word);
+			type = genTypes.getType(word);
 		else if (DTO::GLOBAL::getClasses()->containKey(&word, &genTypes))
-			type = DTO::GLOBAL::getClasses()->getInterface(word);
+			type = DTO::GLOBAL::getClasses()->getType(word);
 		else
 			throw "??";
 		if (type == nullptr)
@@ -489,7 +489,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 			}
 		}
 		DTO::Class* string{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::String) };
-		DTO::Interface** in{ new DTO::Interface * [2]{string,string} };
+		DTO::Instanciable** in{ new DTO::Instanciable * [2]{string,string} };
 		DTO::Function* f{ string->getFuncs()->get("String",in,2) };
 		delete[] in;
 		pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::StringO(string,v) }, 2);
@@ -505,7 +505,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 			throw "?";
 
 		DTO::Class* _char{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Char) };
-		DTO::Interface** in{ new DTO::Interface * [2]{_char,_char} };
+		DTO::Instanciable** in{ new DTO::Instanciable * [2]{_char,_char} };
 		DTO::Function* f{ _char->getFuncs()->get("Char",in,2) };
 		delete[] in;
 		pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::CharO(_char,temp) }, 2);
@@ -518,42 +518,42 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 			switch (a) {
 			case 'b': {
 				DTO::Class* Byte{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Byte) };
-				DTO::Interface** in{ new DTO::Interface * [2]{Byte,Byte} };
+				DTO::Instanciable** in{ new DTO::Instanciable * [2]{Byte,Byte} };
 				DTO::Function* f{ Byte->getFuncs()->get("Byte",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::ByteO(Byte,(int8_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 's': {
 				DTO::Class* Short{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Short) };
-				DTO::Interface** in{ new DTO::Interface * [2]{Short,Short} };
+				DTO::Instanciable** in{ new DTO::Instanciable * [2]{Short,Short} };
 				DTO::Function* f{ Short->getFuncs()->get("Short",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::ShortO(Short,(int16_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'i': {
 				DTO::Class* Integer{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Integer) };
-				DTO::Interface** in{ new DTO::Interface * [2]{Integer,Integer} };
+				DTO::Instanciable** in{ new DTO::Instanciable * [2]{Integer,Integer} };
 				DTO::Function* f{ Integer->getFuncs()->get("Integer",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::IntegerO(Integer,(int32_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'f': {
 				DTO::Class* Float{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Float) };
-				DTO::Interface** in{ new DTO::Interface * [2]{Float,Float} };
+				DTO::Instanciable** in{ new DTO::Instanciable * [2]{Float,Float} };
 				DTO::Function* f{ Float->getFuncs()->get("Float",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::FloatO(Float,(float_t)std::strtod(temp.c_str(),NULL)) }, 2);
 				break;
 			}case 'l': {
 				DTO::Class* Long{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Long) };
-				DTO::Interface** in{ new DTO::Interface * [2]{Long,Long} };
+				DTO::Instanciable** in{ new DTO::Instanciable * [2]{Long,Long} };
 				DTO::Function* f{ Long->getFuncs()->get("Long",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr,new DTO::LongO(Long,(int64_t)std::strtoll(temp.c_str(),NULL,10)) }, 2);
 				break;
 			}case 'd': {
 				DTO::Class* Double{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Double) };
-				DTO::Interface** in{ new DTO::Interface * [2]{Double,Double} };
+				DTO::Instanciable** in{ new DTO::Instanciable * [2]{Double,Double} };
 				DTO::Function* f{ Double->getFuncs()->get("Double",in,2) };
 				delete[] in;
 				pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::DoubleO(Double,(double_t)std::strtod(temp.c_str(),NULL)) }, 2);
@@ -565,14 +565,14 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::s
 		}
 		else if (temp._Equal("true")) {
 			DTO::Class* Bool{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Boolean) };
-			DTO::Interface** in{ new DTO::Interface * [2]{Bool,Bool} };
+			DTO::Instanciable** in{ new DTO::Instanciable * [2]{Bool,Bool} };
 			DTO::Function* f{ Bool->getFuncs()->get("Boolean",in,2) };
 			delete[] in;
 			pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::BooleanO(Bool, true) }, 2);
 		}
 		else if (temp._Equal("false")) {
 			DTO::Class* Bool{ DTO::GLOBAL::getClasses()->getClass(DTO::Paths::Boolean) };
-			DTO::Interface** in{ new DTO::Interface * [2]{Bool,Bool} };
+			DTO::Instanciable** in{ new DTO::Instanciable * [2]{Bool,Bool} };
 			DTO::Function* f{ Bool->getFuncs()->get("Boolean",in,2) };
 			delete[] in;
 			pre = new DTO::ObjectCreator(f, new DTO::IObject * [2]{ nullptr, new DTO::BooleanO(Bool, false) }, 2);
@@ -666,7 +666,7 @@ DTO::Function* Parser::Parser::parseFunction(bool isNotStatic, DTO::Class* metho
 	DTO::MemoryVariable variables{ };
 	DTO::myString s{ str };
 
-	DTO::Interface* returnType{ nullptr };
+	DTO::Instanciable* returnType{ nullptr };
 	std::string returnTypeName{ s.extractName() };
 	std::string methodeName{ std::string(methodeOf->getName()) };
 	if (returnTypeName == DTO::myString{ &methodeName }.extract2()) {
@@ -909,7 +909,7 @@ DTO::Interface* Parser::Parser::parseInterface(std::string path, std::string str
 	while (!str.empty()) {
 		s.removeUseless();
 		std::string typeName{ s.extractName() };
-		DTO::Interface* type{ nullptr };
+		DTO::Instanciable* type{ nullptr };
 		if (typeName != "void") {
 			if (genTypes.containKey(&typeName))
 				type = genTypes.getType(typeName);

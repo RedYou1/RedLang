@@ -20,7 +20,7 @@ namespace DTO {
 		bool containKey(std::string* name, MemorySourceFile* _genTypes = nullptr);
 
 		SourceFile* get(std::string name);
-		Interface* getType(std::string name);
+		Instanciable* getType(std::string name);
 		Interface* getInterface(std::string name);
 		Class* getClass(std::string name);
 

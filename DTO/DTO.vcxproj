@@ -43,6 +43,7 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="If.h" />
     <ClInclude Include="IllegalArgumentException.h" />
+    <ClInclude Include="Instanciable.h" />
     <ClInclude Include="Integer.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Iterable.h" />

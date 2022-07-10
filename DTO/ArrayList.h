@@ -41,14 +41,14 @@ namespace DTO {
 	private:
 		class ArrayListC : public Class {
 		public:
-			Interface* m_type;
-			ArrayListC(std::string name, Interface* type);
+			Instanciable* m_type;
+			ArrayListC(std::string name, Instanciable* type);
 		};
 	public:
 		ArrayList() : GenericStatic("ArrayList", Paths::ArrayList, 1) {
 		}
 
-		SourceFile* create(std::string newName, Interface** gens, size_t genSize)override;
+		SourceFile* create(std::string newName, Instanciable** gens, size_t genSize)override;
 
 		class Equals :public Command {
 		public:
@@ -541,16 +541,16 @@ namespace DTO {
 
 		class toArray : public Command {
 		public:
-			Interface* m_default;
-			toArray(Interface* _default) :m_default(_default) {}
+			Instanciable* m_default;
+			toArray(Instanciable* _default) :m_default(_default) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				ClassO* a{ (ClassO*)mem.get("c") };
 
-				Interface* i;
+				Instanciable* i;
 				if (a == nullptr)
 					i = m_default;
 				else
-					i = (Interface*)a->m_value;
+					i = (Instanciable*)a->m_value;
 
 				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
 

@@ -15,7 +15,7 @@ DTO::FunctionCom::~FunctionCom()
 
 DTO::CommandReturn* DTO::FunctionCom::exec(MemoryObject& mem) {
 
-	Interface** argsType{ new Interface * [m_argsLen] };
+	Instanciable** argsType{ new Instanciable * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {
@@ -270,7 +270,7 @@ DTO::CommandReturn* DTO::FunctionDynCom::exec(MemoryObject& pre_mem)
 	if (cl == nullptr)
 		throw "??";
 
-	Interface** argsType{ new Interface * [m_argsLen] };
+	Instanciable** argsType{ new Instanciable * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {

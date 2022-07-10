@@ -3,7 +3,7 @@
 #include "MemoryFunction.h"
 #include "GarbageCollector.h"
 
-DTO::Return::Return(std::string name, Interface* returnType) : m_name(name), m_returnType(returnType) { }
+DTO::Return::Return(std::string name, Instanciable* returnType) : m_name(name), m_returnType(returnType) { }
 
 DTO::CommandReturn* DTO::Return::exec(MemoryObject& mem) {
 	return new CommandReturn(mem.get(m_name), true, false);
@@ -24,7 +24,7 @@ DTO::ReturnFunc::~ReturnFunc() {
 }
 
 DTO::CommandReturn* DTO::ReturnFunc::exec(MemoryObject& mem) {
-	Interface** argsType{ new Interface * [m_argsLen] };
+	Instanciable** argsType{ new Instanciable * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {
@@ -65,7 +65,7 @@ DTO::InstanceFunc::~InstanceFunc() {
 }
 
 DTO::CommandReturn* DTO::InstanceFunc::exec(MemoryObject& pre_mem) {
-	Interface** argsType{ new Interface * [m_argsLen] };
+	Instanciable** argsType{ new Instanciable * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	args[0] = new CommandReturn(new Object(m_class), false, false);
@@ -221,7 +221,7 @@ DTO::ObFunc::~ObFunc()
 DTO::CommandReturn* DTO::ObFunc::exec(MemoryObject& pre_mem)
 {
 
-	Interface** argsType{ new Interface * [m_argsLen] };
+	Instanciable** argsType{ new Instanciable * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {

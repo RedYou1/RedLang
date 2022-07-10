@@ -4,7 +4,7 @@
 
 namespace DTO {
 	struct Arg {
-		Interface* type = nullptr;
+		Instanciable* type = nullptr;
 		std::string name = "";
 	};
 }

@@ -57,20 +57,20 @@ bool DTO::MemorySourceFile::containKey(std::string* name, MemorySourceFile* _gen
 	if (found && cName.at(cName.size() - 1) == '>') {
 		std::queue<std::string> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
 		size_t size{ q.size() };
-		Interface** genTypesArr{ new Interface * [size] };
+		Instanciable** genTypesArr{ new Instanciable * [size] };
 		size_t i{ 0 };
 		size_t charIndex{ genName.size() + 1 };
 		while (i < size) {
 			std::string genType{ q.front() };
 			if (containKey(&genType, _genTypes)) {
-				genTypesArr[i] = getInterface(genType);
+				genTypesArr[i] = getType(genType);
 				if (name->substr(charIndex).find(genType) != 0) {
 					*name = name->substr(0, charIndex) + genType + name->substr(charIndex + q.front().size());
 					charIndex += genType.size() - q.front().size();
 				}
 			}
 			else if (_genTypes != nullptr && _genTypes->containKey(&genType)) {
-				genTypesArr[i] = _genTypes->getInterface(genType);
+				genTypesArr[i] = _genTypes->getType(genType);
 				*name = name->substr(0, charIndex) + genTypesArr[i]->getName() + name->substr(charIndex + q.front().size());
 				charIndex += genTypesArr[i]->getName().size() - q.front().size();
 			}
@@ -122,14 +122,14 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::string name) {
 			throw "not found";
 		std::queue<std::string> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
 		size_t size{ q.size() };
-		Interface** genTypesArr{ new Interface * [size] };
+		Instanciable** genTypesArr{ new Instanciable * [size] };
 		size_t i{ 0 };
 		size_t charIndex{ genName.size() + 1 };
 		bool a{ false };
 		while (i < size) {
 			std::string genType{ q.front() };
 			if (containKey(&genType)) {
-				genTypesArr[i] = getInterface(genType);
+				genTypesArr[i] = getType(genType);
 			}
 			else {
 				delete[] genTypesArr;
@@ -150,10 +150,10 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::string name) {
 	return s;
 }
 
-DTO::Interface* DTO::MemorySourceFile::getType(std::string name)
+DTO::Instanciable* DTO::MemorySourceFile::getType(std::string name)
 {
 	SourceFile* s{ get(name) };
-	Interface* i{ dynamic_cast<Interface*>(s) };
+	Instanciable* i{ dynamic_cast<Instanciable*>(s) };
 	if (s != nullptr && i == nullptr)
 		throw "not an Interface";
 	return i;

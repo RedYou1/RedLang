@@ -13,7 +13,7 @@
 namespace DTO {
 	class CastExceptionO : public ExceptionO {
 	public:
-		CastExceptionO(Class* type, std::string message, CommandReturn* from, Interface* to)
+		CastExceptionO(Class* type, std::string message, CommandReturn* from, Instanciable* to)
 			: ExceptionO(type, message + "{from:" + from->getObject()->getClass()->getName() + ",to:" + to->getName() + "}") {
 			delete from;
 		}

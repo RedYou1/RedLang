@@ -1,6 +1,6 @@
 #include "SizedArray.h"
 
-DTO::SizedArray::SizedArrayC::SizedArrayC(std::string name, Interface* type)
+DTO::SizedArray::SizedArrayC::SizedArrayC(std::string name, Instanciable* type)
 	:Class(name, Paths::SizedArray, GLOBAL::getClasses()->getClass(Paths::Object)), m_type(type)
 {
 	Number* number{ (Number*)GLOBAL::getClasses()->getInterface(Paths::Number) };
@@ -14,16 +14,13 @@ DTO::SizedArray::SizedArrayC::SizedArrayC(std::string name, Interface* type)
 	addFunc("resize", nullptr, new Arg[2]{ this,"this", number,"c" }, 2, new Resize());
 }
 
-DTO::SourceFile* DTO::SizedArray::create(std::string newName, Interface** gens, size_t genSize)
+DTO::SourceFile* DTO::SizedArray::create(std::string newName, Instanciable** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";
 	}
 	if (gens[0] == nullptr) {
 		throw "Null Class";
-	}
-	if (dynamic_cast<Interface*>(gens[0]) == nullptr) {
-		throw "not an interface or class.";
 	}
 	SizedArrayC* g{ new SizedArrayC(newName, gens[0]) };
 	add(new GenPossibility[]{ gens[0] }, 1, g);

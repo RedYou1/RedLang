@@ -17,9 +17,9 @@ namespace DTO {
 		void add(std::string name, Function* o);
 
 		std::list<Function*> get(std::string name);
-		Function* get(std::string name, Interface** argsType, size_t argsLen);
+		Function* get(std::string name, Instanciable** argsType, size_t argsLen);
 
-		bool containsI(std::string name, Interface** argsType, size_t argsLen);
+		bool containsI(std::string name, Instanciable** argsType, size_t argsLen);
 		bool containsI(std::string name, Arg* args, size_t argsLen);
 
 		template <class K>

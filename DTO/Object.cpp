@@ -69,7 +69,7 @@ DTO::IObject* DTO::Object::clone()
 
 DTO::CommandReturn* DTO::Object::exec(std::string name, IObject** args, size_t argsSize)
 {
-	Interface** i{ new Interface * [argsSize] };
+	Instanciable** i{ new Instanciable * [argsSize] };
 	for (size_t c{ 0 }; c < argsSize; c++) {
 		i[c] = args[c]->getClass();
 	}
@@ -87,7 +87,7 @@ DTO::CommandReturn* DTO::NullObject::exec(std::string name, IObject** args, size
 DTO::CommandReturn* DTO::Object::exec(std::string name, IObject* arg)
 {
 	IObject** o{ new IObject * [1]{arg} };
-	Interface** i{ new Interface * [1]{arg->getClass()} };
+	Instanciable** i{ new Instanciable * [1]{arg->getClass()} };
 	MemoryObject mem2{};
 	CommandReturn* q{ getClass()->getFuncs()->get(name, i, 1)->exec(mem2, o, 1) };
 	delete[] i;

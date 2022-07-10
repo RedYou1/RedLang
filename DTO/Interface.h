@@ -2,14 +2,14 @@
 #include <map>
 #include <string>
 #include <list>
-#include "SourceFile.h"
+#include "Instanciable.h"
 
 namespace DTO {
 	class MemorySourceFile;
 	class Signature;
 	class Class;
 
-	class Interface : public SourceFile {
+	class Interface : public Instanciable {
 	protected:
 		Interface** m_interfaces;
 		size_t m_interfaceLen;
@@ -29,10 +29,10 @@ namespace DTO {
 		void add(std::string name, Signature* o);
 
 		std::list<Signature*> get(std::string name);
-		Signature* get(std::string name, Interface** argsType, size_t argsLen);
+		Signature* get(std::string name, Instanciable** argsType, size_t argsLen);
 
 		bool containsAll(Class* _class);
 
-		virtual bool instanceOf(Interface* other);
+		virtual bool instanceOf(Instanciable* other) override;
 	};
 }

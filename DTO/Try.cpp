@@ -1,6 +1,6 @@
 #include "Try.h"
 
-DTO::Try::Try(FunctionBlock* t_try, Interface** catchKeys, std::string* names, FunctionBlock** catchs, size_t catchLen)
+DTO::Try::Try(FunctionBlock* t_try, Instanciable** catchKeys, std::string* names, FunctionBlock** catchs, size_t catchLen)
 	:m_try(t_try), m_catchKeys(catchKeys), m_names(names), m_catchs(catchs), m_catchLen(catchLen)
 {}
 
@@ -36,7 +36,7 @@ DTO::CommandReturn* DTO::Try::exec(MemoryObject& mem)
 
 DTO::Command* DTO::Try::clone()
 {
-	Interface** catchKeys{ new Interface * [m_catchLen] };
+	Instanciable** catchKeys{ new Instanciable * [m_catchLen] };
 	for (size_t c(0); c < m_catchLen; c++)
 		catchKeys[c] = m_catchKeys[c];
 	std::string* names{ new std::string[m_catchLen] };

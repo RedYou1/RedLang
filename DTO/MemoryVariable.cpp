@@ -3,18 +3,18 @@
 #include "Class.h"
 
 DTO::MemoryVariable::MemoryVariable(MemoryVariable* parent)
-	:m_parent(parent), m_vars(std::map<std::string, Interface*>())
+	:m_parent(parent), m_vars(std::map<std::string, Instanciable*>())
 {
 }
 
-void DTO::MemoryVariable::add(std::string name, Interface* o) {
+void DTO::MemoryVariable::add(std::string name, Instanciable* o) {
 	if (m_vars.find(name) != m_vars.end())
 		throw "variable already exists";
-	m_vars.insert(std::pair<std::string, Interface*>(name, o));
+	m_vars.insert(std::pair<std::string, Instanciable*>(name, o));
 }
 
-void DTO::MemoryVariable::set(std::string name, Interface* o) {
-	typename std::map<std::string, Interface*>::iterator it(m_vars.find(name));
+void DTO::MemoryVariable::set(std::string name, Instanciable* o) {
+	typename std::map<std::string, Instanciable*>::iterator it(m_vars.find(name));
 	if (it == m_vars.end()) {
 		if (m_parent != nullptr)
 			return m_parent->set(name, o);
@@ -31,8 +31,8 @@ bool DTO::MemoryVariable::containKey(std::string name) {
 	return m_vars.find(name) != m_vars.end() || (m_parent != nullptr && m_parent->containKey(name));
 }
 
-DTO::Interface* DTO::MemoryVariable::get(std::string name) {
-	typename std::map<std::string, Interface*>::iterator it(m_vars.find(name));
+DTO::Instanciable* DTO::MemoryVariable::get(std::string name) {
+	typename std::map<std::string, Instanciable*>::iterator it(m_vars.find(name));
 	if (it == m_vars.end())
 		if (m_parent != nullptr)
 			return m_parent->get(name);

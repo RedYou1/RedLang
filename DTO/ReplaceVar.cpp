@@ -1,7 +1,7 @@
 #include "ReplaceVar.h"
 #include "CastException.h"
 
-DTO::ReplaceVar::ReplaceVar(Interface* type, std::string name, Command* cmd)
+DTO::ReplaceVar::ReplaceVar(Instanciable* type, std::string name, Command* cmd)
 	:m_type(type), m_name(name), m_cmd(cmd) {}
 
 DTO::CommandReturn* DTO::ReplaceVar::exec(MemoryObject& mem) {

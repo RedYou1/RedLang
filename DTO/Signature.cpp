@@ -1,10 +1,10 @@
 #include "Signature.h"
-#include "Interface.h"
+#include "Instanciable.h"
 
-DTO::Signature::Signature(std::string path, Interface* returnType, Arg* args, size_t argsLen)
+DTO::Signature::Signature(std::string path, Instanciable* returnType, Arg* args, size_t argsLen)
 	:m_path(path), m_returnType(returnType), m_args(args), m_argsLen(argsLen), m_infinite(false)
 {}
-DTO::Signature::Signature(std::string path, Interface* returnType, Arg* args, size_t argsLen, bool infinite)
+DTO::Signature::Signature(std::string path, Instanciable* returnType, Arg* args, size_t argsLen, bool infinite)
 	: m_path(path), m_returnType(returnType), m_args(args), m_argsLen(argsLen), m_infinite(infinite)
 {}
 
@@ -12,7 +12,7 @@ DTO::Signature::~Signature() {
 	delete[] m_args;
 }
 
-bool DTO::Signature::equalsI(Interface** argsType, size_t argsLen)
+bool DTO::Signature::equalsI(Instanciable** argsType, size_t argsLen)
 {
 	if (m_argsLen == argsLen || (m_infinite && m_argsLen <= argsLen)) {
 		if (m_argsLen == 0)
@@ -44,7 +44,7 @@ bool DTO::Signature::equalsI(Arg* args, size_t argsLen)
 	return false;
 }
 
-bool DTO::Signature::similarI(Interface** argsType, size_t argsLen)
+bool DTO::Signature::similarI(Instanciable** argsType, size_t argsLen)
 {
 	if (m_argsLen == argsLen || (m_infinite && m_argsLen <= argsLen)) {
 		for (size_t c(1); c < m_argsLen; c++)
@@ -55,7 +55,7 @@ bool DTO::Signature::similarI(Interface** argsType, size_t argsLen)
 	return false;
 }
 
-bool DTO::Signature::similar(Interface** argsType, size_t argsLen)
+bool DTO::Signature::similar(Instanciable** argsType, size_t argsLen)
 {
 	if (m_argsLen == argsLen || (m_infinite && m_argsLen <= argsLen)) {
 		for (size_t c(0); c < m_argsLen; c++)

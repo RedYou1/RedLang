@@ -1,6 +1,6 @@
 #include "ArrayList.h"
 
-DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
+DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Instanciable* type)
 	:Class(name, Paths::ArrayList, GLOBAL::getClasses()->getClass(Paths::Object),
 		new Interface* [1]{ GLOBAL::getClasses()->getInterface(std::string(Paths::List) + "<" + type->getName() + ">") }, 1), m_type(type)
 {
@@ -40,16 +40,13 @@ DTO::ArrayList::ArrayListC::ArrayListC(std::string name, Interface* type)
 	addFunc("trimToSize", nullptr, new Arg[1]{ this,"this" }, 1, new trimToSize());
 }
 
-DTO::SourceFile* DTO::ArrayList::create(std::string newName, Interface** gens, size_t genSize)
+DTO::SourceFile* DTO::ArrayList::create(std::string newName, Instanciable** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";
 	}
 	if (gens[0] == nullptr) {
 		throw "Null Class";
-	}
-	if (dynamic_cast<Interface*>(gens[0]) == nullptr) {
-		throw "not an interface or class.";
 	}
 	ArrayListC* g{ new ArrayListC(newName, gens[0]) };
 	GenericStatic::add(new GenPossibility[]{ gens[0] }, 1, g);

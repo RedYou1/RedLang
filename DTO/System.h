@@ -31,7 +31,7 @@ namespace DTO {
 		public:
 			CommandReturn* exec(MemoryObject& mem) {
 				IObject* s{ mem.get("s") };
-				Interface** cc{ new Interface * [1] {s->getClass()} };
+				Instanciable** cc{ new Instanciable * [1] {s->getClass()} };
 				Function* func{ s->getClass()->getFuncs()->get("toString",cc,1) };
 				delete[] cc;
 				IObject** cmds{ new IObject * [1] {s} };
@@ -47,7 +47,7 @@ namespace DTO {
 		public:
 			CommandReturn* exec(MemoryObject& mem) {
 				IObject* s{ mem.get("s") };
-				Interface** cc{ new Interface * [1] {s->getClass()} };
+				Instanciable** cc{ new Instanciable * [1] {s->getClass()} };
 				Function* func{ s->getClass()->getFuncs()->get("toString",cc,1) };
 				delete[] cc;
 				IObject** cmds{ new IObject * [1] {s} };

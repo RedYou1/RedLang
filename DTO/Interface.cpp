@@ -6,22 +6,22 @@
 #include "Generic.h"
 
 DTO::Interface::Interface(std::string name, std::string path)
-	:SourceFile(name, path), m_genTypes(new MemorySourceFile{ false }), m_interfaces(new Interface* [0]), m_interfaceLen(0), m_signs()
+	:Instanciable(name, path), m_genTypes(new MemorySourceFile{ false }), m_interfaces(new Interface* [0]), m_interfaceLen(0), m_signs()
 {
 }
 
 DTO::Interface::Interface(std::string name, std::string path, MemorySourceFile* genTypes)
-	: SourceFile(name, path), m_genTypes(genTypes), m_interfaces(new Interface* [0]), m_interfaceLen(0), m_signs()
+	: Instanciable(name, path), m_genTypes(genTypes), m_interfaces(new Interface* [0]), m_interfaceLen(0), m_signs()
 {
 }
 
 DTO::Interface::Interface(std::string name, std::string path, Interface** implements, size_t implementsLen)
-	: SourceFile(name, path), m_genTypes(new MemorySourceFile{ false }), m_interfaces(implements), m_interfaceLen(implementsLen), m_signs()
+	: Instanciable(name, path), m_genTypes(new MemorySourceFile{ false }), m_interfaces(implements), m_interfaceLen(implementsLen), m_signs()
 {
 }
 
 DTO::Interface::Interface(std::string name, std::string path, MemorySourceFile* genTypes, Interface** implements, size_t implementsLen)
-	: SourceFile(name, path), m_genTypes(genTypes), m_interfaces(implements), m_interfaceLen(implementsLen), m_signs()
+	: Instanciable(name, path), m_genTypes(genTypes), m_interfaces(implements), m_interfaceLen(implementsLen), m_signs()
 {
 }
 
@@ -60,7 +60,7 @@ std::list<DTO::Signature*> DTO::Interface::get(std::string name)
 	return it->second;
 }
 
-DTO::Signature* DTO::Interface::get(std::string name, Interface** argsType, size_t argsLen)
+DTO::Signature* DTO::Interface::get(std::string name, Instanciable** argsType, size_t argsLen)
 {
 	std::list<Signature*> li(get(name));
 	for (std::list<Signature*>::iterator it = li.begin(); it != li.end(); ++it) {
@@ -92,7 +92,7 @@ bool DTO::Interface::containsAll(Class* _class)
 	return true;
 }
 
-bool DTO::Interface::instanceOf(Interface* other)
+bool DTO::Interface::instanceOf(Instanciable* other)
 {
 	if (other == nullptr)
 		return true;
@@ -101,7 +101,7 @@ bool DTO::Interface::instanceOf(Interface* other)
 	if (this == other)
 		return true;
 	if (GenericI * o{ dynamic_cast<GenericI*>(other) })
-		return o->isOk(this);
+		return o->instanceOf(this);
 	for (size_t c(0); c < m_interfaceLen; c++)
 		if (m_interfaces[c]->instanceOf(other))
 			return true;

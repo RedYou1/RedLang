@@ -101,7 +101,7 @@ namespace DTO {
 
 				size_t size{ mem.size() - 2 };
 				IObject** args{ new IObject * [size] };
-				Interface** argsT{ new Interface * [size] };
+				Instanciable** argsT{ new Instanciable * [size] };
 				for (size_t i{ 0 }; i < size; i++) {
 					args[i] = mem.get(std::to_string(i));
 					argsT[i] = args[i]->getClass();

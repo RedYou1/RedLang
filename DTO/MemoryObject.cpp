@@ -12,7 +12,7 @@ DTO::MemoryObject::~MemoryObject() {
 	}
 }
 
-void DTO::MemoryObject::add(std::string name, IObject* o, Interface* type) {
+void DTO::MemoryObject::add(std::string name, IObject* o, Instanciable* type) {
 	if (m_vars.find(name) != m_vars.end())
 		throw "variable already exists";
 	m_vars.insert(std::pair<std::string, Memory*>(name, new Memory{ o ,type }));
@@ -50,7 +50,7 @@ size_t DTO::MemoryObject::size() {
 	return m_vars.size();
 }
 
-DTO::MemoryObject::Memory::Memory(IObject* object, Interface* type)
+DTO::MemoryObject::Memory::Memory(IObject* object, Instanciable* type)
 	:m_object(object), m_type(type)
 {
 	GarbageCollector::Add(m_object);
@@ -66,7 +66,7 @@ DTO::IObject* DTO::MemoryObject::Memory::getObject()
 	return m_object;
 }
 
-DTO::Interface* DTO::MemoryObject::Memory::getType()
+DTO::Instanciable* DTO::MemoryObject::Memory::getType()
 {
 	return m_type;
 }

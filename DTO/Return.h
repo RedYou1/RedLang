@@ -11,9 +11,9 @@ namespace DTO {
 	class Return :public Command {
 	private:
 		std::string m_name;
-		Interface* m_returnType;
+		Instanciable* m_returnType;
 	public:
-		Return(std::string name, Interface* returnType);
+		Return(std::string name, Instanciable* returnType);
 		virtual ~Return() override {}
 
 		CommandReturn* exec(MemoryObject& mem) override;

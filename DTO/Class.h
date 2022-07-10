@@ -26,13 +26,13 @@ namespace DTO {
 
 		Class* extends();
 
-		bool instanceOf(Interface* other) override;
+		bool instanceOf(Instanciable* other) override;
 
 		MemoryFunction* getFuncs() { return m_funcs; }
 		MemoryVar* getVars() { return m_vars; }
 		MemoryStatVar* getStatVars() { return m_statVars; }
 
-		void addFunc(std::string name, Interface* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity = true);
-		void addFunc(std::string name, Interface* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity = true);
+		void addFunc(std::string name, Instanciable* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity = true);
+		void addFunc(std::string name, Instanciable* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity = true);
 	};
 }

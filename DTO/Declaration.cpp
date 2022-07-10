@@ -1,7 +1,7 @@
 #include "Declaration.h"
 #include "CastException.h"
 
-DTO::Declaration::Declaration(Interface* type, std::string name, Command* cmd)
+DTO::Declaration::Declaration(Instanciable* type, std::string name, Command* cmd)
 	:m_type(type), m_name(name), m_cmd(cmd) {}
 
 DTO::CommandReturn* DTO::Declaration::exec(MemoryObject& mem) {

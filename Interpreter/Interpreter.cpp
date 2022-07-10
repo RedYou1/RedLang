@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 		DTO::MemoryObject* mem{ new DTO::MemoryObject {} };
 		DTO::CommandReturn* r{ c1->getFuncs()->get("main", nullptr, 0)->exec(*mem, (DTO::Command**)nullptr,0) };
 		if (r->isThrow()) {
-			DTO::Interface** cc{ new DTO::Interface * [1] {r->getObject()->getClass()} };
+			DTO::Instanciable** cc{ new DTO::Instanciable * [1] {r->getObject()->getClass()} };
 			DTO::Function* func{ r->getObject()->getClass()->getFuncs()->get("toString",cc,1) };
 			delete[] cc;
 			DTO::IObject** cmds{ new DTO::IObject * [1] {r->getObject()} };
