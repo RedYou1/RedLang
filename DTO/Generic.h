@@ -62,6 +62,7 @@ namespace DTO {
 	public:
 		GenericStatic(std::string name, std::string path, size_t genSize) :Generic(name, path), m_genSize(genSize) {}
 		virtual ~GenericStatic() override;
+		size_t genSize() { return m_genSize; }
 		void add(GenPossibility* gens, size_t genSize, SourceFile* _class) override;
 		bool contains(Interface** gens, size_t genSize)override;
 		SourceFile* get(Interface** gens, size_t genSize)override;

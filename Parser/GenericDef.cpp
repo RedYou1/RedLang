@@ -6,14 +6,13 @@
 #include "../DTO/Global.h"
 
 Parser::GenericDef::GenericDef(std::string name, std::string path, std::string type, std::queue<std::string> genTypes, std::string content)
-	:DTO::GenericDynamic(name, path),
+	:DTO::GenericStatic(name, path, genTypes.size()),
 	m_type(type),
-	m_genSize(genTypes.size()),
 	m_genTypes(),
 	m_content(content)
 {
-	m_genTypes.resize(m_genSize);
-	for (size_t i{ 0 }; i < m_genSize; i++)
+	m_genTypes.resize(genSize());
+	for (size_t i{ 0 }; i < genSize(); i++)
 	{
 		m_genTypes[i] = genTypes.front();
 		genTypes.pop();
@@ -22,12 +21,23 @@ Parser::GenericDef::GenericDef(std::string name, std::string path, std::string t
 
 DTO::SourceFile* Parser::GenericDef::create(std::string newName, DTO::Interface** gens, size_t genSize)
 {
-	if (genSize != m_genSize)
+	if (genSize != this->genSize())
 		throw "??";
 
 	DTO::MemorySourceFile* genTypes{ new DTO::MemorySourceFile{false} };
-	for (size_t i{ 0 }; i < m_genSize; i++) {
-		genTypes->add(m_genTypes[i], gens[i]);
+	for (size_t i{ 0 }; i < genSize; i++) {
+		size_t find{ m_genTypes[i].find(' ') };
+		genTypes->add(m_genTypes[i].substr(0, find), gens[i]);
+
+		while (find < m_genTypes[i].size()) {
+			size_t next{ m_genTypes[i].substr(find+1).find(' ') };
+			std::string name{ m_genTypes[i].substr(find+1,next) };
+			if (!gens[i]->instanceOf(DTO::GLOBAL::getClasses()->getInterface(name)))
+				throw "do not respect the heritance clause of a generic";
+			if (next >= m_genTypes[i].size())
+				break;
+			find += next+1;
+		}
 	}
 
 	std::string str{ newName + m_content };
