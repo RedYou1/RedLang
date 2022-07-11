@@ -24,6 +24,11 @@ namespace DTO {
 		Interface* getInterface(std::string name);
 		Class* getClass(std::string name);
 
+		SourceFile* checkGet(std::string name);
+		Instanciable* checkGetType(std::string name);
+		Interface* checkGetInterface(std::string name);
+		Class* checkGetClass(std::string name);
+
 		size_t size();
 
 		template <class K>

@@ -39,16 +39,137 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 	DTO::myString m{ &line };
 	m.removeUseless();
 	std::string word{ m.extractName() };
-	if (word._Equal("return")) {
-		m.removeUseless();
-		if (line.empty())
-			return new DTO::ReturnObj(new DTO::NullObject());
-		else
-			return new DTO::ReturnCom(parseReturn(variables, line, genTypes));
-	}
-	else if (word._Equal("bp")) {
-		m.removeUseless();
-		return new DTO::BreakPoint();
+
+	if (pre == nullptr && preC == nullptr) {
+		if (word._Equal("return")) {
+			m.removeUseless();
+			if (line.empty())
+				return new DTO::ReturnObj(new DTO::NullObject());
+			else
+				return new DTO::ReturnCom(parseReturn(variables, line, genTypes));
+		}
+		else if (word._Equal("bp")) {
+			m.removeUseless();
+			return new DTO::BreakPoint();
+		}
+		else if (line.at(0) == '{') {
+			DTO::MemoryVariable var{ &variables };
+			return parseFunctionBlock(var, &line, genTypes);
+		}
+		else if (word._Equal("if")) {
+			m.removeUseless();
+			std::string in{ m.extractFunc() };
+			DTO::MemoryVariable var{ &variables };
+			DTO::Command* cond{ parseReturn(var,in,genTypes) };
+			return new DTO::If(cond, parseFunctionBlock(var, &line, genTypes));
+		}
+		else if (word._Equal("while")) {
+			m.removeUseless();
+			std::string in{ m.extractFunc() };
+			DTO::MemoryVariable var{ &variables };
+			DTO::Command* cond{ parseReturn(var,in,genTypes) };
+			return new DTO::While(cond, parseFunctionBlock(var, &line, genTypes));
+		}
+		else if (word._Equal("for")) {
+			m.removeUseless();
+			std::string in{ m.extractFunc2() };
+
+			std::queue<std::string> func{ DTO::myString(&in).split2(';') };
+			if (func.size() != 3)
+				throw "??";
+			DTO::MemoryVariable var{ &variables };
+			DTO::Command* init{ parseCommand(nullptr,nullptr,var,func.front(),genTypes) };
+			func.pop();
+			DTO::Command* cond{ parseReturn(var,func.front(),genTypes) };
+			func.pop();
+			DTO::Command* end{ parseCommand(nullptr,nullptr,var,func.front(),genTypes) };
+			return new DTO::For(init, cond, end, parseFunctionBlock(var, &line, genTypes));
+		}
+		else if (word._Equal("forEach")) {
+			m.removeUseless();
+			std::string in{ m.extractFunc2() };
+
+			DTO::myString inS{ &in };
+
+			inS.removeUseless();
+			inS.extract(1);
+			inS.removeUseless();
+			std::string typeName{ inS.extractName() };
+			DTO::Instanciable* type{ DTO::GLOBAL::getClasses()->getType(typeName) };
+			inS.removeUseless();
+			std::string name{ inS.extract2() };
+			inS.removeUseless();
+			inS.extract(1);
+			inS.removeUseless();
+			in = in.substr(0, in.find_last_of(')'));
+			DTO::MemoryVariable var{ &variables };
+			var.add(name, type);
+			DTO::Command* iterable{ parseReturn(var,in,genTypes) };
+
+			DTO::FunctionBlock* fb{ parseFunctionBlock(var, &line, genTypes) };//dont delete because they will be deleted in the function.
+			DTO::Function* func{ new DTO::Function(new DTO::Signature("",nullptr,new DTO::Arg[1]{type,name},1),fb->getCommands(),fb->getcommandLen()) };
+
+			return new DTO::ForEach(type, name, iterable, func);
+		}
+		else if (word._Equal("throw")) {
+			m.removeUseless();
+			return new DTO::Throw(parseReturn(variables, line, genTypes));
+		}
+		else if (word._Equal("try")) {
+			m.removeUseless();
+			DTO::MemoryVariable var{ &variables };
+			DTO::FunctionBlock* t_try{ parseFunctionBlock(var, &line, genTypes) };
+			m.removeUseless();
+			word = m.extractName();
+			std::queue<std::tuple<std::string, DTO::Interface*, DTO::FunctionBlock*>> catchs{};
+			while (word._Equal("catch")) {
+				m.removeUseless();
+
+				std::string arg{ m.extractFunc() };
+				DTO::myString m2{ &arg };
+				DTO::Interface* type{ nullptr };
+
+				std::string typeName{ m2.extractName() };
+				if (genTypes.containKey(&typeName))
+					type = genTypes.getInterface(typeName);
+				else if (DTO::GLOBAL::getClasses()->containKey(&typeName, &genTypes))
+					type = DTO::GLOBAL::getClasses()->getInterface(typeName);
+				else
+					throw "??";
+
+				if (type == nullptr)
+					throw "??";
+
+				m2.removeUseless();
+				std::string name{ m2.extractName() };
+
+				m.removeUseless();
+
+				DTO::MemoryVariable var2{ &variables };
+				var2.add(name, type);
+
+				DTO::FunctionBlock* t_catch{ parseFunctionBlock(var2, &line, genTypes) };
+				catchs.push(std::tuple<std::string, DTO::Interface*, DTO::FunctionBlock*>(name, type, t_catch));
+				m.removeUseless();
+				word = m.extractName();
+			}
+			m.removeUseless();
+			size_t size{ catchs.size() };
+			std::string* names{ new std::string[size] };
+			DTO::Instanciable** types{ new DTO::Instanciable * [size] };
+			DTO::FunctionBlock** catches{ new DTO::FunctionBlock * [size] };
+
+			size_t i{ 0 };
+			while (!catchs.empty() && i < size) {
+				std::tie(names[i], types[i], catches[i]) = catchs.front();
+				catchs.pop();
+				i++;
+			}
+			if (!catchs.empty() || i < size)
+				throw "??";
+
+			return new DTO::Try(t_try, types, names, catches, size);
+		}
 	}
 	else if (line.empty()) {
 		if (word.at(word.size() - 1) == '>') {
@@ -91,98 +212,6 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			return new DTO::Return(word, variables.get(word));
 		}
 		throw "??";
-	}
-	else if (line.at(0) == '{') {
-		DTO::MemoryVariable var{ &variables };
-		return parseFunctionBlock(var, &line, genTypes);
-	}
-	else if (word._Equal("if")) {
-		m.removeUseless();
-		std::string in{ m.extractFunc() };
-		DTO::MemoryVariable var{ &variables };
-		DTO::Command* cond{ parseReturn(var,in,genTypes) };
-		return new DTO::If(cond, parseFunctionBlock(var, &line, genTypes));
-	}
-	else if (word._Equal("while")) {
-		m.removeUseless();
-		std::string in{ m.extractFunc() };
-		DTO::MemoryVariable var{ &variables };
-		DTO::Command* cond{ parseReturn(var,in,genTypes) };
-		return new DTO::While(cond, parseFunctionBlock(var, &line, genTypes));
-	}
-	else if (word._Equal("for")) {
-		m.removeUseless();
-		std::string in{ m.extractFunc2() };
-
-		std::queue<std::string> func{ DTO::myString(&in).split2(';') };
-		if (func.size() != 3)
-			throw "??";
-		DTO::MemoryVariable var{ &variables };
-		DTO::Command* init{ parseCommand(nullptr,nullptr,var,func.front(),genTypes) };
-		func.pop();
-		DTO::Command* cond{ parseReturn(var,func.front(),genTypes) };
-		func.pop();
-		DTO::Command* end{ parseCommand(nullptr,nullptr,var,func.front(),genTypes) };
-		return new DTO::For(init, cond, end, parseFunctionBlock(var, &line, genTypes));
-	}
-	else if (word._Equal("throw")) {
-		m.removeUseless();
-		return new DTO::Throw(parseReturn(variables, line, genTypes));
-	}
-	else if (word._Equal("try")) {
-		m.removeUseless();
-		DTO::MemoryVariable var{ &variables };
-		DTO::FunctionBlock* t_try{ parseFunctionBlock(var, &line, genTypes) };
-		m.removeUseless();
-		word = m.extractName();
-		std::queue<std::tuple<std::string, DTO::Interface*, DTO::FunctionBlock*>> catchs{};
-		while (word._Equal("catch")) {
-			m.removeUseless();
-
-			std::string arg{ m.extractFunc() };
-			DTO::myString m2{ &arg };
-			DTO::Interface* type{ nullptr };
-
-			std::string typeName{ m2.extractName() };
-			if (genTypes.containKey(&typeName))
-				type = genTypes.getInterface(typeName);
-			else if (DTO::GLOBAL::getClasses()->containKey(&typeName, &genTypes))
-				type = DTO::GLOBAL::getClasses()->getInterface(typeName);
-			else
-				throw "??";
-
-			if (type == nullptr)
-				throw "??";
-
-			m2.removeUseless();
-			std::string name{ m2.extractName() };
-
-			m.removeUseless();
-
-			DTO::MemoryVariable var2{ &variables };
-			var2.add(name, type);
-
-			DTO::FunctionBlock* t_catch{ parseFunctionBlock(var2, &line, genTypes) };
-			catchs.push(std::tuple<std::string, DTO::Interface*, DTO::FunctionBlock*>(name, type, t_catch));
-			m.removeUseless();
-			word = m.extractName();
-		}
-		m.removeUseless();
-		size_t size{ catchs.size() };
-		std::string* names{ new std::string[size] };
-		DTO::Instanciable** types{ new DTO::Instanciable * [size] };
-		DTO::FunctionBlock** catches{ new DTO::FunctionBlock * [size] };
-
-		size_t i{ 0 };
-		while (!catchs.empty() && i < size) {
-			std::tie(names[i], types[i], catches[i]) = catchs.front();
-			catchs.pop();
-			i++;
-		}
-		if (!catchs.empty() || i < size)
-			throw "??";
-
-		return new DTO::Try(t_try, types, names, catches, size);
 	}
 	switch (line.at(0)) {
 	case '(': {

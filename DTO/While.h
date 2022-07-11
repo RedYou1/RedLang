@@ -5,6 +5,7 @@
 #include "Object.h"
 
 #include "Function.h"
+#include "FunctionClass.h"
 
 namespace DTO {
 	class While : public Command {
@@ -31,5 +32,30 @@ namespace DTO {
 
 		CommandReturn* exec(MemoryObject& mem) override;
 		Command* clone()override;
+	};
+
+	class ForEach :public Command {
+	private:
+		Instanciable* m_type;
+		std::string m_name;
+		Command* m_iterable;
+		Function* m_func;
+	public:
+		ForEach(Instanciable* type, std::string name, Command* iterable, Function* func) :
+			m_type(type), m_name(name), m_iterable(iterable), m_func(func) {}
+		~ForEach() { delete m_iterable; delete m_func; }
+		CommandReturn* exec(MemoryObject& mem) override {
+			CommandReturn* q{ m_iterable->exec(mem) };
+
+			FunctionO* func{ new FunctionO(GLOBAL::getClasses()->getClass(Paths::Function),m_func) };
+
+			IObject** args{ new IObject * [2]{q->getObject(),func} };
+			q->getObject()->exec("forEach", args, 2);
+
+			delete[] args;
+			delete q;
+			return new CommandReturn(new NullObject(), false, false);
+		}
+		Command* clone()override { return new ForEach(m_type, m_name, m_iterable->clone(), (Function*)m_func->clone()); }
 	};
 }

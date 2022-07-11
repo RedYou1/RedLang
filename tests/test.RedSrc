@@ -188,37 +188,71 @@ class test{
 		heatMap.set(51i,2i,2i);
 		System.println(heatMap);
 
+		System.print("HeatMap:");
+		forEach(Integer item : heatMap){
+			System.print(item);
+			System.print(",");
+		}
+		System.println("");
+
 		RealPrinter<Integer> rp = new RealPrinter<Integer>(1i);
 		rp.print(2i);
 		rp.print(3i);
-	}
-
-	static function void main(){
-		test.preMain();
 
 		SizedArray<Integer> arr = new SizedArray<Integer>(2i);
 		arr.set(1i,0i);
 		arr.set(2i,1i);
 		System.println(arr.size());
-		String s = "";
+		String s2 = "";
 		for(Number y = 0l;y.lt(arr.size());y.add(1l)){
             if(y.gt(0i)){
-                s.concat(",");
+                s2.concat(",");
             }
-            s.concat(arr.get(y).toString());
+            s2.concat(arr.get(y).toString());
         }
-		System.println(s);
+		System.println(s2);
 		arr.resize(3i);
 		System.println(arr.size());
-		s = "";
+		s2 = "";
 		for(Number y = 0l;y.lt(arr.size());y.add(1l)){
             if(y.gt(0i)){
-                s.concat(",");
+                s2.concat(",");
             }
-            s.concat(arr.get(y).toString());
+            s2.concat(arr.get(y).toString());
         }
-		System.println(s);
+		System.println(s2);
+	}
+
+	static function void main(){
+		test.preMain();
+
+		ArrayList<String> names = new ArrayList<String>();
+		names.add("James");
+		names.add("Robert");
+		names.add("John");
+		names.add("Mary");
+		names.add("Patricia");
+		names.add("Jennifer");
+
+		System.println("size:".concat(names.size()));
+		System.println("capacity:".concat(names.capacity()));
+		System.println("names:");
+		names.forEach(test.printNames<String>);
+		System.println("");
+
+		names.add("RedYou1");
+
+		System.println("size:".concat(names.size()));
+		System.println("capacity:".concat(names.capacity()));
+		System.println("names:");
+		names.forEach(test.printNames<String>);
+		System.println("");
 
 		throw new Exception("FINI");
+	}
+
+	static function void printNames(String name){
+		System.print(name);
+		System.print(",");
 	}
 }

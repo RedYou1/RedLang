@@ -68,8 +68,13 @@ namespace DTO {
 			Concat(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				StringO* a{ (StringO*)mem.get("this") };
-				StringO* b{ (StringO*)mem.get("other") };
-				a->m_value += b->m_value;
+				IObject* b{ mem.get("other") };
+
+				CommandReturn* q{ b->exec("toString",b) };
+
+				a->m_value += ((StringO*)q->getObject())->m_value;
+
+				delete q;
 				return new CommandReturn(a, true, false);
 			}
 			Command* clone()override { return new Concat(m_s); }

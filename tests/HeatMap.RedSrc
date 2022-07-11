@@ -1,4 +1,4 @@
-class HeatMap<T>{
+class HeatMap<T> implements Iterable<T>{
 
     Array<Array<T>> heatMap;
     Number width;
@@ -25,6 +25,14 @@ class HeatMap<T>{
 
     function void set(T o,Number x, Number y){
         this.heatMap.get(x).set(o,y);
+    }
+
+    function void forEach(Function func){
+        for(Number x = 0l;x.lt(this.width);x.add(1l)){
+            for(Number y = 0l;y.lt(this.heigth);y.add(1l)){
+                func.execute(this.get(x,y));
+            }
+        }
     }
 
     function String toString(){

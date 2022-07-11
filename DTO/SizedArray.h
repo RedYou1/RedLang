@@ -12,6 +12,7 @@
 #include "CastException.h"
 #include "GarbageCollector.h"
 #include "CastException.h"
+#include "FunctionClass.h"
 
 namespace DTO {
 	class SizedArrayO : public Object {
@@ -177,6 +178,24 @@ namespace DTO {
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new Resize(); }
+		};
+
+		class forEach : public Command {
+		public:
+			forEach() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				SizedArrayO* array{ (SizedArrayO*)mem.get("this") };
+				FunctionO* func{ (FunctionO*)mem.get("func") };
+				size_t size{ array->m_size };
+				IObject** i{ new IObject * [1] };
+				for (size_t c{ 0 }; c < size; c++) {
+					MemoryObject mem{};
+					i[0] = array->m_value[c];
+					func->m_value->exec(mem, i, 1);
+				}
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new forEach(); }
 		};
 	};
 }

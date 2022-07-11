@@ -4,7 +4,7 @@
 
 DTO::Collection::CollectionI::CollectionI(std::string name, Instanciable* type)
 	:Interface(name, Paths::Collection,
-		new Interface* [1]{ GLOBAL::getClasses()->getInterface(std::string(Paths::Iterable) + "<" + type->getName() + ">") }, 1), m_type(type)
+		new Interface* [1]{ GLOBAL::getClasses()->checkGetInterface(std::string(Paths::Iterable) + "<" + type->getName() + ">") }, 1), m_type(type)
 {
 	Interface* Bool{ GLOBAL::getClasses()->getInterface(Paths::Boolean) };
 	Interface* Integer{ GLOBAL::getClasses()->getInterface(Paths::Integer) };

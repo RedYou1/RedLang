@@ -4,11 +4,11 @@
 
 DTO::List::ListI::ListI(std::string name, Instanciable* type)
 	:Interface(name, Paths::List,
-		new Interface* [1]{ GLOBAL::getClasses()->getInterface(std::string(Paths::Collection) + "<" + type->getName() + ">") }, 1), m_type(type)
+		new Interface* [1]{ GLOBAL::getClasses()->checkGetInterface(std::string(Paths::Collection) + "<" + type->getName() + ">") }, 1), m_type(type)
 {
 	Interface* function{ GLOBAL::getClasses()->getInterface(Paths::Function) };
 	Interface* Number{ GLOBAL::getClasses()->getInterface(Paths::Number) };
-	Interface* Array{ GLOBAL::getClasses()->getInterface(Paths::Array) };
+	Interface* Array{ GLOBAL::getClasses()->checkGetClass(std::string(Paths::Array) + '<' + type->getName() + '>') };
 	Interface* Class{ GLOBAL::getClasses()->getInterface(Paths::Class) };
 	add("add", new Signature("", nullptr, new Arg[3]{ this,"this", Number,"i", type,"c" }, 3));
 	add("addAll", new Signature("", nullptr, new Arg[3]{ this,"this", Number,"i", this,"c" }, 3));

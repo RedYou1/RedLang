@@ -34,8 +34,18 @@ bool DTO::MemorySourceFile::containKey(std::string* name, MemorySourceFile* _gen
 	SourceFile* s{ nullptr };
 
 	std::string cName{ *name };
-	std::string genTypes{ myString{ &cName }.split(".").back() };
-	std::string genName{ myString{&genTypes}.extract2() };
+
+	size_t lastDot{ cName.find_last_of('.') };
+	if (lastDot == SIZE_MAX) {
+		lastDot = 0;
+	}
+
+	size_t firstTri{ cName.substr(lastDot).find('<') };
+	if (firstTri == SIZE_MAX) {
+		firstTri = cName.size();
+	}
+
+	std::string genName{ cName.substr(0,lastDot + firstTri) };
 
 	size_t nameSize{ genName.size() };
 
@@ -55,11 +65,13 @@ bool DTO::MemorySourceFile::containKey(std::string* name, MemorySourceFile* _gen
 	}
 
 	if (found && cName.at(cName.size() - 1) == '>') {
+		std::string genTypes{ myString{ &cName }.split(".").back() };
+		myString{ &genTypes }.extract2();
 		std::queue<std::string> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
 		size_t size{ q.size() };
 		Instanciable** genTypesArr{ new Instanciable * [size] };
 		size_t i{ 0 };
-		size_t charIndex{ genName.size() + 1 };
+		size_t charIndex{ lastDot + firstTri + 1 };
 		while (i < size) {
 			std::string genType{ q.front() };
 			if (containKey(&genType, _genTypes)) {
@@ -98,8 +110,18 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::string name) {
 	SourceFile* s{ nullptr };
 
 	std::string cName{ name };
-	std::string genTypes{ myString{ &cName }.split(".").back() };
-	std::string genName{ myString{&genTypes}.extract2() };
+
+	size_t lastDot{ cName.find_last_of('.') };
+	if (lastDot == SIZE_MAX) {
+		lastDot = 0;
+	}
+
+	size_t firstTri{ cName.substr(lastDot).find('<') };
+	if (firstTri == SIZE_MAX) {
+		firstTri = cName.size();
+	}
+
+	std::string genName{ cName.substr(0,lastDot + firstTri) };
 
 	size_t nameSize{ genName.size() };
 
@@ -120,6 +142,8 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::string name) {
 	if (cName.at(cName.size() - 1) == '>') {
 		if (s == nullptr)
 			throw "not found";
+		std::string genTypes{ myString{ &cName }.split(".").back() };
+		myString{ &genTypes }.extract2();
 		std::queue<std::string> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
 		size_t size{ q.size() };
 		Instanciable** genTypesArr{ new Instanciable * [size] };
@@ -150,6 +174,15 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::string name) {
 	return s;
 }
 
+DTO::SourceFile* DTO::MemorySourceFile::checkGet(std::string name)
+{
+	std::string sname{ name };
+	bool check{ containKey(&sname) };
+	if (!check)
+		throw "??";
+	return get(sname);
+}
+
 DTO::Instanciable* DTO::MemorySourceFile::getType(std::string name)
 {
 	SourceFile* s{ get(name) };
@@ -171,6 +204,33 @@ DTO::Interface* DTO::MemorySourceFile::getInterface(std::string name)
 DTO::Class* DTO::MemorySourceFile::getClass(std::string name)
 {
 	SourceFile* s{ get(name) };
+	Class* i{ dynamic_cast<Class*>(s) };
+	if (s != nullptr && i == nullptr)
+		throw "not a Class";
+	return i;
+}
+
+DTO::Instanciable* DTO::MemorySourceFile::checkGetType(std::string name)
+{
+	SourceFile* s{ checkGet(name) };
+	Instanciable* i{ dynamic_cast<Instanciable*>(s) };
+	if (s != nullptr && i == nullptr)
+		throw "not an Interface";
+	return i;
+}
+
+DTO::Interface* DTO::MemorySourceFile::checkGetInterface(std::string name)
+{
+	SourceFile* s{ checkGet(name) };
+	Interface* i{ dynamic_cast<Interface*>(s) };
+	if (s != nullptr && i == nullptr)
+		throw "not an Interface";
+	return i;
+}
+
+DTO::Class* DTO::MemorySourceFile::checkGetClass(std::string name)
+{
+	SourceFile* s{ checkGet(name) };
 	Class* i{ dynamic_cast<Class*>(s) };
 	if (s != nullptr && i == nullptr)
 		throw "not a Class";

@@ -97,6 +97,7 @@ namespace DTO {
 				CommandReturn* exec(MemoryObject& mem) override {
 					IObject* a{ mem.get("c") };
 					m_array->m_value[m_index] = a;
+					GarbageCollector::Add(a);
 					m_index++;
 					return new CommandReturn(new NullObject(), true, false);
 				}
@@ -151,6 +152,7 @@ namespace DTO {
 				ArrayListO* a{ (ArrayListO*)mem.get("this") };
 				IObject* b{ mem.get("c") };
 				a->m_value.push_back(b);
+				GarbageCollector::Add(b);
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new add(); }
@@ -171,6 +173,7 @@ namespace DTO {
 					return new CommandReturn(new IllegalArgumentExceptionO(GLOBAL::getClasses()->getClass(Paths::IllegalArgumentException), "index too big"), true, true);
 				}
 				a->m_value.insert(a->m_value.begin() + index, b);
+				GarbageCollector::Add(b);
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new addI(); }
@@ -206,6 +209,7 @@ namespace DTO {
 				CommandReturn* exec(MemoryObject& mem) override {
 					IObject* a{ mem.get("c") };
 					m_array->m_value[m_index] = a;
+					GarbageCollector::Add(a);
 					m_index++;
 					return new CommandReturn(new NullObject(), true, false);
 				}
@@ -309,6 +313,9 @@ namespace DTO {
 			clear() {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				for (size_t i{ 0 }; i < arr->m_value.size(); i++) {
+					GarbageCollector::Remove(arr->m_value[i]);
+				}
 				arr->m_value.clear();
 				return new CommandReturn(new NullObject(), true, false);
 			}
@@ -404,6 +411,7 @@ namespace DTO {
 					delete[] args;
 					delete q;
 					if (r) {
+						GarbageCollector::Remove(arr->m_value[i]);
 						arr->m_value.erase(arr->m_value.begin() + i);
 						break;
 					}
@@ -423,7 +431,9 @@ namespace DTO {
 				CommandReturn* q{ a->exec("toLong", a) };
 				if (q->isThrow())
 					return q;
-				arr->m_value.erase(arr->m_value.begin() + ((LongO*)q->getObject())->m_value);
+				int64_t i{ ((LongO*)q->getObject())->m_value };
+				GarbageCollector::Remove(arr->m_value[i]);
+				arr->m_value.erase(arr->m_value.begin() + i);
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
 			}
@@ -467,6 +477,17 @@ namespace DTO {
 			Command* clone()override { return new size(); }
 		};
 
+		class capacity : public Command {
+		public:
+			capacity() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+
+				return new CommandReturn(new LongO(GLOBAL::getClasses()->getClass(Paths::Long), arr->m_value.capacity()), true, false);
+			}
+			Command* clone()override { return new capacity(); }
+		};
+
 		class set : public Command {
 		public:
 			set() {}
@@ -475,7 +496,10 @@ namespace DTO {
 				CommandReturn* q{ a->exec("toLong", a) };
 				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
 				GarbageCollector::Remove(arr->m_value[((NumberO*)q->getObject())->toLong()]);
-				arr->m_value[((NumberO*)q->getObject())->toLong()] = mem.get("o");
+				int64_t i{ ((LongO*)q->getObject())->m_value };
+				GarbageCollector::Remove(arr->m_value[i]);
+				arr->m_value[i] = mem.get("o");
+				GarbageCollector::Add(arr->m_value[i]);
 				GarbageCollector::Add(arr->m_value[((NumberO*)q->getObject())->toLong()]);
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
@@ -576,7 +600,7 @@ namespace DTO {
 				size_t i{ arr->m_value.size() };
 				arr->m_value.reserve(((LongO*)q->getObject())->m_value);
 				for (; i < arr->m_value.size(); i++) {
-					arr->m_value[i] = nullptr;
+					arr->m_value[i] = new NullObject();
 				}
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);

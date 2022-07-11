@@ -28,6 +28,8 @@
 #include "Collection.h"
 #include "Array.h"
 #include "SizedArray.h"
+#include "List.h"
+#include "ArrayList.h"
 
 void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	ObjectClass* object{ new ObjectClass() };
@@ -77,17 +79,12 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	IllegalArgumentExceptionC* argExcept{ new IllegalArgumentExceptionC() };
 	GLOBAL::getClasses()->add(Paths::IllegalArgumentException, argExcept);
 
-	Iterable* iterable{ new Iterable() };
-	GLOBAL::getClasses()->add(Paths::Iterable, iterable);
-
-	Collection* collection{ new Collection() };
-	GLOBAL::getClasses()->add(Paths::Collection, collection);
-
-	Array* array{ new Array() };
-	GLOBAL::getClasses()->add(Paths::Array, array);
-
-	SizedArray* sizedArray{ new SizedArray() };
-	GLOBAL::getClasses()->add(Paths::SizedArray, sizedArray);
+	GLOBAL::getClasses()->add(Paths::Iterable, new Iterable());
+	GLOBAL::getClasses()->add(Paths::Collection, new Collection());
+	GLOBAL::getClasses()->add(Paths::Array, new Array());
+	GLOBAL::getClasses()->add(Paths::SizedArray, new SizedArray());
+	GLOBAL::getClasses()->add(Paths::List, new List());
+	GLOBAL::getClasses()->add(Paths::ArrayList, new ArrayList());
 
 	object->addFunc("equals", Bool, new Arg[2]{ object,"this", object,"c" }, 2, new ObjectClass::Equals(Bool));
 	object->addFunc("toString", String, new Arg[1]{ object,"this" }, 1, new ObjectClass::ToString(String));
@@ -106,7 +103,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	String->addFunc("equals", Bool, new Arg[2]{ String,"this", String,"c" }, 2, new StringC::Equals(Bool));
 	String->addFunc("String", String, new Arg[2]{ String,"this", Char,"c" }, 2, new StringC::CharConstruct(String));
 	String->addFunc("String", String, new Arg[2]{ String,"this", String,"c" }, 2, new StringC::StringConstruct(String));
-	String->addFunc("concat", String, new Arg[2]{ String,"this", String,"other" }, 2, new StringC::Concat(String));
+	String->addFunc("concat", String, new Arg[2]{ String,"this", object,"other" }, 2, new StringC::Concat(String));
 	String->addFunc("toString", String, new Arg[1]{ String,"this" }, 1, new StringC::ToString(String));
 
 	system->addFunc("getWord", String, new Arg[0]{ }, 0, new System::GetWord(String));
