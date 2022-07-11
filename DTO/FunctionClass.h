@@ -75,7 +75,9 @@ namespace DTO {
 					args[c] = mem.get(std::to_string(c));
 				}
 				MemoryObject mem2{};
-				return a->m_value->exec(mem2, args, size);
+				CommandReturn* q{ a->m_value->exec(mem2, args, size) };
+				delete[] args;
+				return q;
 			}
 			Command* clone()override { return new Execute(m_s); }
 		};

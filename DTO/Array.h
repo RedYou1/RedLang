@@ -12,28 +12,36 @@
 #include "CastException.h"
 #include "GarbageCollector.h"
 #include "CastException.h"
+#include "FunctionClass.h"
 
 namespace DTO {
 	class ArrayO : public Object {
 	public:
 		IObject** m_value;
+		size_t m_size;
 
-		ArrayO(Class* type, size_t size) :Object(type) {
-			m_value = new IObject * [size];
+		ArrayO(Class* type, size_t size) :Object(type), m_size(size) {
+			m_value = new IObject * [m_size];
 			Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
-			for (size_t i{ 0 }; i < size; i++) {
+			for (size_t i{ 0 }; i < m_size; i++) {
 				m_value[i] = new NullObject(obj);
+				GarbageCollector::Add(m_value[i]);
 			}
 		}
+
+		~ArrayO() override {
+			for (size_t i{ 0 }; i < m_size; i++) {
+				GarbageCollector::Remove(m_value[i]);
+			}
+			delete[] m_value;
+		}
 	private:
-		ArrayO(Class* type, IObject** value) :Object(type) {
-			m_value = value;
+		ArrayO(Class* type, IObject** value, size_t size) :Object(type), m_value(value), m_size(size) {
 		}
 	public:
 
 		Object* clone()override {
-
-			return new ArrayO(m_type, m_value);
+			return new ArrayO(m_type, m_value, m_size);
 		}
 	};
 
@@ -124,13 +132,83 @@ namespace DTO {
 				delete[] i;
 				delete[] o;
 				ArrayO* arr{ (ArrayO*)mem.get("this") };
-				GarbageCollector::Remove(arr->m_value[((NumberO*)q->getObject())->toLong()]);
-				arr->m_value[((NumberO*)q->getObject())->toLong()] = mem.get("o");
-				GarbageCollector::Add(arr->m_value[((NumberO*)q->getObject())->toLong()]);
+				int64_t index{ ((LongO*)q->getObject())->m_value };
+				GarbageCollector::Remove(arr->m_value[index]);
+				arr->m_value[index] = mem.get("o");
+				GarbageCollector::Add(arr->m_value[index]);
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new Set(m_s); }
+		};
+		class Size :public Command {
+		public:
+			LongC* m_s;
+			Size(LongC* s) :m_s(s) {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayO* arr{ (ArrayO*)mem.get("this") };
+				return new CommandReturn(new LongO(m_s, (int64_t)arr->m_size), true, false);
+			}
+			Command* clone()override { return new Size(m_s); }
+		};
+		class Resize :public Command {
+		public:
+			Resize() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayO* arr{ (ArrayO*)mem.get("this") };
+				IObject* a{ mem.get("c") };
+
+				Instanciable** i{ new Instanciable * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
+				if (!a->getClass()->instanceOf(i[0])) {
+					delete[] i;
+					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), arr->getClass()->getName() + ".Resize", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
+				}
+				IObject** o{ new IObject * [1]{a} };
+				MemoryObject mem2{};
+				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
+				delete[] i;
+				delete[] o;
+
+				uint64_t newSize{ (uint64_t)((LongO*)q->getObject())->m_value };
+
+				for (uint64_t i{ newSize }; i < arr->m_size; i++) {
+					GarbageCollector::Remove(arr->m_value[i]);
+				}
+				IObject** newArr{ new IObject * [newSize] };
+				memcpy(newArr, arr->m_value, std::min(arr->m_size, newSize) * sizeof(IObject*));
+				Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
+				for (uint64_t i{ newSize }; i < arr->m_size; i++) {
+					GarbageCollector::Remove(arr->m_value[i]);
+				}
+				for (uint64_t i{ arr->m_size }; i < newSize; i++) {
+					newArr[i] = new NullObject(obj);
+					GarbageCollector::Add(newArr[i]);
+				}
+				delete[] arr->m_value;
+				arr->m_value = newArr;
+				arr->m_size = newSize;
+				delete q;
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new Resize(); }
+		};
+
+		class forEach : public Command {
+		public:
+			forEach() {}
+			CommandReturn* exec(MemoryObject& mem) override {
+				ArrayO* array{ (ArrayO*)mem.get("this") };
+				FunctionO* func{ (FunctionO*)mem.get("func") };
+				size_t size{ array->m_size };
+				IObject** i{ new IObject * [1] };
+				for (size_t c{ 0 }; c < size; c++) {
+					MemoryObject mem{};
+					i[0] = array->m_value[c];
+					func->m_value->exec(mem, i, 1);
+				}
+				return new CommandReturn(new NullObject(), true, false);
+			}
+			Command* clone()override { return new forEach(); }
 		};
 	};
 }

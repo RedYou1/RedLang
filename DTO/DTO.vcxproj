@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arg.h" />
-    <ClInclude Include="Array.h" />
     <ClInclude Include="ArrayList.h" />
     <ClInclude Include="Boolean.h" />
     <ClInclude Include="BreakPoint.h" />
@@ -68,7 +67,7 @@
     <ClInclude Include="Return.h" />
     <ClInclude Include="Short.h" />
     <ClInclude Include="Signature.h" />
-    <ClInclude Include="SizedArray.h" />
+    <ClInclude Include="Array.h" />
     <ClInclude Include="SourceFile.h" />
     <ClInclude Include="StatVar.h" />
     <ClInclude Include="String.h" />
@@ -79,7 +78,6 @@
     <ClInclude Include="While.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Array.cpp" />
     <ClCompile Include="ArrayList.cpp" />
     <ClCompile Include="BreakPoint.cpp" />
     <ClCompile Include="Byte.cpp" />
@@ -115,7 +113,7 @@
     <ClCompile Include="Return.cpp" />
     <ClCompile Include="Short.cpp" />
     <ClCompile Include="Signature.cpp" />
-    <ClCompile Include="SizedArray.cpp" />
+    <ClCompile Include="Array.cpp" />
     <ClCompile Include="SourceFile.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="Try.cpp" />

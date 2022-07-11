@@ -106,8 +106,11 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			var.add(name, type);
 			DTO::Command* iterable{ parseReturn(var,in,genTypes) };
 
-			DTO::FunctionBlock* fb{ parseFunctionBlock(var, &line, genTypes) };//dont delete because they will be deleted in the function.
+			DTO::FunctionBlock* fb{ parseFunctionBlock(var, &line, genTypes) };
 			DTO::Function* func{ new DTO::Function(new DTO::Signature("",nullptr,new DTO::Arg[1]{type,name},1),fb->getCommands(),fb->getcommandLen()) };
+
+			fb->clear();
+			delete fb;
 
 			return new DTO::ForEach(type, name, iterable, func);
 		}

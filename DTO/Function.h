@@ -109,6 +109,8 @@ namespace DTO {
 		size_t getcommandLen() { return m_commandLen; }
 
 		Command* clone() override;
+
+		void clear() { m_commandLen = 0; m_commands = nullptr; }
 	};
 
 	class FunctionKnownCom :public Command {

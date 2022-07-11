@@ -34,8 +34,7 @@ namespace DTO {
 		constexpr char Iterable[] = "RedLang.Iterable";
 		constexpr char Collection[] = "RedLang.Iterable.Collection";
 		constexpr char List[] = "RedLang.Iterable.Collection.List";
-		constexpr char Array[] = "RedLang.Array";
-		constexpr char SizedArray[] = "RedLang.Iterable.SizedArray";
+		constexpr char Array[] = "RedLang.Iterable.Array";
 		constexpr char ArrayList[] = "RedLang.Iterable.ArrayList";
 	}
 }

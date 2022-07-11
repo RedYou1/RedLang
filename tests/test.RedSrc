@@ -199,7 +199,7 @@ class test{
 		rp.print(2i);
 		rp.print(3i);
 
-		SizedArray<Integer> arr = new SizedArray<Integer>(2i);
+		Array<Integer> arr = new Array<Integer>(2i);
 		arr.set(1i,0i);
 		arr.set(2i,1i);
 		System.println(arr.size());

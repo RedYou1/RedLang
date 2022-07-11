@@ -27,7 +27,6 @@
 #include "Iterable.h"
 #include "Collection.h"
 #include "Array.h"
-#include "SizedArray.h"
 #include "List.h"
 #include "ArrayList.h"
 
@@ -82,7 +81,6 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::string)) {
 	GLOBAL::getClasses()->add(Paths::Iterable, new Iterable());
 	GLOBAL::getClasses()->add(Paths::Collection, new Collection());
 	GLOBAL::getClasses()->add(Paths::Array, new Array());
-	GLOBAL::getClasses()->add(Paths::SizedArray, new SizedArray());
 	GLOBAL::getClasses()->add(Paths::List, new List());
 	GLOBAL::getClasses()->add(Paths::ArrayList, new ArrayList());
 

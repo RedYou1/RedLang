@@ -129,9 +129,6 @@
     <ClInclude Include="MemoryVariable.h">
       <Filter>Fichiers d%27en-tête\Memories</Filter>
     </ClInclude>
-    <ClInclude Include="Array.h">
-      <Filter>Fichiers d%27en-tête\RedLang</Filter>
-    </ClInclude>
     <ClInclude Include="Boolean.h">
       <Filter>Fichiers d%27en-tête\RedLang</Filter>
     </ClInclude>
@@ -219,7 +216,7 @@
     <ClInclude Include="Var.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="SizedArray.h">
+    <ClInclude Include="Array.h">
       <Filter>Fichiers d%27en-tête\RedLang</Filter>
     </ClInclude>
     <ClInclude Include="Iterable.h">
@@ -345,9 +342,6 @@
       <Filter>Fichiers sources\Commands</Filter>
     </ClCompile>
     <ClCompile Include="Array.cpp">
-      <Filter>Fichiers sources\RedLang</Filter>
-    </ClCompile>
-    <ClCompile Include="SizedArray.cpp">
       <Filter>Fichiers sources\RedLang</Filter>
     </ClCompile>
     <ClCompile Include="Iterable.cpp">

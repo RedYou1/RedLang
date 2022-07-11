@@ -32,6 +32,13 @@ namespace DTO {
 			}
 		}
 
+		~ArrayListO() override {
+			for (IObject* var : m_value)
+			{
+				GarbageCollector::Remove(var);
+			}
+		}
+
 		Object* clone()override {
 			return new ArrayListO(m_type, m_value);
 		}
@@ -79,7 +86,11 @@ namespace DTO {
 			CommandReturn* exec(MemoryObject& mem) override {
 				IObject* a{ mem.get("c") };
 				CommandReturn* q{ a->exec("toLong", a) };
-				Object* c{ new ArrayListO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
+				size_t size{ (size_t)((LongO*)q->getObject())->m_value };
+				ArrayListO* c{ new ArrayListO(m_s, size) };
+				for (size_t i{ 0 }; i < size; i++) {
+					GarbageCollector::Add(c->m_value[i]);
+				}
 				mem.set("this", c);
 				delete q;
 				return new CommandReturn(c, true, false);
@@ -138,8 +149,9 @@ namespace DTO {
 				for (size_t c{ 0 }; c < size; c++) {
 					MemoryObject mem{};
 					i[0] = array->m_value[c];
-					func->m_value->exec(mem, i, 1);
+					delete func->m_value->exec(mem, i, 1);
 				}
+				delete[] i;
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new forEach(); }
@@ -601,6 +613,7 @@ namespace DTO {
 				arr->m_value.reserve(((LongO*)q->getObject())->m_value);
 				for (; i < arr->m_value.size(); i++) {
 					arr->m_value[i] = new NullObject();
+					GarbageCollector::Add(arr->m_value[i]);
 				}
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);

@@ -50,7 +50,7 @@ namespace DTO {
 			FunctionO* func{ new FunctionO(GLOBAL::getClasses()->getClass(Paths::Function),m_func) };
 
 			IObject** args{ new IObject * [2]{q->getObject(),func} };
-			q->getObject()->exec("forEach", args, 2);
+			delete q->getObject()->exec("forEach", args, 2);
 
 			delete[] args;
 			delete q;

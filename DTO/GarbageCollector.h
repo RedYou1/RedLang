@@ -10,7 +10,7 @@ namespace DTO {
 		static size_t _isRunning;
 		static std::thread::id _current_id;
 		static std::lock_guard<std::mutex>* _lock;
-		static std::map<Object*, size_t> _commands;
+		static std::map<IObject*, size_t> _commands;
 
 		static void lock();
 		static void unLock();
