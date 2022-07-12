@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <filesystem>
 #include "Exception.h"
 #include "MemoryFunction.h"
 #include "MemoryStatVar.h"
@@ -11,6 +12,7 @@
 #include "Global.h"
 #include "Boolean.h"
 #include "StatVar.h"
+#include "File.h"
 
 namespace DTO {
 	class ClassO : public Object {
@@ -25,7 +27,7 @@ namespace DTO {
 
 	class ClassClass : public Class {
 	public:
-		ClassClass() : Class("Class", Paths::Class, GLOBAL::getClasses()->getClass(Paths::Object)) {
+		ClassClass() : Class(L"Class", Paths::Class, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {
@@ -33,8 +35,8 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ClassO* o{ (ClassO*)mem.get("this") };
-				ClassO* c{ (ClassO*)mem.get("c") };
+				ClassO* o{ (ClassO*)mem.get(L"this") };
+				ClassO* c{ (ClassO*)mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_value == c->m_value), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -42,15 +44,12 @@ namespace DTO {
 		class ClassConstruct :public Command {
 		public:
 			ClassClass* m_s;
-			SourceFile* (*m_parser)(std::string);
-			ClassConstruct(ClassClass* s, SourceFile* (*parser)(std::string)) :m_s(s), m_parser(parser) {}
+			SourceFile* (*m_parser)(std::wstring);
+			ClassConstruct(ClassClass* s, SourceFile* (*parser)(std::wstring)) :m_s(s), m_parser(parser) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				std::string a{ ((StringO*)mem.get("c"))->m_value };
-				if (mem.containKey(">workspace")) {
-					a = ((StringO*)mem.get(">workspace"))->m_value + "\\" + a;
-				}
+				std::wstring a{ ((FileO*)mem.get(L"c"))->m_path.wstring() };
 				Object* c{ new ClassO(m_s, m_parser(a)) };
-				mem.set("this", c);
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new ClassConstruct(m_s, m_parser); }
@@ -61,7 +60,7 @@ namespace DTO {
 			StringC* m_s;
 			ToString(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ClassO* a{ (ClassO*)mem.get("this") };
+				ClassO* a{ (ClassO*)mem.get(L"this") };
 				return new CommandReturn(new StringO(m_s, a->m_value->getName()), true, false);
 			}
 			Command* clone()override { return new ToString(m_s); }
@@ -72,7 +71,7 @@ namespace DTO {
 			StringC* m_s;
 			GetName(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ClassO* a{ (ClassO*)mem.get("this") };
+				ClassO* a{ (ClassO*)mem.get(L"this") };
 				return new CommandReturn(new StringO(m_s, a->m_value->getName()), true, false);
 			}
 			Command* clone()override { return new GetName(m_s); }
@@ -83,8 +82,8 @@ namespace DTO {
 			StringC* m_s;
 			GetStatVar(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ClassO* a{ (ClassO*)mem.get("this") };
-				StringO* b{ (StringO*)mem.get("c") };
+				ClassO* a{ (ClassO*)mem.get(L"this") };
+				StringO* b{ (StringO*)mem.get(L"c") };
 				return new CommandReturn(((Class*)a->m_value)->getStatVars()->get(b->m_value)->GetValue(), true, false);
 			}
 			Command* clone()override { return new GetStatVar(m_s); }
@@ -95,15 +94,15 @@ namespace DTO {
 			StringC* m_s;
 			Invoke(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ClassO* a{ (ClassO*)mem.get("this") };
+				ClassO* a{ (ClassO*)mem.get(L"this") };
 				Class* c{ (Class*)a->m_value };
-				StringO* s{ (StringO*)mem.get("func") };
+				StringO* s{ (StringO*)mem.get(L"func") };
 
 				size_t size{ mem.size() - 2 };
 				IObject** args{ new IObject * [size] };
 				Instanciable** argsT{ new Instanciable * [size] };
 				for (size_t i{ 0 }; i < size; i++) {
-					args[i] = mem.get(std::to_string(i));
+					args[i] = mem.get(std::to_wstring(i));
 					argsT[i] = args[i]->getClass();
 				}
 
@@ -111,7 +110,7 @@ namespace DTO {
 				try {
 					func = c->getFuncs()->get(s->m_value, argsT, size);
 				}
-				catch (std::string e) {
+				catch (std::wstring e) {
 					delete[] argsT;
 					delete[] args;
 					return new CommandReturn(new StringO(m_s, e), true, false);
@@ -132,11 +131,11 @@ namespace DTO {
 			BooleanC* m_s;
 			InstanceOf(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ClassO* a{ (ClassO*)mem.get("this") };
-				ClassO* b{ (ClassO*)mem.get("c") };
+				ClassO* a{ (ClassO*)mem.get(L"this") };
+				ClassO* b{ (ClassO*)mem.get(L"c") };
 
 				if (dynamic_cast<Interface*>(a->m_value) == nullptr || dynamic_cast<Interface*>(b->m_value) == nullptr)
-					return new CommandReturn(new ExceptionO(GLOBAL::getClasses()->getClass(Paths::IllegalArgumentException), "Class.instanceOf"), false, true);
+					return new CommandReturn(new ExceptionO(GLOBAL::getClasses()->getClass(Paths::IllegalArgumentException), L"Class.instanceOf"), false, true);
 
 				return new CommandReturn(new BooleanO(m_s, ((Interface*)a->m_value)->instanceOf((Interface*)b->m_value)), true, false);
 			}

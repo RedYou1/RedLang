@@ -2,24 +2,24 @@
 #include "GarbageCollector.h"
 
 DTO::MemoryObject::MemoryObject(MemoryObject* parent)
-	:m_parent(parent), m_vars(std::map<std::string, Memory*>())
+	:m_parent(parent), m_vars(std::map<std::wstring, Memory*>())
 {
 }
 
 DTO::MemoryObject::~MemoryObject() {
-	for (std::map<std::string, Memory*>::iterator it{ m_vars.begin() }; it != m_vars.end(); it++) {
+	for (std::map<std::wstring, Memory*>::iterator it{ m_vars.begin() }; it != m_vars.end(); it++) {
 		delete it->second;
 	}
 }
 
-void DTO::MemoryObject::add(std::string name, IObject* o, Instanciable* type) {
+void DTO::MemoryObject::add(std::wstring name, IObject* o, Instanciable* type) {
 	if (m_vars.find(name) != m_vars.end())
 		throw "variable already exists";
-	m_vars.insert(std::pair<std::string, Memory*>(name, new Memory{ o ,type }));
+	m_vars.insert(std::pair<std::wstring, Memory*>(name, new Memory{ o ,type }));
 }
 
-void DTO::MemoryObject::set(std::string name, IObject* o) {
-	typename std::map<std::string, Memory*>::iterator it(m_vars.find(name));
+void DTO::MemoryObject::set(std::wstring name, IObject* o) {
+	typename std::map<std::wstring, Memory*>::iterator it(m_vars.find(name));
 	if (it == m_vars.end()) {
 		if (m_parent != nullptr)
 			return m_parent->set(name, o);
@@ -31,12 +31,12 @@ void DTO::MemoryObject::set(std::string name, IObject* o) {
 	it->second->setObject(o);
 }
 
-bool DTO::MemoryObject::containKey(std::string name) {
+bool DTO::MemoryObject::containKey(std::wstring name) {
 	return m_vars.find(name) != m_vars.end() || (m_parent != nullptr && m_parent->containKey(name));
 }
 
-DTO::IObject* DTO::MemoryObject::get(std::string name) {
-	typename std::map<std::string, Memory*>::iterator it(m_vars.find(name));
+DTO::IObject* DTO::MemoryObject::get(std::wstring name) {
+	typename std::map<std::wstring, Memory*>::iterator it(m_vars.find(name));
 	if (it == m_vars.end()) {
 		if (m_parent != nullptr)
 			return m_parent->get(name);

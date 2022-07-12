@@ -10,13 +10,13 @@
 namespace DTO {
 	class CharO : public Object {
 	public:
-		char m_value;
+		wchar_t m_value;
 
 		CharO(Class* type) :Object(type) {
 			m_value = 0;
 		}
 
-		CharO(Class* type, char value) :Object(type) {
+		CharO(Class* type, wchar_t value) :Object(type) {
 			m_value = value;
 		}
 		Object* clone()override { return new CharO(m_type, m_value); }
@@ -24,7 +24,7 @@ namespace DTO {
 
 	class CharC : public Class {
 	public:
-		CharC() : Class("Char", Paths::Char, GLOBAL::getClasses()->getClass(Paths::Object)) {
+		CharC() : Class(L"Char", Paths::Char, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {
@@ -32,8 +32,8 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				CharO* o{ (CharO*)mem.get("this") };
-				CharO* c{ (CharO*)mem.get("c") };
+				CharO* o{ (CharO*)mem.get(L"this") };
+				CharO* c{ (CharO*)mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_value == c->m_value), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -43,9 +43,9 @@ namespace DTO {
 			CharC* m_s;
 			CharConstruct(CharC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				CharO* a{ (CharO*)mem.get("c") };
+				CharO* a{ (CharO*)mem.get(L"c") };
 				Object* c{ new CharO(m_s, a->m_value) };
-				mem.set("this", c);
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new CharConstruct(m_s); }
@@ -56,8 +56,8 @@ namespace DTO {
 			StringC* m_s;
 			ToString(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				CharO* a{ (CharO*)mem.get("this") };
-				return new CommandReturn(new StringO(m_s, std::to_string(a->m_value)), true, false);
+				CharO* a{ (CharO*)mem.get(L"this") };
+				return new CommandReturn(new StringO(m_s, std::to_wstring(a->m_value)), true, false);
 			}
 			Command* clone()override { return new ToString(m_s); }
 		};

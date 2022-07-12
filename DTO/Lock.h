@@ -31,7 +31,7 @@ namespace DTO {
 
 	class LockC : public Class {
 	public:
-		LockC() : Class("Lock", Paths::Lock, GLOBAL::getClasses()->getClass(Paths::Object)) {
+		LockC() : Class(L"Lock", Paths::Lock, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {
@@ -39,8 +39,8 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				LockO* o{ (LockO*)mem.get("this") };
-				LockO* c{ (LockO*)mem.get("c") };
+				LockO* o{ (LockO*)mem.get(L"this") };
+				LockO* c{ (LockO*)mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_mutex == c->m_mutex), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -51,9 +51,9 @@ namespace DTO {
 			StringC* m_s;
 			ToString(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				LockO* a{ (LockO*)mem.get("this") };
-				std::string s{ a->m_lock == nullptr ? "not " : "" };
-				return new CommandReturn(new StringO(m_s, "Lock is " + s + "locked"), true, false);
+				LockO* a{ (LockO*)mem.get(L"this") };
+				std::wstring s{ a->m_lock == nullptr ? L"not " : L"" };
+				return new CommandReturn(new StringO(m_s, L"Lock is " + s + L"locked"), true, false);
 			}
 			Command* clone()override { return new ToString(m_s); }
 		};
@@ -64,7 +64,7 @@ namespace DTO {
 			LockConstruct(LockC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				Object* c{ new LockO(m_s) };
-				mem.set("this", c);
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new LockConstruct(m_s); }
@@ -75,7 +75,7 @@ namespace DTO {
 			StringC* m_s;
 			Lock(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				LockO* a{ (LockO*)mem.get("this") };
+				LockO* a{ (LockO*)mem.get(L"this") };
 				a->m_lock = new std::lock_guard<std::mutex>(*a->m_mutex);
 				return new CommandReturn(new NullObject(), true, false);
 			}
@@ -87,10 +87,10 @@ namespace DTO {
 			StringC* m_s;
 			Unlock(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				LockO* a{ (LockO*)mem.get("this") };
+				LockO* a{ (LockO*)mem.get(L"this") };
 				std::lock_guard<std::mutex>* b{ a->m_lock };
 				if (b == nullptr)
-					return new CommandReturn(new StringO(m_s, "Not locked"), false, true);
+					return new CommandReturn(new StringO(m_s, L"Not locked"), false, true);
 				a->m_lock = nullptr;
 				delete b;
 				return new CommandReturn(new NullObject(), true, false);

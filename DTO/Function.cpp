@@ -3,7 +3,7 @@
 #include "MemoryFunction.h"
 #include "CastException.h"
 
-DTO::FunctionCom::FunctionCom(Class* _class, std::string name, Command** args, size_t argsLen)
+DTO::FunctionCom::FunctionCom(Class* _class, std::wstring name, Command** args, size_t argsLen)
 	:m_class(_class), m_name(name), m_args(args), m_argsLen(argsLen) {}
 
 DTO::FunctionCom::~FunctionCom()
@@ -61,7 +61,7 @@ DTO::CommandReturn* DTO::FunctionBlock::exec(MemoryObject& pre_mem) {
 	return new CommandReturn(new NullObject(), false, false);
 }
 
-DTO::CommandReturn* DTO::FunctionBlock::exec2(MemoryObject& pre_mem, std::string* name, IObject** args, size_t argsLen) {
+DTO::CommandReturn* DTO::FunctionBlock::exec2(MemoryObject& pre_mem, std::wstring* name, IObject** args, size_t argsLen) {
 	MemoryObject mem(&pre_mem);
 
 	for (size_t c(0); c < argsLen; c++)
@@ -80,7 +80,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& mem)
 {
 	if (!m_signature->getPath().empty()) {
 		Class* string{ GLOBAL::getClasses()->getClass(Paths::String) };
-		mem.add(">workspace", new StringO(string, m_signature->getPath()), string);
+		mem.add(L">workspace", new StringO(string, m_signature->getPath()), string);
 	}
 	for (size_t c{ 0 }; c < m_commandLen; c++) {
 		CommandReturn* r{ m_commands[c]->exec(mem) };
@@ -93,7 +93,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& mem)
 				return r;
 			}
 			else
-				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "FunctionReturn", r, m_signature->getReturnType()), false, true);
+				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionReturn", r, m_signature->getReturnType()), false, true);
 		}
 		delete r;
 	}
@@ -128,7 +128,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, Command** arg
 
 			if (dynamic_cast<Object*>(ob->getObject()) != nullptr &&
 				!ob->getObject()->getClass()->instanceOf(m_signature->getArgs()[c].type))
-				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "FunctionArgs", ob, m_signature->getArgs()[c].type), false, true);
+				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionArgs", ob, m_signature->getArgs()[c].type), false, true);
 
 			mem.add(m_signature->getArgs()[c].name, ob->getObject(), m_signature->getArgs()[c].type);
 			delete ob;
@@ -137,7 +137,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, Command** arg
 
 	for (size_t c{ m_signature->getArgsLen() }; c < args_size; c++) {
 		if (args[c] == nullptr) {
-			mem.add(std::to_string(c - m_signature->getArgsLen()), nullptr, nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), nullptr, nullptr);
 		}
 		else {
 			CommandReturn* ob{ args[c]->exec(pre_mem) };
@@ -145,7 +145,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, Command** arg
 			if (ob->isThrow())
 				return ob;
 
-			mem.add(std::to_string(c - m_signature->getArgsLen()), ob->getObject(), nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob->getObject(), nullptr);
 			delete ob;
 		}
 	}
@@ -169,7 +169,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, IObject** arg
 
 			if (dynamic_cast<Object*>(ob) != nullptr &&
 				!ob->getClass()->instanceOf(m_signature->getArgs()[c].type))
-				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "FunctionArgs", new CommandReturn(ob, false, false), m_signature->getArgs()[c].type), false, true);
+				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionArgs", new CommandReturn(ob, false, false), m_signature->getArgs()[c].type), false, true);
 
 			mem.add(m_signature->getArgs()[c].name, ob, m_signature->getArgs()[c].type);
 		}
@@ -177,12 +177,12 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, IObject** arg
 
 	for (size_t c{ m_signature->getArgsLen() }; c < args_size; c++) {
 		if (args[c] == nullptr) {
-			mem.add(std::to_string(c - m_signature->getArgsLen()), nullptr, nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), nullptr, nullptr);
 		}
 		else {
 			IObject* ob{ args[c] };
 
-			mem.add(std::to_string(c - m_signature->getArgsLen()), ob, nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob, nullptr);
 		}
 	}
 
@@ -208,7 +208,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, CommandReturn
 
 			if (dynamic_cast<Object*>(ob->getObject()) != nullptr &&
 				!ob->getObject()->getClass()->instanceOf(m_signature->getArgs()[c].type))
-				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "FunctionArgs", ob, m_signature->getArgs()[c].type), false, true);
+				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionArgs", ob, m_signature->getArgs()[c].type), false, true);
 
 			mem.add(m_signature->getArgs()[c].name, ob->getObject(), m_signature->getArgs()[c].type);
 		}
@@ -216,7 +216,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, CommandReturn
 
 	for (size_t c{ m_signature->getArgsLen() }; c < args_size; c++) {
 		if (args[c] == nullptr) {
-			mem.add(std::to_string(c - m_signature->getArgsLen()), nullptr, nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), nullptr, nullptr);
 		}
 		else {
 			CommandReturn* ob{ args[c] };
@@ -224,7 +224,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, CommandReturn
 			if (ob->isThrow())
 				return ob;
 
-			mem.add(std::to_string(c - m_signature->getArgsLen()), ob->getObject(), nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob->getObject(), nullptr);
 		}
 	}
 
@@ -247,7 +247,7 @@ DTO::Command* DTO::FunctionBlock::clone()
 	return new FunctionBlock(cmds, m_commandLen);
 }
 
-DTO::FunctionDynCom::FunctionDynCom(Command* ob, std::string name, Command** args, size_t argsLen)
+DTO::FunctionDynCom::FunctionDynCom(Command* ob, std::wstring name, Command** args, size_t argsLen)
 	:m_ob(ob), m_name(name), m_args(args), m_argsLen(argsLen)
 {
 }

@@ -2,24 +2,24 @@
 
 #include "FunctionClass.h"
 
-DTO::Collection::CollectionI::CollectionI(std::string name, Instanciable* type)
+DTO::Collection::CollectionI::CollectionI(std::wstring name, Instanciable* type)
 	:Interface(name, Paths::Collection,
-		new Interface* [1]{ GLOBAL::getClasses()->checkGetInterface(std::string(Paths::Iterable) + "<" + type->getName() + ">") }, 1), m_type(type)
+		new Interface* [1]{ GLOBAL::getClasses()->checkGetInterface(std::wstring(Paths::Iterable) + L"<" + type->getName() + L">") }, 1), m_type(type)
 {
 	Interface* Bool{ GLOBAL::getClasses()->getInterface(Paths::Boolean) };
 	Interface* Integer{ GLOBAL::getClasses()->getInterface(Paths::Integer) };
-	add("add", new Signature("", nullptr, new Arg[2]{ this,"this", type,"c" }, 2));
-	add("addAll", new Signature("", nullptr, new Arg[2]{ this,"this", this,"c" }, 2));
-	add("clear", new Signature("", nullptr, new Arg[1]{ this,"this" }, 1));
-	add("contains", new Signature("", Bool, new Arg[2]{ this,"this", type,"c" }, 2));
-	add("containsAll", new Signature("", Bool, new Arg[2]{ this,"this", this,"c" }, 2));
-	add("isEmpty", new Signature("", Bool, new Arg[1]{ this,"this" }, 1));
-	add("remove", new Signature("", nullptr, new Arg[2]{ this,"this", type,"c" }, 2));
-	add("removeAll", new Signature("", nullptr, new Arg[2]{ this,"this", this,"c" }, 2));
-	add("size", new Signature("", Integer, new Arg[1]{ this,"this" }, 1));
+	add(L"add", new Signature(L"", nullptr, new Arg[2]{ this,L"this", type,L"c" }, 2));
+	add(L"addAll", new Signature(L"", nullptr, new Arg[2]{ this,L"this", this,L"c" }, 2));
+	add(L"clear", new Signature(L"", nullptr, new Arg[1]{ this,L"this" }, 1));
+	add(L"contains", new Signature(L"", Bool, new Arg[2]{ this,L"this", type,L"c" }, 2));
+	add(L"containsAll", new Signature(L"", Bool, new Arg[2]{ this,L"this", this,L"c" }, 2));
+	add(L"isEmpty", new Signature(L"", Bool, new Arg[1]{ this,L"this" }, 1));
+	add(L"remove", new Signature(L"", nullptr, new Arg[2]{ this,L"this", type,L"c" }, 2));
+	add(L"removeAll", new Signature(L"", nullptr, new Arg[2]{ this,L"this", this,L"c" }, 2));
+	add(L"size", new Signature(L"", Integer, new Arg[1]{ this,L"this" }, 1));
 }
 
-DTO::SourceFile* DTO::Collection::create(std::string newName, Instanciable** gens, size_t genSize)
+DTO::SourceFile* DTO::Collection::create(std::wstring newName, Instanciable** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";

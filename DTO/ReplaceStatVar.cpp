@@ -3,7 +3,7 @@
 #include "StatVar.h"
 #include "MemoryStatVar.h"
 
-DTO::ReplaceStatVar::ReplaceStatVar(Class* _class, std::string name, Command* value)
+DTO::ReplaceStatVar::ReplaceStatVar(Class* _class, std::wstring name, Command* value)
 	:m_class(_class), m_name(name), m_value(value) {}
 
 DTO::CommandReturn* DTO::ReplaceStatVar::exec(MemoryObject& mem) {
@@ -11,7 +11,7 @@ DTO::CommandReturn* DTO::ReplaceStatVar::exec(MemoryObject& mem) {
 	StatVar* var{ m_class->getStatVars()->get(m_name) };
 	if (dynamic_cast<Object*>(r->getObject()) != nullptr &&
 		!r->getObject()->getClass()->instanceOf(var->GetType()))
-		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "ReplaceStatVar", r, var->GetType()), false, true);
+		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"ReplaceStatVar", r, var->GetType()), false, true);
 	m_class->getStatVars()->set(m_name, r->getObject());
 	return r;
 }

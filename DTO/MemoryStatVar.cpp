@@ -10,24 +10,24 @@ DTO::MemoryStatVar::MemoryStatVar()
 
 DTO::MemoryStatVar::~MemoryStatVar()
 {
-	for (typename std::map<std::string, StatVar*>::iterator it = m_string.begin(); it != m_string.end(); ++it) {
+	for (typename std::map<std::wstring, StatVar*>::iterator it = m_string.begin(); it != m_string.end(); ++it) {
 		delete it->second;
 	}
 }
 
-void DTO::MemoryStatVar::add(std::string name, StatVar* var)
+void DTO::MemoryStatVar::add(std::wstring name, StatVar* var)
 {
-	m_string.insert(std::pair<std::string, StatVar*>(name, var));
+	m_string.insert(std::pair<std::wstring, StatVar*>(name, var));
 }
 
-DTO::StatVar* DTO::MemoryStatVar::get(std::string name)
+DTO::StatVar* DTO::MemoryStatVar::get(std::wstring name)
 {
 	if (m_string.find(name) == m_string.end())
 		throw "does not contain this name.";
 	return m_string[name];
 }
 
-void DTO::MemoryStatVar::set(std::string name, IObject* value)
+void DTO::MemoryStatVar::set(std::wstring name, IObject* value)
 {
 	StatVar* var{ get(name) };
 	if (!value->getClass()->instanceOf(var->GetType()))
@@ -35,7 +35,7 @@ void DTO::MemoryStatVar::set(std::string name, IObject* value)
 	var->SetValue(value);
 }
 
-bool DTO::MemoryStatVar::containKey(std::string name)
+bool DTO::MemoryStatVar::containKey(std::wstring name)
 {
 	return m_string.find(name) != m_string.end();
 }

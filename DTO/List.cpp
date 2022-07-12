@@ -2,27 +2,27 @@
 
 #include "FunctionClass.h"
 
-DTO::List::ListI::ListI(std::string name, Instanciable* type)
+DTO::List::ListI::ListI(std::wstring name, Instanciable* type)
 	:Interface(name, Paths::List,
-		new Interface* [1]{ GLOBAL::getClasses()->checkGetInterface(std::string(Paths::Collection) + "<" + type->getName() + ">") }, 1), m_type(type)
+		new Interface* [1]{ GLOBAL::getClasses()->checkGetInterface(std::wstring(Paths::Collection) + L"<" + type->getName() + L">") }, 1), m_type(type)
 {
 	Interface* function{ GLOBAL::getClasses()->getInterface(Paths::Function) };
 	Interface* Number{ GLOBAL::getClasses()->getInterface(Paths::Number) };
-	Interface* Array{ GLOBAL::getClasses()->checkGetClass(std::string(Paths::Array) + '<' + type->getName() + '>') };
+	Interface* Array{ GLOBAL::getClasses()->checkGetClass(std::wstring(Paths::Array) + L'<' + type->getName() + L'>') };
 	Interface* Class{ GLOBAL::getClasses()->getInterface(Paths::Class) };
-	add("add", new Signature("", nullptr, new Arg[3]{ this,"this", Number,"i", type,"c" }, 3));
-	add("addAll", new Signature("", nullptr, new Arg[3]{ this,"this", Number,"i", this,"c" }, 3));
-	add("get", new Signature("", type, new Arg[2]{ this,"this", Number,"i" }, 2));
-	add("indexOf", new Signature("", Number, new Arg[2]{ this,"this", type,"c" }, 2));
-	add("lastIndexOf", new Signature("", Number, new Arg[2]{ this,"this", type,"c" }, 2));
-	add("remove", new Signature("", type, new Arg[2]{ this,"this", Number,"i" }, 2));
-	add("set", new Signature("", nullptr, new Arg[3]{ this,"this", Number,"i", type,"c" }, 3));
-	add("sort", new Signature("", nullptr, new Arg[2]{ this,"this", function,"c" }, 2));
-	add("subList", new Signature("", this, new Arg[3]{ this,"this", Number,"a", Number,"b" }, 3));
-	add("toArray", new Signature("", Array, new Arg[2]{ this,"this", Class,"c" }, 2));
+	add(L"add", new Signature(L"", nullptr, new Arg[3]{ this,L"this", Number,L"i", type,L"c" }, 3));
+	add(L"addAll", new Signature(L"", nullptr, new Arg[3]{ this,L"this", Number,L"i", this,L"c" }, 3));
+	add(L"get", new Signature(L"", type, new Arg[2]{ this,L"this", Number,L"i" }, 2));
+	add(L"indexOf", new Signature(L"", Number, new Arg[2]{ this,L"this", type,L"c" }, 2));
+	add(L"lastIndexOf", new Signature(L"", Number, new Arg[2]{ this,L"this", type,L"c" }, 2));
+	add(L"remove", new Signature(L"", type, new Arg[2]{ this,L"this", Number,L"i" }, 2));
+	add(L"set", new Signature(L"", nullptr, new Arg[3]{ this,L"this", Number,L"i", type,L"c" }, 3));
+	add(L"sort", new Signature(L"", nullptr, new Arg[2]{ this,L"this", function,L"c" }, 2));
+	add(L"subList", new Signature(L"", this, new Arg[3]{ this,L"this", Number,L"a", Number,L"b" }, 3));
+	add(L"toArray", new Signature(L"", Array, new Arg[2]{ this,L"this", Class,L"c" }, 2));
 }
 
-DTO::SourceFile* DTO::List::create(std::string newName, Instanciable** gens, size_t genSize)
+DTO::SourceFile* DTO::List::create(std::wstring newName, Instanciable** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";

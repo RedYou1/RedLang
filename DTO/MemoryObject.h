@@ -23,18 +23,18 @@ namespace DTO {
 		};
 
 		MemoryObject* m_parent;
-		std::map<std::string, Memory*> m_vars;
+		std::map<std::wstring, Memory*> m_vars;
 	public:
-		MemoryObject() : m_parent{ nullptr }, m_vars(std::map<std::string, Memory*>()) {}
+		MemoryObject() : m_parent{ nullptr }, m_vars(std::map<std::wstring, Memory*>()) {}
 		MemoryObject(MemoryObject* parent);
 		~MemoryObject();
 
-		void add(std::string name, IObject* object, Instanciable* type);
-		void set(std::string name, IObject* object);
+		void add(std::wstring name, IObject* object, Instanciable* type);
+		void set(std::wstring name, IObject* object);
 
-		bool containKey(std::string name);
+		bool containKey(std::wstring name);
 
-		IObject* get(std::string name);
+		IObject* get(std::wstring name);
 
 		size_t size();
 	};

@@ -13,15 +13,15 @@
 namespace DTO {
 	class CastExceptionO : public ExceptionO {
 	public:
-		CastExceptionO(Class* type, std::string message, CommandReturn* from, Instanciable* to)
-			: ExceptionO(type, message + "{from:" + from->getObject()->getClass()->getName() + ",to:" + to->getName() + "}") {
+		CastExceptionO(Class* type, std::wstring message, CommandReturn* from, Instanciable* to)
+			: ExceptionO(type, message + L"{from:" + from->getObject()->getClass()->getName() + L",to:" + to->getName() + L"}") {
 			delete from;
 		}
 	};
 
 	class CastExceptionC : public Class {
 	public:
-		CastExceptionC() : Class("CastException", Paths::CastException, GLOBAL::getClasses()->getClass(Paths::Exception)) {
+		CastExceptionC() : Class(L"CastException", Paths::CastException, GLOBAL::getClasses()->getClass(Paths::Exception)) {
 		}
 
 		class ExceptionConstruct :public Command {
@@ -29,9 +29,9 @@ namespace DTO {
 			CastExceptionC* m_s;
 			ExceptionConstruct(CastExceptionC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				StringO* a{ (StringO*)mem.get("c") };
+				StringO* a{ (StringO*)mem.get(L"c") };
 				Object* c{ new ExceptionO(m_s, a->m_value) };
-				mem.set("this", c);
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new ExceptionConstruct(m_s); }

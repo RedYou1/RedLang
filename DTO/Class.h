@@ -18,10 +18,10 @@ namespace DTO {
 		MemoryVar* m_vars;
 		MemoryStatVar* m_statVars;
 	public:
-		Class(std::string name, std::string path, Class* parent);
-		Class(std::string name, std::string path, Class* parent, Interface** implements, size_t implementsLen);
-		Class(std::string name, std::string path, Class* parent, MemorySourceFile* genTypes);
-		Class(std::string name, std::string path, Class* parent, Interface** implements, size_t implementsLen, MemorySourceFile* genTypes);
+		Class(std::wstring name, std::wstring path, Class* parent);
+		Class(std::wstring name, std::wstring path, Class* parent, Interface** implements, size_t implementsLen);
+		Class(std::wstring name, std::wstring path, Class* parent, MemorySourceFile* genTypes);
+		Class(std::wstring name, std::wstring path, Class* parent, Interface** implements, size_t implementsLen, MemorySourceFile* genTypes);
 		virtual ~Class() override;
 
 		Class* extends();
@@ -32,7 +32,7 @@ namespace DTO {
 		MemoryVar* getVars() { return m_vars; }
 		MemoryStatVar* getStatVars() { return m_statVars; }
 
-		void addFunc(std::string name, Instanciable* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity = true);
-		void addFunc(std::string name, Instanciable* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity = true);
+		void addFunc(std::wstring name, Instanciable* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity = true);
+		void addFunc(std::wstring name, Instanciable* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity = true);
 	};
 }

@@ -10,20 +10,20 @@
 #include "Signature.h"
 #include "Generic.h"
 
-DTO::Class::Class(std::string name, std::string path, Class* parent)
+DTO::Class::Class(std::wstring name, std::wstring path, Class* parent)
 	: Class(name, path, parent, new Interface* [0], 0) {}
 
-DTO::Class::Class(std::string name, std::string path, Class* parent, Interface** implements, size_t implementsLen)
+DTO::Class::Class(std::wstring name, std::wstring path, Class* parent, Interface** implements, size_t implementsLen)
 	: Interface(name, path, new MemorySourceFile{ false }, implements, implementsLen),
 	m_funcs(new MemoryFunction(parent ? parent->m_funcs : nullptr)),
 	m_vars(parent ? new MemoryVar(parent->m_vars) : new MemoryVar()),
 	m_statVars(new MemoryStatVar()),
 	m_parent(parent) {}
 
-DTO::Class::Class(std::string name, std::string path, Class* parent, MemorySourceFile* genTypes)
+DTO::Class::Class(std::wstring name, std::wstring path, Class* parent, MemorySourceFile* genTypes)
 	: Class(name, path, parent, new Interface* [0], 0, genTypes) {}
 
-DTO::Class::Class(std::string name, std::string path, Class* parent, Interface** implements, size_t implementsLen, MemorySourceFile* genTypes)
+DTO::Class::Class(std::wstring name, std::wstring path, Class* parent, Interface** implements, size_t implementsLen, MemorySourceFile* genTypes)
 	: Interface(name, path, genTypes, implements, implementsLen),
 	m_funcs(new MemoryFunction(parent ? parent->m_funcs : nullptr)),
 	m_vars(parent ? new MemoryVar(parent->m_vars) : new MemoryVar()),
@@ -47,12 +47,12 @@ bool DTO::Class::instanceOf(Instanciable* other)
 	return false;
 }
 
-void DTO::Class::addFunc(std::string name, Instanciable* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity)
+void DTO::Class::addFunc(std::wstring name, Instanciable* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity)
 {
-	m_funcs->add(name, new Function(new Signature("", returnType, args, argsLen, infinity), new Command * [1]{ cmd }, 1));
+	m_funcs->add(name, new Function(new Signature(L"", returnType, args, argsLen, infinity), new Command * [1]{ cmd }, 1));
 }
 
-void DTO::Class::addFunc(std::string name, Instanciable* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity)
+void DTO::Class::addFunc(std::wstring name, Instanciable* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity)
 {
-	m_funcs->add(name, new Function(new Signature("", returnType, args, argsLen, infinity), cmds, cmdsLen));
+	m_funcs->add(name, new Function(new Signature(L"", returnType, args, argsLen, infinity), cmds, cmdsLen));
 }

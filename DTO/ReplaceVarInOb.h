@@ -10,10 +10,10 @@ namespace DTO {
 	private:
 		bool m_delete;
 		Command* m_ob;
-		std::string m_name;
+		std::wstring m_name;
 		Command* m_value;
 	public:
-		ReplaceVarInOb(Command* ob, bool _delete, std::string name, Command* value);
+		ReplaceVarInOb(Command* ob, bool _delete, std::wstring name, Command* value);
 		virtual ~ReplaceVarInOb() override { delete m_ob; delete m_value; }
 
 		CommandReturn* exec(MemoryObject& mem) override;

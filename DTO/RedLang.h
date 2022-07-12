@@ -4,6 +4,6 @@
 namespace DTO {
 	class RedLang {
 	public:
-		static void importRedLang(SourceFile* (*parser)(std::string));
+		static void importRedLang(SourceFile* (*parser)(std::wstring));
 	};
 }

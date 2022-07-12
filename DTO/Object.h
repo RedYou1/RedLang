@@ -16,8 +16,8 @@ namespace DTO {
 
 		Class* getClass() { return m_type; }
 		virtual IObject* clone() = 0;
-		virtual CommandReturn* exec(std::string name, IObject** args, size_t argsSize) = 0;
-		virtual CommandReturn* exec(std::string name, IObject* arg) = 0;
+		virtual CommandReturn* exec(std::wstring name, IObject** args, size_t argsSize) = 0;
+		virtual CommandReturn* exec(std::wstring name, IObject* arg) = 0;
 	};
 
 	class NullObject : public IObject {
@@ -26,8 +26,8 @@ namespace DTO {
 		NullObject(Instanciable* _interface) :IObject(dynamic_cast<Class*>(_interface) == nullptr ? GLOBAL::getClasses()->getClass(Paths::Object) : (Class*)_interface) {}
 		NullObject(Class* suposedType) : IObject(suposedType) {}
 		IObject* clone() override { return new NullObject(m_type); }
-		CommandReturn* exec(std::string name, IObject** args, size_t argsSize)override;
-		CommandReturn* exec(std::string name, IObject* arg)override;
+		CommandReturn* exec(std::wstring name, IObject** args, size_t argsSize)override;
+		CommandReturn* exec(std::wstring name, IObject* arg)override;
 	};
 
 	class Object : public IObject {
@@ -41,12 +41,12 @@ namespace DTO {
 		virtual ~Object() override;
 
 		size_t getVarsSize() { return m_size; }
-		IObject* get(std::string);
+		IObject* get(std::wstring);
 		IObject* get(size_t i);
 		void set(size_t i, IObject* obj);
 
 		virtual IObject* clone() override;
-		CommandReturn* exec(std::string name, IObject** args, size_t argsSize)override;
-		CommandReturn* exec(std::string name, IObject* arg)override;
+		CommandReturn* exec(std::wstring name, IObject** args, size_t argsSize)override;
+		CommandReturn* exec(std::wstring name, IObject* arg)override;
 	};
 }

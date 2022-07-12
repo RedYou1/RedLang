@@ -1,6 +1,6 @@
 #include "SourceFile.h"
 
-DTO::SourceFile::SourceFile(std::string name, std::string path)
+DTO::SourceFile::SourceFile(std::wstring name, std::wstring path)
 	:m_name(name), m_path(path)
 {
 }

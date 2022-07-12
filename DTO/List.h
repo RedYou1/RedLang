@@ -19,12 +19,12 @@ namespace DTO {
 		class ListI : public Interface {
 		public:
 			Instanciable* m_type;
-			ListI(std::string name, Instanciable* type);
+			ListI(std::wstring name, Instanciable* type);
 		};
 	public:
-		List() : GenericStatic("List", Paths::List, 1) {
+		List() : GenericStatic(L"List", Paths::List, 1) {
 		}
 
-		SourceFile* create(std::string newName, Instanciable** gens, size_t genSize)override;
+		SourceFile* create(std::wstring newName, Instanciable** gens, size_t genSize)override;
 	};
 }

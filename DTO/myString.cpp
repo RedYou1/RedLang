@@ -1,53 +1,53 @@
 #include <stack>
 #include "myString.h"
 
-DTO::myString::myString(std::string* str) :m_str{ str } {}
+DTO::myString::myString(std::wstring* str) :m_str{ str } {}
 
-bool DTO::myString::startWith(std::string s)
+bool DTO::myString::startWith(std::wstring s)
 {
 	return m_str->find(s) == 0;
 }
 
-bool DTO::myString::endWith(std::string s)
+bool DTO::myString::endWith(std::wstring s)
 {
 	if (m_str->length() < s.length())
 		return false;
 	return (0 == m_str->compare(m_str->length() - s.length(), s.length(), s));
 }
 
-std::string DTO::myString::extract2() {
+std::wstring DTO::myString::extract2() {
 	size_t a{ m_str->size() };
 	for (int c(0); c < endLen; c++) {
 		size_t t{ m_str->find(end[c]) };
-		if (a > t && (end[c] != '.' || !std::isdigit(m_str->at(t + 1))))
+		if (a > t && (end[c] != L'.' || !std::isdigit(m_str->at(t + 1))))
 			a = t;
 	}
 	return extract(a);
 }
 
-std::string DTO::myString::extractName() {
+std::wstring DTO::myString::extractName() {
 	size_t a{ m_str->size() };
 	for (int c(0); c < endLen; c++) {
-		if (end[c] == ',' || end[c] == '<')
+		if (end[c] == L',' || end[c] == L'<')
 			continue;
 		size_t t{ m_str->find(end[c]) };
-		if (a > t && (end[c] != '.' || !std::isdigit(m_str->at(t + 1))))
+		if (a > t && (end[c] != L'.' || !std::isdigit(m_str->at(t + 1))))
 			a = t;
 	}
 	return extract(a);
 }
 
-std::string DTO::myString::extract(size_t amount) {
-	std::string n{ m_str->substr(0, amount) };
+std::wstring DTO::myString::extract(size_t amount) {
+	std::wstring n{ m_str->substr(0, amount) };
 	m_str->erase(0, amount);
 	return n;
 }
 
-std::string DTO::myString::extract(std::string until) {
+std::wstring DTO::myString::extract(std::wstring until) {
 	return extract(m_str->find(until));
 }
 
-std::string DTO::myString::extract(std::queue<std::string> untils) {
+std::wstring DTO::myString::extract(std::queue<std::wstring> untils) {
 	size_t a{ m_str->size() };
 	while (!untils.empty()) {
 		size_t t{ m_str->find(untils.front()) };
@@ -58,38 +58,38 @@ std::string DTO::myString::extract(std::queue<std::string> untils) {
 	return extract(a);
 }
 
-int DTO::myString::isInStack(char b) {
+int DTO::myString::isInStack(wchar_t b) {
 	for (int c(0); c < stackableLen; c++)
 		if (stackable[c] == b)
 			return c;
 	return -1;
 }
 
-std::string DTO::myString::extractFunc() {
+std::wstring DTO::myString::extractFunc() {
 	if (isInStack(m_str->at(0)) == -1)
 		throw "need to start with a stack";
 
-	std::stack<char> a{};
+	std::stack<wchar_t> a{};
 	a.push(extract(1).at(0));
 	int ib{ isInStack(a.top()) };
-	std::string b{ "" };
+	std::wstring b{ L"" };
 	while (!m_str->empty()) {
-		char c{ extract(1).at(0) };
+		wchar_t c{ extract(1).at(0) };
 		int ia{ isInStack(c) };
 
 
 		if (ia > -1) {
-			if ((ia == ib && (stackable[ia] == '"' || stackable[ia] == '\'')) || (ib > -1 && ia - 1 == ib)) {
+			if ((ia == ib && (stackable[ia] == L'"' || stackable[ia] == L'\'')) || (ib > -1 && ia - 1 == ib)) {
 				a.pop();
 				if (a.empty())
 					break;
 				ib = isInStack(a.top());
 			}
-			else if (ia % 2 == 0 && (!(a.top() == '"' || a.top() == '\'') || (c == '"' || c == '\''))) {
+			else if (ia % 2 == 0 && (!(a.top() == L'"' || a.top() == L'\'') || (c == L'"' || c == L'\''))) {
 				a.push(c);
 				ib = isInStack(a.top());
 			}
-			else if (a.top() != '"' && a.top() != '\'') {
+			else if (a.top() != L'"' && a.top() != L'\'') {
 				throw "none stackable";
 			}
 		}
@@ -98,21 +98,21 @@ std::string DTO::myString::extractFunc() {
 	return b;
 }
 
-std::string DTO::myString::extractFunc2() {
+std::wstring DTO::myString::extractFunc2() {
 	if (isInStack(m_str->at(0)) == -1)
 		throw "need to start with a stack";
 
-	std::stack<char> a{};
+	std::stack<wchar_t> a{};
 	a.push(extract(1).at(0));
 	int ib{ isInStack(a.top()) };
-	std::string b{ a.top() };
+	std::wstring b{ a.top() };
 	while (!m_str->empty()) {
-		char c{ extract(1).at(0) };
+		wchar_t c{ extract(1).at(0) };
 		int ia{ isInStack(c) };
 
 
 		if (ia > -1) {
-			if ((ia == ib && (stackable[ia] == '"' || stackable[ia] == '\'')) || (ib > -1 && ia - 1 == ib)) {
+			if ((ia == ib && (stackable[ia] == L'"' || stackable[ia] == L'\'')) || (ib > -1 && ia - 1 == ib)) {
 				a.pop();
 				if (a.empty()) {
 					b += c;
@@ -120,11 +120,11 @@ std::string DTO::myString::extractFunc2() {
 				}
 				ib = isInStack(a.top());
 			}
-			else if (ia % 2 == 0 && (!(a.top() == '"' || a.top() == '\'') || (c == '"' || c == '\''))) {
+			else if (ia % 2 == 0 && (!(a.top() == L'"' || a.top() == L'\'') || (c == L'"' || c == L'\''))) {
 				a.push(c);
 				ib = isInStack(a.top());
 			}
-			else if (a.top() != '"' && a.top() != '\'') {
+			else if (a.top() != L'"' && a.top() != L'\'') {
 				throw "none stackable";
 			}
 		}
@@ -133,26 +133,26 @@ std::string DTO::myString::extractFunc2() {
 	return b;
 }
 
-std::queue<std::string> DTO::myString::split2(char split) {
+std::queue<std::wstring> DTO::myString::split2(wchar_t split) {
 	if (isInStack(m_str->at(0)) == -1)
 		throw "need to start with a stack";
 	int last{ 0 };
-	std::string a{ *m_str };
-	std::queue<std::string> result{};
-	std::stack<char> stack{};
+	std::wstring a{ *m_str };
+	std::queue<std::wstring> result{};
+	std::stack<wchar_t> stack{};
 	stack.push(extract(1).at(0));
 	int ib{ isInStack(stack.top()) };
-	std::string temp{ "" };
+	std::wstring temp{ L"" };
 	while (!m_str->empty()) {
-		char c{ extract(1).at(0) };
+		wchar_t c{ extract(1).at(0) };
 		int ia{ isInStack(c) };
 
-		if ((c != '\'' && stack.top() == '\'') || (c != '"' && stack.top() == '"')) {
+		if ((c != L'\'' && stack.top() == L'\'') || (c != L'"' && stack.top() == L'"')) {
 			temp += c;
 			continue;
 		}
 
-		if ((c == '\'' && stack.top() == '\'') || (c == '"' && stack.top() == '"')) {
+		if ((c == L'\'' && stack.top() == L'\'') || (c == L'"' && stack.top() == L'"')) {
 			temp += c;
 			stack.pop();
 			if (stack.empty())
@@ -163,7 +163,7 @@ std::queue<std::string> DTO::myString::split2(char split) {
 
 		if (stack.size() == 1 && c == split) {
 			result.push(temp);
-			temp = "";
+			temp = L"";
 			continue;
 		}
 
@@ -173,13 +173,13 @@ std::queue<std::string> DTO::myString::split2(char split) {
 				if (stack.empty())
 					break;
 				ib = isInStack(stack.top());
-				if (stack.size() == 1 && c == '}') {
+				if (stack.size() == 1 && c == L'}') {
 					result.push(temp + c);
-					temp = "";
+					temp = L"";
 					continue;
 				}
 			}
-			else if (ia % 2 == 0 && (!(stack.top() == '"' || stack.top() == '\'') || (c == '"' || c == '\''))) {
+			else if (ia % 2 == 0 && (!(stack.top() == L'"' || stack.top() == L'\'') || (c == L'"' || c == L'\''))) {
 				stack.push(c);
 				ib = isInStack(stack.top());
 			}
@@ -189,24 +189,24 @@ std::queue<std::string> DTO::myString::split2(char split) {
 		}
 		temp += c;
 	}
-	if (!result.empty() || temp != "")
+	if (!result.empty() || temp != L"")
 		result.push(temp);
 	return result;
 }
 
-std::queue<std::string> DTO::myString::split(std::string s) {
+std::queue<std::wstring> DTO::myString::split(std::wstring s) {
 	int last{ 0 };
-	std::string a{ *m_str };
-	std::queue<std::string> result{};
+	std::wstring a{ *m_str };
+	std::queue<std::wstring> result{};
 	while (a.size() > 0) {
 		size_t f{ a.find(s) };
-		if (f == std::string::npos) {
+		if (f == std::wstring::npos) {
 			result.push(a);
 			break;
 		}
 		else {
 			myString t{ &a };
-			std::string b{ t.extract(f) };
+			std::wstring b{ t.extract(f) };
 			t.extract(s.size());
 			result.push(b);
 		}
@@ -214,37 +214,37 @@ std::queue<std::string> DTO::myString::split(std::string s) {
 	return result;
 }
 
-char DTO::myString::backSlachChar(char c)
+wchar_t DTO::myString::backSlachChar(wchar_t c)
 {
 	switch (c) {
-	case '\\':
-		return '\\';
-	case '\"':
-		return '\"';
-	case '\'':
-		return '\'';
-	case 'a':
-		return '\a';
-	case 'b':
-		return '\b';
-	case 't':
-		return '\t';
-	case 'n':
-		return '\n';
-	case 'v':
-		return '\v';
-	case 'f':
-		return '\f';
-	case 'r':
-		return '\r';
+	case L'\\':
+		return L'\\';
+	case L'\"':
+		return L'\"';
+	case L'\'':
+		return L'\'';
+	case L'a':
+		return L'\a';
+	case L'b':
+		return L'\b';
+	case L't':
+		return L'\t';
+	case L'n':
+		return L'\n';
+	case L'v':
+		return L'\v';
+	case L'f':
+		return L'\f';
+	case L'r':
+		return L'\r';
 	default:
 		return c;
 	}
 }
 
 
-bool DTO::myString::isUseless(char c) {
-	return c == ' ' || c == '\r' || c == '\n' || c == '	';
+bool DTO::myString::isUseless(wchar_t c) {
+	return c == L' ' || c == L'\r' || c == L'\n' || c == L'	';
 }
 
 void DTO::myString::removeUseless() {

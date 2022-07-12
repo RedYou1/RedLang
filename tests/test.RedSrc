@@ -137,7 +137,7 @@ class test{
 			System.println(e);
 		}
 
-		Class c = new Class("ExternalClass.RedSrc");
+		Class c = new Class(new File("ExternalClass.RedSrc"));
 		String wow = c.invoke("wow","Bonjour");
 		System.println(wow);
 
@@ -251,6 +251,9 @@ class test{
 		System.println("names:");
 		names.forEach(test.printNames<String>);
 		System.println("");
+
+		System.println(new File("ExternalClass.RedSrc"));
+		System.println(new File("ExternalClass.RedSrc").getAbsolutePath());
 
 		throw new Exception("FINI");
 	}

@@ -8,13 +8,13 @@
 namespace Parser {
 	class GenericDef : public DTO::GenericStatic {
 	private:
-		std::string m_type;
-		std::string m_content;
-		std::vector<std::string> m_genTypes;
+		std::wstring m_type;
+		std::wstring m_content;
+		std::vector<std::wstring> m_genTypes;
 	public:
-		GenericDef(std::string name, std::string path, std::string type, std::queue<std::string> genTypes, std::string content);
+		GenericDef(std::wstring name, std::wstring path, std::wstring type, std::queue<std::wstring> genTypes, std::wstring content);
 		virtual ~GenericDef() override = default;
 
-		DTO::SourceFile* create(std::string newName, DTO::Instanciable** gens, size_t genSize) override;
+		DTO::SourceFile* create(std::wstring newName, DTO::Instanciable** gens, size_t genSize) override;
 	};
 }

@@ -5,6 +5,6 @@
 namespace DTO {
 	struct Arg {
 		Instanciable* type = nullptr;
-		std::string name = "";
+		std::wstring name = L"";
 	};
 }

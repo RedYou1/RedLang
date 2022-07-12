@@ -1,10 +1,10 @@
 #include "Signature.h"
 #include "Instanciable.h"
 
-DTO::Signature::Signature(std::string path, Instanciable* returnType, Arg* args, size_t argsLen)
+DTO::Signature::Signature(std::wstring path, Instanciable* returnType, Arg* args, size_t argsLen)
 	:m_path(path), m_returnType(returnType), m_args(args), m_argsLen(argsLen), m_infinite(false)
 {}
-DTO::Signature::Signature(std::string path, Instanciable* returnType, Arg* args, size_t argsLen, bool infinite)
+DTO::Signature::Signature(std::wstring path, Instanciable* returnType, Arg* args, size_t argsLen, bool infinite)
 	: m_path(path), m_returnType(returnType), m_args(args), m_argsLen(argsLen), m_infinite(infinite)
 {}
 

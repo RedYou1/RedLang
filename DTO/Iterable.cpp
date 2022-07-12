@@ -2,14 +2,14 @@
 
 #include "FunctionClass.h"
 
-DTO::Iterable::IterableI::IterableI(std::string name, Instanciable* type)
+DTO::Iterable::IterableI::IterableI(std::wstring name, Instanciable* type)
 	:Interface(name, Paths::Iterable), m_type(type)
 {
 	FunctionClass* function{ (FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function) };
-	add("forEach", new Signature("", nullptr, new Arg[2]{ this,"this", function,"func" }, 2));
+	add(L"forEach", new Signature(L"", nullptr, new Arg[2]{ this,L"this", function,L"func" }, 2));
 }
 
-DTO::SourceFile* DTO::Iterable::create(std::string newName, Instanciable** gens, size_t genSize)
+DTO::SourceFile* DTO::Iterable::create(std::wstring newName, Instanciable** gens, size_t genSize)
 {
 	if (genSize != 1) {
 		throw "not the right number of generic type.";

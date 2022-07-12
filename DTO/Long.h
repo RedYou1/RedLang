@@ -34,7 +34,7 @@ namespace DTO {
 
 	class LongC : public Class {
 	public:
-		LongC(Number* number) : Class("Long", Paths::Long, GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
+		LongC(Number* number) : Class(L"Long", Paths::Long, GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
 		}
 
 		class Equals :public Command {

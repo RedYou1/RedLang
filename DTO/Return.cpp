@@ -3,7 +3,7 @@
 #include "MemoryFunction.h"
 #include "GarbageCollector.h"
 
-DTO::Return::Return(std::string name, Instanciable* returnType) : m_name(name), m_returnType(returnType) { }
+DTO::Return::Return(std::wstring name, Instanciable* returnType) : m_name(name), m_returnType(returnType) { }
 
 DTO::CommandReturn* DTO::Return::exec(MemoryObject& mem) {
 	return new CommandReturn(mem.get(m_name), true, false);
@@ -14,7 +14,7 @@ DTO::Command* DTO::Return::clone()
 	return new Return(m_name, m_returnType);
 }
 
-DTO::ReturnFunc::ReturnFunc(Class* _class, std::string name, Command** args, size_t argsLen)
+DTO::ReturnFunc::ReturnFunc(Class* _class, std::wstring name, Command** args, size_t argsLen)
 	:m_class(_class), m_name(name), m_args(args), m_argsLen(argsLen) {
 }
 DTO::ReturnFunc::~ReturnFunc() {
@@ -75,7 +75,7 @@ DTO::CommandReturn* DTO::InstanceFunc::exec(MemoryObject& pre_mem) {
 		args[c] = m_args[c - 1]->exec(pre_mem);
 		argsType[c] = args[c]->getObject()->getClass();
 	}
-	std::string name{ std::string(m_class->getName()) };
+	std::wstring name{ std::wstring(m_class->getName()) };
 	CommandReturn* r{ m_class->getFuncs()->get(myString{&name}.extract2(), argsType, m_argsLen)->exec(pre_mem, args,m_argsLen) };
 
 	//TODO can return an exception
@@ -206,7 +206,7 @@ DTO::Command* DTO::ObjectCreator::clone()
 	return new ObjectCreator(m_func, cmds, m_argsLen);
 }
 
-DTO::ObFunc::ObFunc(std::string name, Command** args, size_t argsLen)
+DTO::ObFunc::ObFunc(std::wstring name, Command** args, size_t argsLen)
 	:m_name(name), m_args(args), m_argsLen(argsLen)
 {
 }

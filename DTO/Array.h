@@ -50,21 +50,21 @@ namespace DTO {
 		class ArrayC : public Class {
 		public:
 			Instanciable* m_type;
-			ArrayC(std::string name, Instanciable* type);
+			ArrayC(std::wstring name, Instanciable* type);
 		};
 	public:
-		Array() : GenericStatic("Array", Paths::Array, 1) {
+		Array() : GenericStatic(L"Array", Paths::Array, 1) {
 		}
 
-		SourceFile* create(std::string newName, Instanciable** gens, size_t genSize)override;
+		SourceFile* create(std::wstring newName, Instanciable** gens, size_t genSize)override;
 
 		class Equals :public Command {
 		public:
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayO* o{ (ArrayO*)mem.get("this") };
-				ArrayO* c{ (ArrayO*)mem.get("c") };
+				ArrayO* o{ (ArrayO*)mem.get(L"this") };
+				ArrayO* c{ (ArrayO*)mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_value == c->m_value), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -74,19 +74,19 @@ namespace DTO {
 			ArrayC* m_s;
 			ArrayConstruct(ArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
+				IObject* a{ mem.get(L"c") };
 				Instanciable** i{ new Instanciable * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
 				if (!a->getClass()->instanceOf(i[0])) {
 					delete[] i;
-					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Array", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
+					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + L".Array", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
 				}
 				IObject** o{ new IObject * [1]{a} };
 				MemoryObject mem2{};
-				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
+				CommandReturn* q{ a->getClass()->getFuncs()->get(L"toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
 				Object* c{ new ArrayO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
-				mem.set("this", c);
+				mem.set(L"this", c);
 				delete q;
 				return new CommandReturn(c, true, false);
 			}
@@ -97,18 +97,18 @@ namespace DTO {
 			ArrayC* m_s;
 			Get(ArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
+				IObject* a{ mem.get(L"c") };
 				Instanciable** i{ new Instanciable * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
 				if (!a->getClass()->instanceOf(i[0])) {
 					delete[] i;
-					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Get", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
+					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + L".Get", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
 				}
 				IObject** o{ new IObject * [1]{a} };
 				MemoryObject mem2{};
-				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
+				CommandReturn* q{ a->getClass()->getFuncs()->get(L"toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				ArrayO* arr{ (ArrayO*)mem.get("this") };
+				ArrayO* arr{ (ArrayO*)mem.get(L"this") };
 				IObject* arro{ arr->m_value[((NumberO*)q->getObject())->toLong()] };
 				delete q;
 				return new CommandReturn(arro, true, false);
@@ -120,21 +120,21 @@ namespace DTO {
 			ArrayC* m_s;
 			Set(ArrayC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
+				IObject* a{ mem.get(L"c") };
 				Instanciable** i{ new Instanciable * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
 				if (!a->getClass()->instanceOf(i[0])) {
 					delete[] i;
-					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + ".Set", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
+					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), m_s->getName() + L".Set", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
 				}
 				IObject** o{ new IObject * [1]{a} };
 				MemoryObject mem2{};
-				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
+				CommandReturn* q{ a->getClass()->getFuncs()->get(L"toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				ArrayO* arr{ (ArrayO*)mem.get("this") };
+				ArrayO* arr{ (ArrayO*)mem.get(L"this") };
 				int64_t index{ ((LongO*)q->getObject())->m_value };
 				GarbageCollector::Remove(arr->m_value[index]);
-				arr->m_value[index] = mem.get("o");
+				arr->m_value[index] = mem.get(L"o");
 				GarbageCollector::Add(arr->m_value[index]);
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
@@ -146,7 +146,7 @@ namespace DTO {
 			LongC* m_s;
 			Size(LongC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayO* arr{ (ArrayO*)mem.get("this") };
+				ArrayO* arr{ (ArrayO*)mem.get(L"this") };
 				return new CommandReturn(new LongO(m_s, (int64_t)arr->m_size), true, false);
 			}
 			Command* clone()override { return new Size(m_s); }
@@ -155,17 +155,17 @@ namespace DTO {
 		public:
 			Resize() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayO* arr{ (ArrayO*)mem.get("this") };
-				IObject* a{ mem.get("c") };
+				ArrayO* arr{ (ArrayO*)mem.get(L"this") };
+				IObject* a{ mem.get(L"c") };
 
 				Instanciable** i{ new Instanciable * [1]{GLOBAL::getClasses()->getInterface(Paths::Number)} };
 				if (!a->getClass()->instanceOf(i[0])) {
 					delete[] i;
-					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), arr->getClass()->getName() + ".Resize", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
+					return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), arr->getClass()->getName() + L".Resize", new CommandReturn(a, false, false), GLOBAL::getClasses()->getInterface(Paths::Number)), false, true);
 				}
 				IObject** o{ new IObject * [1]{a} };
 				MemoryObject mem2{};
-				CommandReturn* q{ a->getClass()->getFuncs()->get("toLong", i, 1)->exec(mem2, o, 1) };
+				CommandReturn* q{ a->getClass()->getFuncs()->get(L"toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
 
@@ -197,8 +197,8 @@ namespace DTO {
 		public:
 			forEach() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayO* array{ (ArrayO*)mem.get("this") };
-				FunctionO* func{ (FunctionO*)mem.get("func") };
+				ArrayO* array{ (ArrayO*)mem.get(L"this") };
+				FunctionO* func{ (FunctionO*)mem.get(L"func") };
 				size_t size{ array->m_size };
 				IObject** i{ new IObject * [1] };
 				for (size_t c{ 0 }; c < size; c++) {

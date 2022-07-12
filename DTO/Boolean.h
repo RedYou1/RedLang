@@ -25,7 +25,7 @@ namespace DTO {
 
 	class BooleanC : public Class {
 	public:
-		BooleanC() : Class("Boolean", Paths::Boolean, GLOBAL::getClasses()->getClass(Paths::Object)) {
+		BooleanC() : Class(L"Boolean", Paths::Boolean, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Not : public Command {
@@ -33,7 +33,7 @@ namespace DTO {
 			BooleanC* m_s;
 			Not(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				BooleanO* o{ (BooleanO*)mem.get("this") };
+				BooleanO* o{ (BooleanO*)mem.get(L"this") };
 				return new CommandReturn(new BooleanO(m_s, !o->m_value), true, false);
 			}
 			Command* clone()override { return new Not(m_s); }
@@ -44,8 +44,8 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				BooleanO* o{ (BooleanO*)mem.get("this") };
-				BooleanO* c{ (BooleanO*)mem.get("c") };
+				BooleanO* o{ (BooleanO*)mem.get(L"this") };
+				BooleanO* c{ (BooleanO*)mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_value == c->m_value), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -55,8 +55,8 @@ namespace DTO {
 			BooleanC* m_s;
 			BooleanConstruct(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				Object* c{ new BooleanO(m_s, ((BooleanO*)mem.get("c"))->m_value) };
-				mem.set("this", c);
+				Object* c{ new BooleanO(m_s, ((BooleanO*)mem.get(L"c"))->m_value) };
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new BooleanConstruct(m_s); }
@@ -67,8 +67,8 @@ namespace DTO {
 			StringC* m_s;
 			ToString(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				BooleanO* a{ (BooleanO*)mem.get("this") };
-				return new CommandReturn(new StringO(m_s, a->m_value ? "TRUE" : "FALSE"), true, false);
+				BooleanO* a{ (BooleanO*)mem.get(L"this") };
+				return new CommandReturn(new StringO(m_s, a->m_value ? L"TRUE" : L"FALSE"), true, false);
 			}
 			Command* clone()override { return new ToString(m_s); }
 		};

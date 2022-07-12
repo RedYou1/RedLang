@@ -11,30 +11,34 @@ namespace DTO {
 	};
 
 	namespace Paths {
-		constexpr char Function[] = "RedLang.Function";
-		constexpr char Class[] = "RedLang.Class";
-		constexpr char Object[] = "RedLang.Object";
-		constexpr char Number[] = "RedLang.Numbers.Number";
-		constexpr char Byte[] = "RedLang.Numbers.Byte";
-		constexpr char Short[] = "RedLang.Numbers.Short";
-		constexpr char Integer[] = "RedLang.Numbers.Integer";
-		constexpr char Long[] = "RedLang.Numbers.Long";
-		constexpr char Float[] = "RedLang.Numbers.Float";
-		constexpr char Double[] = "RedLang.Numbers.Double";
-		constexpr char Char[] = "RedLang.Char";
-		constexpr char String[] = "RedLang.String";
-		constexpr char Boolean[] = "RedLang.Boolean";
-		constexpr char Lock[] = "RedLang.Threading.Lock";
-		constexpr char Thread[] = "RedLang.Threading.Thread";
-		constexpr char System[] = "RedLang.System";
-		constexpr char Exception[] = "RedLang.Exceptions.Exception";
-		constexpr char CastException[] = "RedLang.Exceptions.CastException";
-		constexpr char IllegalArgumentException[] = "RedLang.Exceptions.IllegalArgumentException";
-		constexpr char NullException[] = "RedLang.Exceptions.NullException";
-		constexpr char Iterable[] = "RedLang.Iterable";
-		constexpr char Collection[] = "RedLang.Iterable.Collection";
-		constexpr char List[] = "RedLang.Iterable.Collection.List";
-		constexpr char Array[] = "RedLang.Iterable.Array";
-		constexpr char ArrayList[] = "RedLang.Iterable.ArrayList";
+		constexpr wchar_t Function[] = L"RedLang.Function";
+		constexpr wchar_t Class[] = L"RedLang.Class";
+		constexpr wchar_t Object[] = L"RedLang.Object";
+		constexpr wchar_t Char[] = L"RedLang.Char";
+		constexpr wchar_t String[] = L"RedLang.String";
+		constexpr wchar_t Boolean[] = L"RedLang.Boolean";
+		constexpr wchar_t Lock[] = L"RedLang.Threading.Lock";
+		constexpr wchar_t Thread[] = L"RedLang.Threading.Thread";
+		constexpr wchar_t System[] = L"RedLang.System";
+		constexpr wchar_t File[] = L"RedLang.File";
+
+		constexpr wchar_t Number[] = L"RedLang.Numbers.Number";
+		constexpr wchar_t Byte[] = L"RedLang.Numbers.Byte";
+		constexpr wchar_t Short[] = L"RedLang.Numbers.Short";
+		constexpr wchar_t Integer[] = L"RedLang.Numbers.Integer";
+		constexpr wchar_t Long[] = L"RedLang.Numbers.Long";
+		constexpr wchar_t Float[] = L"RedLang.Numbers.Float";
+		constexpr wchar_t Double[] = L"RedLang.Numbers.Double";
+
+		constexpr wchar_t Exception[] = L"RedLang.Exceptions.Exception";
+		constexpr wchar_t CastException[] = L"RedLang.Exceptions.CastException";
+		constexpr wchar_t IllegalArgumentException[] = L"RedLang.Exceptions.IllegalArgumentException";
+		constexpr wchar_t NullException[] = L"RedLang.Exceptions.NullException";
+
+		constexpr wchar_t Iterable[] = L"RedLang.Iterable";
+		constexpr wchar_t Collection[] = L"RedLang.Iterable.Collection";
+		constexpr wchar_t List[] = L"RedLang.Iterable.Collection.List";
+		constexpr wchar_t Array[] = L"RedLang.Iterable.Array";
+		constexpr wchar_t ArrayList[] = L"RedLang.Iterable.ArrayList";
 	}
 }

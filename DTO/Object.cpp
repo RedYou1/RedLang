@@ -35,7 +35,7 @@ DTO::Object::~Object() {
 	delete[] m_vars;
 }
 
-DTO::IObject* DTO::Object::get(std::string name) {
+DTO::IObject* DTO::Object::get(std::wstring name) {
 	size_t i{ m_type->getVars()->get(name)->m_index };
 	if (i >= m_size)
 		throw "OutOfBound";
@@ -67,7 +67,7 @@ DTO::IObject* DTO::Object::clone()
 	return new Object(m_type, vars, m_size);
 }
 
-DTO::CommandReturn* DTO::Object::exec(std::string name, IObject** args, size_t argsSize)
+DTO::CommandReturn* DTO::Object::exec(std::wstring name, IObject** args, size_t argsSize)
 {
 	Instanciable** i{ new Instanciable * [argsSize] };
 	for (size_t c{ 0 }; c < argsSize; c++) {
@@ -79,12 +79,12 @@ DTO::CommandReturn* DTO::Object::exec(std::string name, IObject** args, size_t a
 	return q;
 }
 
-DTO::CommandReturn* DTO::NullObject::exec(std::string name, IObject** args, size_t argsSize)
+DTO::CommandReturn* DTO::NullObject::exec(std::wstring name, IObject** args, size_t argsSize)
 {
-	return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), "Can't execute a function on a null object."), true, true);
+	return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), L"Can't execute a function on a null object."), true, true);
 }
 
-DTO::CommandReturn* DTO::Object::exec(std::string name, IObject* arg)
+DTO::CommandReturn* DTO::Object::exec(std::wstring name, IObject* arg)
 {
 	IObject** o{ new IObject * [1]{arg} };
 	Instanciable** i{ new Instanciable * [1]{arg->getClass()} };
@@ -95,7 +95,7 @@ DTO::CommandReturn* DTO::Object::exec(std::string name, IObject* arg)
 	return q;
 }
 
-DTO::CommandReturn* DTO::NullObject::exec(std::string name, IObject* arg)
+DTO::CommandReturn* DTO::NullObject::exec(std::wstring name, IObject* arg)
 {
-	return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), "Can't execute a function on a null object."), true, true);
+	return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), L"Can't execute a function on a null object."), true, true);
 }

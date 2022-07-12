@@ -5,56 +5,56 @@
 namespace DTO {
 	class myString {
 	private:
-		static constexpr const char stackable[12]{ '(',')','{','}','[',']','<','>','\"','\"','\'','\'' };
+		static constexpr const wchar_t stackable[12]{ '(',')','{','}','[',']','<','>','\"','\"','\'','\'' };
 		static constexpr const int stackableLen{ 12 };
 
-		static constexpr const char end[8]{ ' ', '.', '{', '(', '<', ';','=',',' };
+		static constexpr const wchar_t end[8]{ ' ', '.', '{', '(', '<', ';','=',',' };
 		static constexpr const int endLen{ 8 };
 
-		std::string* m_str;
+		std::wstring* m_str;
 
-		int isInStack(char b);
+		int isInStack(wchar_t b);
 
-		static bool isUseless(char c);
+		static bool isUseless(wchar_t c);
 	public:
-		myString(std::string* str);
+		myString(std::wstring* str);
 
-		bool startWith(std::string s);
-		bool endWith(std::string s);
+		bool startWith(std::wstring s);
+		bool endWith(std::wstring s);
 
-		std::string extract(size_t amount);
+		std::wstring extract(size_t amount);
 
-		std::string extract(std::string until);
+		std::wstring extract(std::wstring until);
 
-		std::string extract(std::queue<std::string> untils);
+		std::wstring extract(std::queue<std::wstring> untils);
 
-		std::string extract2();
+		std::wstring extract2();
 
-		std::string extractName();
+		std::wstring extractName();
 
-		std::string extractFunc();
-		std::string extractFunc2();
+		std::wstring extractFunc();
+		std::wstring extractFunc2();
 
-		std::queue<std::string> split(std::string s);
-		std::queue<std::string> split2(char split);
+		std::queue<std::wstring> split(std::wstring s);
+		std::queue<std::wstring> split2(wchar_t split);
 
 		void removeUseless();
 
-		static char backSlachChar(char c);
+		static wchar_t backSlachChar(wchar_t c);
 
-		static bool is_number(const std::string& s)
+		static bool is_number(const std::wstring& s)
 		{
 			if (s.size() <= 1)
 				return false;
 
-			if (s.back() != 'b' && s.back() != 's' && s.back() != 'i' && s.back() != 'f' && s.back() != 'l' && s.back() != 'd')
+			if (s.back() != L'b' && s.back() != L's' && s.back() != L'i' && s.back() != L'f' && s.back() != L'l' && s.back() != L'd')
 				return false;
 
-			bool dot{ s.back() == 'f' || s.back() == 'd' };
+			bool dot{ s.back() == L'f' || s.back() == L'd' };
 
-			for (std::string::const_iterator it{ s.begin() + (s.at(0) == '-' ? 1 : 0) }; it != s.end() - 1; ++it) {
+			for (std::wstring::const_iterator it{ s.begin() + (s.at(0) == L'-' ? 1 : 0) }; it != s.end() - 1; ++it) {
 				if (!std::isdigit(*it))
-					if (*it == '.' && dot) {
+					if (*it == L'.' && dot) {
 						dot = false;
 					}
 					else

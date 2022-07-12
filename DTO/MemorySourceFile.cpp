@@ -7,19 +7,19 @@
 DTO::MemorySourceFile::~MemorySourceFile() {
 	if (!m_delete)
 		return;
-	for (typename std::map<std::string, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
+	for (typename std::map<std::wstring, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
 		delete it->second;
 	}
 }
 
-void DTO::MemorySourceFile::add(std::string name, SourceFile* o) {
+void DTO::MemorySourceFile::add(std::wstring name, SourceFile* o) {
 	if (m_vars.find(name) != m_vars.end())
 		throw "variable already exists";
-	m_vars.insert(std::pair<std::string, SourceFile*>(name, o));
+	m_vars.insert(std::pair<std::wstring, SourceFile*>(name, o));
 }
 
-void DTO::MemorySourceFile::set(std::string name, SourceFile* o) {
-	typename std::map<std::string, SourceFile*>::iterator it(m_vars.find(name));
+void DTO::MemorySourceFile::set(std::wstring name, SourceFile* o) {
+	typename std::map<std::wstring, SourceFile*>::iterator it(m_vars.find(name));
 	if (it == m_vars.end())
 		throw "not found";
 	if (it->second != nullptr)
@@ -27,13 +27,13 @@ void DTO::MemorySourceFile::set(std::string name, SourceFile* o) {
 	it->second = o;
 }
 
-bool DTO::MemorySourceFile::containKey(std::string* name, MemorySourceFile* _genTypes) {
+bool DTO::MemorySourceFile::containKey(std::wstring* name, MemorySourceFile* _genTypes) {
 	if (m_vars.empty())
 		return false;
 	bool found{ false };
 	SourceFile* s{ nullptr };
 
-	std::string cName{ *name };
+	std::wstring cName{ *name };
 
 	size_t lastDot{ cName.find_last_of('.') };
 	if (lastDot == SIZE_MAX) {
@@ -45,18 +45,18 @@ bool DTO::MemorySourceFile::containKey(std::string* name, MemorySourceFile* _gen
 		firstTri = cName.size();
 	}
 
-	std::string genName{ cName.substr(0,lastDot + firstTri) };
+	std::wstring genName{ cName.substr(0,lastDot + firstTri) };
 
 	size_t nameSize{ genName.size() };
 
-	for (typename std::map<std::string, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
+	for (typename std::map<std::wstring, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
 		size_t itSize{ it->first.size() };
 
 		if (itSize < nameSize)
 			continue;
 
 		if (0 == it->first.compare(it->first.length() - nameSize, nameSize, genName) &&
-			(itSize == nameSize || it->first.at(itSize - nameSize - 1) == '.')) {
+			(itSize == nameSize || it->first.at(itSize - nameSize - 1) == L'.')) {
 			if (s != nullptr)
 				throw "multiple classes";
 			s = it->second;
@@ -64,16 +64,16 @@ bool DTO::MemorySourceFile::containKey(std::string* name, MemorySourceFile* _gen
 		}
 	}
 
-	if (found && cName.at(cName.size() - 1) == '>') {
-		std::string genTypes{ myString{ &cName }.split(".").back() };
+	if (found && cName.at(cName.size() - 1) == L'>') {
+		std::wstring genTypes{ myString{ &cName }.split(L".").back() };
 		myString{ &genTypes }.extract2();
-		std::queue<std::string> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
+		std::queue<std::wstring> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
 		size_t size{ q.size() };
 		Instanciable** genTypesArr{ new Instanciable * [size] };
 		size_t i{ 0 };
 		size_t charIndex{ lastDot + firstTri + 1 };
 		while (i < size) {
-			std::string genType{ q.front() };
+			std::wstring genType{ q.front() };
 			if (containKey(&genType, _genTypes)) {
 				genTypesArr[i] = getType(genType);
 				if (name->substr(charIndex).find(genType) != 0) {
@@ -106,10 +106,10 @@ bool DTO::MemorySourceFile::containKey(std::string* name, MemorySourceFile* _gen
 	return found;
 }
 
-DTO::SourceFile* DTO::MemorySourceFile::get(std::string name) {
+DTO::SourceFile* DTO::MemorySourceFile::get(std::wstring name) {
 	SourceFile* s{ nullptr };
 
-	std::string cName{ name };
+	std::wstring cName{ name };
 
 	size_t lastDot{ cName.find_last_of('.') };
 	if (lastDot == SIZE_MAX) {
@@ -121,37 +121,37 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::string name) {
 		firstTri = cName.size();
 	}
 
-	std::string genName{ cName.substr(0,lastDot + firstTri) };
+	std::wstring genName{ cName.substr(0,lastDot + firstTri) };
 
 	size_t nameSize{ genName.size() };
 
-	for (typename std::map<std::string, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
+	for (typename std::map<std::wstring, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
 		size_t itSize{ it->first.size() };
 
 		if (itSize < nameSize)
 			continue;
 
 		if (0 == it->first.compare(it->first.length() - nameSize, nameSize, genName) &&
-			(itSize == nameSize || it->first.at(itSize - nameSize - 1) == '.')) {
+			(itSize == nameSize || it->first.at(itSize - nameSize - 1) == L'.')) {
 			if (s != nullptr)
 				throw "multiple classes";
 			s = it->second;
 		}
 	}
 
-	if (cName.at(cName.size() - 1) == '>') {
+	if (cName.at(cName.size() - 1) == L'>') {
 		if (s == nullptr)
 			throw "not found";
-		std::string genTypes{ myString{ &cName }.split(".").back() };
+		std::wstring genTypes{ myString{ &cName }.split(L".").back() };
 		myString{ &genTypes }.extract2();
-		std::queue<std::string> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
+		std::queue<std::wstring> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
 		size_t size{ q.size() };
 		Instanciable** genTypesArr{ new Instanciable * [size] };
 		size_t i{ 0 };
 		size_t charIndex{ genName.size() + 1 };
 		bool a{ false };
 		while (i < size) {
-			std::string genType{ q.front() };
+			std::wstring genType{ q.front() };
 			if (containKey(&genType)) {
 				genTypesArr[i] = getType(genType);
 			}
@@ -174,16 +174,16 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::string name) {
 	return s;
 }
 
-DTO::SourceFile* DTO::MemorySourceFile::checkGet(std::string name)
+DTO::SourceFile* DTO::MemorySourceFile::checkGet(std::wstring name)
 {
-	std::string sname{ name };
+	std::wstring sname{ name };
 	bool check{ containKey(&sname) };
 	if (!check)
 		throw "??";
 	return get(sname);
 }
 
-DTO::Instanciable* DTO::MemorySourceFile::getType(std::string name)
+DTO::Instanciable* DTO::MemorySourceFile::getType(std::wstring name)
 {
 	SourceFile* s{ get(name) };
 	Instanciable* i{ dynamic_cast<Instanciable*>(s) };
@@ -192,7 +192,7 @@ DTO::Instanciable* DTO::MemorySourceFile::getType(std::string name)
 	return i;
 }
 
-DTO::Interface* DTO::MemorySourceFile::getInterface(std::string name)
+DTO::Interface* DTO::MemorySourceFile::getInterface(std::wstring name)
 {
 	SourceFile* s{ get(name) };
 	Interface* i{ dynamic_cast<Interface*>(s) };
@@ -201,7 +201,7 @@ DTO::Interface* DTO::MemorySourceFile::getInterface(std::string name)
 	return i;
 }
 
-DTO::Class* DTO::MemorySourceFile::getClass(std::string name)
+DTO::Class* DTO::MemorySourceFile::getClass(std::wstring name)
 {
 	SourceFile* s{ get(name) };
 	Class* i{ dynamic_cast<Class*>(s) };
@@ -210,7 +210,7 @@ DTO::Class* DTO::MemorySourceFile::getClass(std::string name)
 	return i;
 }
 
-DTO::Instanciable* DTO::MemorySourceFile::checkGetType(std::string name)
+DTO::Instanciable* DTO::MemorySourceFile::checkGetType(std::wstring name)
 {
 	SourceFile* s{ checkGet(name) };
 	Instanciable* i{ dynamic_cast<Instanciable*>(s) };
@@ -219,7 +219,7 @@ DTO::Instanciable* DTO::MemorySourceFile::checkGetType(std::string name)
 	return i;
 }
 
-DTO::Interface* DTO::MemorySourceFile::checkGetInterface(std::string name)
+DTO::Interface* DTO::MemorySourceFile::checkGetInterface(std::wstring name)
 {
 	SourceFile* s{ checkGet(name) };
 	Interface* i{ dynamic_cast<Interface*>(s) };
@@ -228,7 +228,7 @@ DTO::Interface* DTO::MemorySourceFile::checkGetInterface(std::string name)
 	return i;
 }
 
-DTO::Class* DTO::MemorySourceFile::checkGetClass(std::string name)
+DTO::Class* DTO::MemorySourceFile::checkGetClass(std::wstring name)
 {
 	SourceFile* s{ checkGet(name) };
 	Class* i{ dynamic_cast<Class*>(s) };

@@ -5,7 +5,7 @@
 #include "../DTO/Class.h"
 #include "../DTO/Global.h"
 
-Parser::GenericDef::GenericDef(std::string name, std::string path, std::string type, std::queue<std::string> genTypes, std::string content)
+Parser::GenericDef::GenericDef(std::wstring name, std::wstring path, std::wstring type, std::queue<std::wstring> genTypes, std::wstring content)
 	:DTO::GenericStatic(name, path, genTypes.size()),
 	m_type(type),
 	m_genTypes(),
@@ -19,7 +19,7 @@ Parser::GenericDef::GenericDef(std::string name, std::string path, std::string t
 	}
 }
 
-DTO::SourceFile* Parser::GenericDef::create(std::string newName, DTO::Instanciable** gens, size_t genSize)
+DTO::SourceFile* Parser::GenericDef::create(std::wstring newName, DTO::Instanciable** gens, size_t genSize)
 {
 	if (genSize != this->genSize())
 		throw "??";
@@ -31,7 +31,7 @@ DTO::SourceFile* Parser::GenericDef::create(std::string newName, DTO::Instanciab
 
 		while (find < m_genTypes[i].size()) {
 			size_t next{ m_genTypes[i].substr(find + 1).find(' ') };
-			std::string name{ m_genTypes[i].substr(find + 1,next) };
+			std::wstring name{ m_genTypes[i].substr(find + 1,next) };
 			if (!gens[i]->instanceOf(DTO::GLOBAL::getClasses()->getType(name)))
 				throw "do not respect the heritance clause of a generic";
 			if (next >= m_genTypes[i].size())
@@ -40,13 +40,13 @@ DTO::SourceFile* Parser::GenericDef::create(std::string newName, DTO::Instanciab
 		}
 	}
 
-	std::string str{ newName + m_content };
+	std::wstring str{ newName + m_content };
 
 	SourceFile* r{ nullptr };
-	if (m_type == "class") {
+	if (m_type == L"class") {
 		r = Parser::parseClass(getPath(), str, *genTypes);
 	}
-	else if (m_type == "interface") {
+	else if (m_type == L"interface") {
 		r = Parser::parseInterface(getPath(), str, *genTypes);
 	}
 	else {

@@ -14,7 +14,7 @@ DTO::CommandReturn* DTO::If::exec(MemoryObject& pre_mem)
 	CommandReturn* t{ m_cond->exec(mem) };
 	if (dynamic_cast<Object*>(t->getObject()) != nullptr &&
 		!t->getObject()->getClass()->instanceOf(GLOBAL::getClasses()->getClass(Paths::Boolean)))
-		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "If", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
+		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"If", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
 	bool v{ ((BooleanO*)t->getObject())->m_value };
 	delete t;
 	if (v)

@@ -4,13 +4,13 @@
 namespace DTO {
 	class SourceFile {
 	private:
-		std::string m_name;
-		std::string	m_path;
+		std::wstring m_name;
+		std::wstring	m_path;
 	public:
-		SourceFile(std::string name, std::string path);
+		SourceFile(std::wstring name, std::wstring path);
 		virtual ~SourceFile() = default;
 
-		std::string getPath() { return m_path; }
-		std::string getName() { return m_name; }
+		std::wstring getPath() { return m_path; }
+		std::wstring getName() { return m_name; }
 	};
 }

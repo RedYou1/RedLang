@@ -9,17 +9,17 @@ namespace DTO {
 
 	class MemoryStatVar {
 	private:
-		std::map<std::string, StatVar*> m_string;
+		std::map<std::wstring, StatVar*> m_string;
 	public:
 		MemoryStatVar();
 		~MemoryStatVar();
 
-		void add(std::string name, StatVar* var);
+		void add(std::wstring name, StatVar* var);
 
-		StatVar* get(std::string name);
-		void set(std::string name, IObject* value);
+		StatVar* get(std::wstring name);
+		void set(std::wstring name, IObject* value);
 
-		bool containKey(std::string name);
+		bool containKey(std::wstring name);
 
 		size_t size();
 	};

@@ -19,12 +19,12 @@ namespace DTO {
 		class CollectionI : public Interface {
 		public:
 			Instanciable* m_type;
-			CollectionI(std::string name, Instanciable* type);
+			CollectionI(std::wstring name, Instanciable* type);
 		};
 	public:
-		Collection() : GenericStatic("Collection", Paths::Collection, 1) {
+		Collection() : GenericStatic(L"Collection", Paths::Collection, 1) {
 		}
 
-		SourceFile* create(std::string newName, Instanciable** gens, size_t genSize)override;
+		SourceFile* create(std::wstring newName, Instanciable** gens, size_t genSize)override;
 	};
 }

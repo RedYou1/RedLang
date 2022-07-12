@@ -10,10 +10,10 @@
 namespace DTO {
 	class Return :public Command {
 	private:
-		std::string m_name;
+		std::wstring m_name;
 		Instanciable* m_returnType;
 	public:
-		Return(std::string name, Instanciable* returnType);
+		Return(std::wstring name, Instanciable* returnType);
 		virtual ~Return() override {}
 
 		CommandReturn* exec(MemoryObject& mem) override;
@@ -68,11 +68,11 @@ namespace DTO {
 	class ReturnFunc :public Command {
 	private:
 		Class* m_class;
-		std::string m_name;
+		std::wstring m_name;
 		Command** m_args;
 		size_t m_argsLen;
 	public:
-		ReturnFunc(Class* _class, std::string name, Command** args, size_t argsLen);
+		ReturnFunc(Class* _class, std::wstring name, Command** args, size_t argsLen);
 		virtual ~ReturnFunc() override;
 		CommandReturn* exec(MemoryObject& pre_mem) override;
 		Command* clone()override;
@@ -80,11 +80,11 @@ namespace DTO {
 
 	class ObFunc :public Command {
 	private:
-		std::string m_name;
+		std::wstring m_name;
 		Command** m_args;
 		size_t m_argsLen;
 	public:
-		ObFunc(std::string name, Command** args, size_t argsLen);
+		ObFunc(std::wstring name, Command** args, size_t argsLen);
 		virtual ~ObFunc() override;
 		CommandReturn* exec(MemoryObject& pre_mem) override;
 		Command* clone()override;

@@ -13,14 +13,14 @@
 namespace DTO {
 	class NullExceptionO : public ExceptionO {
 	public:
-		NullExceptionO(Class* type, std::string message)
+		NullExceptionO(Class* type, std::wstring message)
 			: ExceptionO(type, message) {
 		}
 	};
 
 	class NullException : public Class {
 	public:
-		NullException() : Class("NullException", Paths::NullException, GLOBAL::getClasses()->getClass(Paths::Exception)) {
+		NullException() : Class(L"NullException", Paths::NullException, GLOBAL::getClasses()->getClass(Paths::Exception)) {
 		}
 
 		class ExceptionConstruct :public Command {
@@ -28,9 +28,9 @@ namespace DTO {
 			NullException* m_s;
 			ExceptionConstruct(NullException* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				StringO* a{ (StringO*)mem.get("c") };
+				StringO* a{ (StringO*)mem.get(L"c") };
 				Object* c{ new ExceptionO(m_s, a->m_value) };
-				mem.set("this", c);
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone() override { return new ExceptionConstruct(m_s); }

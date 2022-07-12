@@ -1,22 +1,22 @@
 #include "MemoryFunction.h"
 
 DTO::MemoryFunction::~MemoryFunction() {
-	for (typename std::map<std::string, std::list<Function*>>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
+	for (typename std::map<std::wstring, std::list<Function*>>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
 		for (typename std::list<Function*>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
 			delete* it2;
 		}
 	}
 }
 
-void DTO::MemoryFunction::add(std::string name, Function* o) {
+void DTO::MemoryFunction::add(std::wstring name, Function* o) {
 	if (m_vars.find(name) == m_vars.end())
-		m_vars.insert(std::pair<std::string, std::list<Function*>>(name, std::list<Function*>()));
-	typename std::map<std::string, std::list<Function*>>::iterator it(m_vars.find(name));
+		m_vars.insert(std::pair<std::wstring, std::list<Function*>>(name, std::list<Function*>()));
+	typename std::map<std::wstring, std::list<Function*>>::iterator it(m_vars.find(name));
 	it->second.push_back(o);
 }
 
-std::list<DTO::Function*> DTO::MemoryFunction::get(std::string name) {
-	typename std::map<std::string, std::list<Function*>>::iterator it(m_vars.find(name));
+std::list<DTO::Function*> DTO::MemoryFunction::get(std::wstring name) {
+	typename std::map<std::wstring, std::list<Function*>>::iterator it(m_vars.find(name));
 	if (it == m_vars.end()) {
 		if (m_parent)
 			return m_parent->get(name);
@@ -25,7 +25,7 @@ std::list<DTO::Function*> DTO::MemoryFunction::get(std::string name) {
 	return it->second;
 }
 
-DTO::Function* DTO::MemoryFunction::get(std::string name, Instanciable** argsType, size_t argsLen) {
+DTO::Function* DTO::MemoryFunction::get(std::wstring name, Instanciable** argsType, size_t argsLen) {
 	std::list<Function*> li(get(name));
 	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {
 		if ((*it)->getSignature()->similarI(argsType, argsLen))
@@ -36,7 +36,7 @@ DTO::Function* DTO::MemoryFunction::get(std::string name, Instanciable** argsTyp
 	throw "not found";
 }
 
-bool DTO::MemoryFunction::containsI(std::string name, Instanciable** argsType, size_t argsLen) {
+bool DTO::MemoryFunction::containsI(std::wstring name, Instanciable** argsType, size_t argsLen) {
 	std::list<Function*> li(get(name));
 	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {
 		if ((*it)->getSignature()->equalsI(argsType, argsLen))
@@ -47,7 +47,7 @@ bool DTO::MemoryFunction::containsI(std::string name, Instanciable** argsType, s
 	return false;
 }
 
-bool DTO::MemoryFunction::containsI(std::string name, Arg* args, size_t argsLen) {
+bool DTO::MemoryFunction::containsI(std::wstring name, Arg* args, size_t argsLen) {
 	std::list<Function*> li(get(name));
 	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {
 		if ((*it)->getSignature()->equalsI(args, argsLen))

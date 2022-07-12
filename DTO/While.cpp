@@ -15,7 +15,7 @@ DTO::CommandReturn* DTO::While::exec(MemoryObject& pre_mem)
 		return t;
 	if (dynamic_cast<Object*>(t->getObject()) == nullptr ||
 		!t->getObject()->getClass()->instanceOf(GLOBAL::getClasses()->getClass(Paths::Boolean)))
-		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "While1", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
+		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"While1", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
 	bool v{ ((BooleanO*)t->getObject())->m_value };
 	delete t;
 	while (v) {
@@ -32,7 +32,7 @@ DTO::CommandReturn* DTO::While::exec(MemoryObject& pre_mem)
 			return t;
 		if (dynamic_cast<Object*>(t->getObject()) == nullptr ||
 			!t->getObject()->getClass()->instanceOf(GLOBAL::getClasses()->getClass(Paths::Boolean)))
-			return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "While2", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
+			return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"While2", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
 		v = ((BooleanO*)t->getObject())->m_value;
 		delete t;
 	}
@@ -64,7 +64,7 @@ DTO::CommandReturn* DTO::For::exec(MemoryObject& pre_mem)
 		return t;
 	if (dynamic_cast<Object*>(t->getObject()) == nullptr ||
 		!t->getObject()->getClass()->instanceOf(GLOBAL::getClasses()->getClass(Paths::Boolean)))
-		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "For1", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
+		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"For1", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
 	bool v{ ((BooleanO*)t->getObject())->m_value };
 	delete t;
 	while (v) {
@@ -87,7 +87,7 @@ DTO::CommandReturn* DTO::For::exec(MemoryObject& pre_mem)
 			return t;
 		if (dynamic_cast<Object*>(t->getObject()) == nullptr ||
 			!t->getObject()->getClass()->instanceOf(GLOBAL::getClasses()->getClass(Paths::Boolean)))
-			return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), "For2", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
+			return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"For2", t, GLOBAL::getClasses()->getClass(Paths::Boolean)), false, true);
 		v = ((BooleanO*)t->getObject())->m_value;
 		delete t;
 	}

@@ -23,7 +23,7 @@ namespace DTO {
 
 	class FunctionClass : public Class {
 	public:
-		FunctionClass() : Class("Function", Paths::Function, GLOBAL::getClasses()->getClass(Paths::Object)) {
+		FunctionClass() : Class(L"Function", Paths::Function, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {
@@ -31,8 +31,8 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				FunctionO* o{ (FunctionO*)mem.get("this") };
-				FunctionO* c{ (FunctionO*)mem.get("c") };
+				FunctionO* o{ (FunctionO*)mem.get(L"this") };
+				FunctionO* c{ (FunctionO*)mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_value == c->m_value), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -42,13 +42,13 @@ namespace DTO {
 			StringC* m_s;
 			ToString(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				FunctionO* a{ (FunctionO*)mem.get("this") };
+				FunctionO* a{ (FunctionO*)mem.get(L"this") };
 				Signature* sig{ a->m_value->getSignature() };
-				std::string s{ "Function<" };
+				std::wstring s{ L"Function<" };
 				for (size_t c{ 0 }; c < sig->getArgsLen(); c++)
-					s += sig->getArgs()[c].type->getName() + ",";
-				s += sig->getReturnType() == nullptr ? "void" : sig->getReturnType()->getName();
-				return new CommandReturn(new StringO(m_s, s + ">"), true, false);
+					s += sig->getArgs()[c].type->getName() + L",L";
+				s += sig->getReturnType() == nullptr ? L"void" : sig->getReturnType()->getName();
+				return new CommandReturn(new StringO(m_s, s + L">"), true, false);
 			}
 			Command* clone()override { return new ToString(m_s); }
 		};
@@ -57,8 +57,8 @@ namespace DTO {
 			FunctionClass* m_s;
 			FunctionConstruct(FunctionClass* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				mem.set("this", a);
+				IObject* a{ mem.get(L"c") };
+				mem.set(L"this", a);
 				return new CommandReturn(a, true, false);
 			}
 			Command* clone()override { return new FunctionConstruct(m_s); }
@@ -68,11 +68,11 @@ namespace DTO {
 			FunctionClass* m_s;
 			Execute(FunctionClass* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				FunctionO* a{ (FunctionO*)mem.get("this") };
+				FunctionO* a{ (FunctionO*)mem.get(L"this") };
 				size_t size{ mem.size() - 1 };
 				IObject** args{ new IObject * [size] };
 				for (size_t c{ 0 }; c < size; c++) {
-					args[c] = mem.get(std::to_string(c));
+					args[c] = mem.get(std::to_wstring(c));
 				}
 				MemoryObject mem2{};
 				CommandReturn* q{ a->m_value->exec(mem2, args, size) };

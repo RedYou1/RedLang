@@ -9,10 +9,10 @@ namespace DTO {
 	class ReplaceStatVar : public Command {
 	private:
 		Class* m_class;
-		std::string m_name;
+		std::wstring m_name;
 		Command* m_value;
 	public:
-		ReplaceStatVar(Class* _class, std::string name, Command* value);
+		ReplaceStatVar(Class* _class, std::wstring name, Command* value);
 		virtual ~ReplaceStatVar() override { delete m_value; }
 
 		CommandReturn* exec(MemoryObject& mem) override;

@@ -8,32 +8,32 @@
 namespace DTO {
 	class MemorySourceFile {
 	private:
-		std::map<std::string, SourceFile*> m_vars;
+		std::map<std::wstring, SourceFile*> m_vars;
 		bool m_delete;
 	public:
-		MemorySourceFile(bool _delete) : m_delete(_delete), m_vars(std::map<std::string, SourceFile*>()) {}
+		MemorySourceFile(bool _delete) : m_delete(_delete), m_vars(std::map<std::wstring, SourceFile*>()) {}
 		~MemorySourceFile();
 
-		void add(std::string name, SourceFile* o);
-		void set(std::string name, SourceFile* o);
+		void add(std::wstring name, SourceFile* o);
+		void set(std::wstring name, SourceFile* o);
 
-		bool containKey(std::string* name, MemorySourceFile* _genTypes = nullptr);
+		bool containKey(std::wstring* name, MemorySourceFile* _genTypes = nullptr);
 
-		SourceFile* get(std::string name);
-		Instanciable* getType(std::string name);
-		Interface* getInterface(std::string name);
-		Class* getClass(std::string name);
+		SourceFile* get(std::wstring name);
+		Instanciable* getType(std::wstring name);
+		Interface* getInterface(std::wstring name);
+		Class* getClass(std::wstring name);
 
-		SourceFile* checkGet(std::string name);
-		Instanciable* checkGetType(std::string name);
-		Interface* checkGetInterface(std::string name);
-		Class* checkGetClass(std::string name);
+		SourceFile* checkGet(std::wstring name);
+		Instanciable* checkGetType(std::wstring name);
+		Interface* checkGetInterface(std::wstring name);
+		Class* checkGetClass(std::wstring name);
 
 		size_t size();
 
 		template <class K>
-		void forEach(K* global, void(*func)(K* global, std::string name, SourceFile* ob)) {
-			for (typename std::map<std::string, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
+		void forEach(K* global, void(*func)(K* global, std::wstring name, SourceFile* ob)) {
+			for (typename std::map<std::wstring, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
 				func(global, it->first, it->second);
 			}
 		}

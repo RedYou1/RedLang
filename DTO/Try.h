@@ -11,12 +11,12 @@ namespace DTO {
 	private:
 		FunctionBlock* m_try;
 		Instanciable** m_catchKeys;
-		std::string* m_names;
+		std::wstring* m_names;
 		FunctionBlock** m_catchs;
 		FunctionBlock* m_finally;
 		size_t m_catchLen;
 	public:
-		Try(FunctionBlock* t_try, Instanciable** catchKeys, std::string* names, FunctionBlock** catchs, size_t catchLen, FunctionBlock* finally);
+		Try(FunctionBlock* t_try, Instanciable** catchKeys, std::wstring* names, FunctionBlock** catchs, size_t catchLen, FunctionBlock* finally);
 		virtual ~Try() override;
 
 		CommandReturn* exec(MemoryObject& mem) override;

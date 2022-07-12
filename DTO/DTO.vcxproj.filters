@@ -216,9 +216,6 @@
     <ClInclude Include="Var.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Array.h">
-      <Filter>Fichiers d%27en-tête\RedLang</Filter>
-    </ClInclude>
     <ClInclude Include="Iterable.h">
       <Filter>Fichiers d%27en-tête\RedLang\Iterable</Filter>
     </ClInclude>
@@ -236,6 +233,12 @@
     </ClInclude>
     <ClInclude Include="Instanciable.h">
       <Filter>Fichiers d%27en-tête\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Array.h">
+      <Filter>Fichiers d%27en-tête\RedLang\Iterable</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>Fichiers d%27en-tête\RedLang</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,9 +344,6 @@
     <ClCompile Include="ReplaceVar.cpp">
       <Filter>Fichiers sources\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="Array.cpp">
-      <Filter>Fichiers sources\RedLang</Filter>
-    </ClCompile>
     <ClCompile Include="Iterable.cpp">
       <Filter>Fichiers sources\RedLang\Iterable</Filter>
     </ClCompile>
@@ -358,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="Generic.cpp">
       <Filter>Fichiers sources\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Array.cpp">
+      <Filter>Fichiers sources\RedLang\Iterable</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

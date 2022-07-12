@@ -16,7 +16,7 @@ namespace DTO {
 
 	class ObjectClass : public Class {
 	public:
-		ObjectClass() : Class("Object", Paths::Object, nullptr) {
+		ObjectClass() : Class(L"Object", Paths::Object, nullptr) {
 		}
 
 		class Equals :public Command {
@@ -24,8 +24,8 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* o{ mem.get("this") };
-				IObject* c{ mem.get("c") };
+				IObject* o{ mem.get(L"this") };
+				IObject* c{ mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o == c), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -35,8 +35,8 @@ namespace DTO {
 			StringC* m_s;
 			ToString(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* o{ mem.get("this") };
-				std::stringstream ss;
+				IObject* o{ mem.get(L"this") };
+				std::wstringstream ss;
 
 
 				ss << o->getClass()->getName() << "@";

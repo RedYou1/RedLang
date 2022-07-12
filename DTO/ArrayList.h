@@ -49,21 +49,21 @@ namespace DTO {
 		class ArrayListC : public Class {
 		public:
 			Instanciable* m_type;
-			ArrayListC(std::string name, Instanciable* type);
+			ArrayListC(std::wstring name, Instanciable* type);
 		};
 	public:
-		ArrayList() : GenericStatic("ArrayList", Paths::ArrayList, 1) {
+		ArrayList() : GenericStatic(L"ArrayList", Paths::ArrayList, 1) {
 		}
 
-		SourceFile* create(std::string newName, Instanciable** gens, size_t genSize)override;
+		SourceFile* create(std::wstring newName, Instanciable** gens, size_t genSize)override;
 
 		class Equals :public Command {
 		public:
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* o{ (ArrayListO*)mem.get("this") };
-				ArrayListO* c{ (ArrayListO*)mem.get("c") };
+				ArrayListO* o{ (ArrayListO*)mem.get(L"this") };
+				ArrayListO* c{ (ArrayListO*)mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_value == c->m_value), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -74,7 +74,7 @@ namespace DTO {
 			ArrayConstructEmpty(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				Object* c{ new ArrayListO(m_s) };
-				mem.set("this", c);
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new ArrayConstructEmpty(m_s); }
@@ -84,14 +84,14 @@ namespace DTO {
 			ArrayListC* m_s;
 			ArrayConstructSize(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				CommandReturn* q{ a->exec("toLong", a) };
+				IObject* a{ mem.get(L"c") };
+				CommandReturn* q{ a->exec(L"toLong", a) };
 				size_t size{ (size_t)((LongO*)q->getObject())->m_value };
 				ArrayListO* c{ new ArrayListO(m_s, size) };
 				for (size_t i{ 0 }; i < size; i++) {
 					GarbageCollector::Add(c->m_value[i]);
 				}
-				mem.set("this", c);
+				mem.set(L"this", c);
 				delete q;
 				return new CommandReturn(c, true, false);
 			}
@@ -106,7 +106,7 @@ namespace DTO {
 				get(ArrayListO* array) :m_array(array), m_index(0) {}
 				get(ArrayListO* array, size_t index) :m_array(array), m_index(index) {}
 				CommandReturn* exec(MemoryObject& mem) override {
-					IObject* a{ mem.get("c") };
+					IObject* a{ mem.get(L"c") };
 					m_array->m_value[m_index] = a;
 					GarbageCollector::Add(a);
 					m_index++;
@@ -118,21 +118,21 @@ namespace DTO {
 			ArrayListC* m_s;
 			ArrayConstructCopy(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				CommandReturn* q{ a->exec("size", a) };
+				IObject* a{ mem.get(L"c") };
+				CommandReturn* q{ a->exec(L"size", a) };
 				size_t size{ (size_t)(((LongO*)q->getObject())->m_value) };
 				ArrayListO* c{ new ArrayListO(m_s, size) };
 				FunctionO* func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function),
-					new Function(new Signature("", nullptr, new Arg[1]{ m_s->m_type, "c" }, 1),
+					new Function(new Signature(L"", nullptr, new Arg[1]{ m_s->m_type, L"c" }, 1),
 						new Command * [1]{ new get(c) }, 1)) };
 				IObject** i{ new IObject * [2]{a,func} };
-				CommandReturn* e{ a->exec("forEach", i, 2) };
+				CommandReturn* e{ a->exec(L"forEach", i, 2) };
 				delete[] i;
 				delete e;
 				delete q;
 				delete func->m_value;
 				delete func;
-				mem.set("this", c);
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new ArrayConstructCopy(m_s); }
@@ -142,8 +142,8 @@ namespace DTO {
 		public:
 			forEach() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* array{ (ArrayListO*)mem.get("this") };
-				FunctionO* func{ (FunctionO*)mem.get("func") };
+				ArrayListO* array{ (ArrayListO*)mem.get(L"this") };
+				FunctionO* func{ (FunctionO*)mem.get(L"func") };
 				size_t size{ array->m_value.size() };
 				IObject** i{ new IObject * [1] };
 				for (size_t c{ 0 }; c < size; c++) {
@@ -161,8 +161,8 @@ namespace DTO {
 		public:
 			add() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* a{ (ArrayListO*)mem.get("this") };
-				IObject* b{ mem.get("c") };
+				ArrayListO* a{ (ArrayListO*)mem.get(L"this") };
+				IObject* b{ mem.get(L"c") };
 				a->m_value.push_back(b);
 				GarbageCollector::Add(b);
 				return new CommandReturn(new NullObject(), true, false);
@@ -174,15 +174,15 @@ namespace DTO {
 		public:
 			addI() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* a{ (ArrayListO*)mem.get("this") };
-				IObject* i{ mem.get("i") };
-				IObject* b{ mem.get("c") };
-				CommandReturn* q{ i->exec("toLong",i) };
+				ArrayListO* a{ (ArrayListO*)mem.get(L"this") };
+				IObject* i{ mem.get(L"i") };
+				IObject* b{ mem.get(L"c") };
+				CommandReturn* q{ i->exec(L"toLong",i) };
 				size_t index{ (size_t)(((LongO*)q->getObject())->m_value) };
 				delete q;
 				size_t size{ a->m_value.size() };
 				if (index > size) {
-					return new CommandReturn(new IllegalArgumentExceptionO(GLOBAL::getClasses()->getClass(Paths::IllegalArgumentException), "index too big"), true, true);
+					return new CommandReturn(new IllegalArgumentExceptionO(GLOBAL::getClasses()->getClass(Paths::IllegalArgumentException), L"index too big"), true, true);
 				}
 				a->m_value.insert(a->m_value.begin() + index, b);
 				GarbageCollector::Add(b);
@@ -197,13 +197,13 @@ namespace DTO {
 			FunctionO* m_func;
 			addAll(ArrayListC* s) :m_s{ s },
 				m_func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function), new Function(
-					new Signature("", nullptr,new Arg[2]{ m_s,"this", m_s->m_type,"c" }, 2), new Command * [1]{ new add() }, 1)) }{}
+					new Signature(L"", nullptr,new Arg[2]{ m_s,L"this", m_s->m_type,L"c" }, 2), new Command * [1]{ new add() }, 1)) }{}
 			~addAll() override { delete m_func->m_value; delete m_func; }
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* a{ (ArrayListO*)mem.get("this") };
-				IObject* b{ mem.get("c") };
+				ArrayListO* a{ (ArrayListO*)mem.get(L"this") };
+				IObject* b{ mem.get(L"c") };
 				IObject** ob{ new IObject * [2]{a,m_func} };
-				CommandReturn* q{ b->exec("forEach",ob,2) };
+				CommandReturn* q{ b->exec(L"forEach",ob,2) };
 				delete[] ob;
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
@@ -219,7 +219,7 @@ namespace DTO {
 				size_t m_index;
 				addInside(ArrayListO* array, size_t index) :m_array(array), m_index(index) {}
 				CommandReturn* exec(MemoryObject& mem) override {
-					IObject* a{ mem.get("c") };
+					IObject* a{ mem.get(L"c") };
 					m_array->m_value[m_index] = a;
 					GarbageCollector::Add(a);
 					m_index++;
@@ -231,13 +231,13 @@ namespace DTO {
 			ArrayListC* m_s;
 			addAllI(ArrayListC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* array{ (ArrayListO*)mem.get("this") };
-				IObject* a{ mem.get("c") };
-				IObject* i{ mem.get("i") };
-				CommandReturn* q{ a->exec("size", a) };
+				ArrayListO* array{ (ArrayListO*)mem.get(L"this") };
+				IObject* a{ mem.get(L"c") };
+				IObject* i{ mem.get(L"i") };
+				CommandReturn* q{ a->exec(L"size", a) };
 				size_t size{ (size_t)(((LongO*)q->getObject())->m_value) };
 				delete q;
-				q = i->exec("toLong", i);
+				q = i->exec(L"toLong", i);
 				size_t index{ (size_t)(((LongO*)q->getObject())->m_value) };
 				delete q;
 
@@ -246,11 +246,11 @@ namespace DTO {
 
 				FunctionO* func{
 				new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function),
-					new Function(new Signature("", nullptr, new Arg[1]{ m_s->m_type, "c" }, 1),
+					new Function(new Signature(L"", nullptr, new Arg[1]{ m_s->m_type, L"c" }, 1),
 						new Command * [1]{ new addInside(array,index) }, 1))
 				};
 				IObject** ob{ new IObject * [2]{a,func} };
-				CommandReturn* e{ a->exec("forEach", ob, 2) };
+				CommandReturn* e{ a->exec(L"forEach", ob, 2) };
 				delete[] ob;
 				delete e;
 				delete func->m_value;
@@ -264,9 +264,9 @@ namespace DTO {
 		public:
 			get() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				CommandReturn* q{ a->exec("toLong", a) };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"c") };
+				CommandReturn* q{ a->exec(L"toLong", a) };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 				IObject* arro{ arr->m_value[((NumberO*)q->getObject())->toLong()] };
 				delete q;
 				return new CommandReturn(arro, true, false);
@@ -278,11 +278,11 @@ namespace DTO {
 		public:
 			indexOf() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"c") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 				for (size_t i{ 0 }; i < arr->m_value.size(); i++) {
 					IObject** args{ new IObject * [2]{arr->m_value[i],a} };
-					CommandReturn* q{ arr->m_value[i]->exec("equals",args,2) };
+					CommandReturn* q{ arr->m_value[i]->exec(L"equals",args,2) };
 					if (q->isThrow())
 						return q;
 					bool r{ ((BooleanO*)q->getObject())->m_value };
@@ -300,11 +300,11 @@ namespace DTO {
 		public:
 			lastIndexOf() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"c") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 				for (size_t i{ arr->m_value.size() };; i--) {
 					IObject** args{ new IObject * [2]{arr->m_value[i],a} };
-					CommandReturn* q{ arr->m_value[i]->exec("equals",args,2) };
+					CommandReturn* q{ arr->m_value[i]->exec(L"equals",args,2) };
 					if (q->isThrow())
 						return q;
 					bool r{ ((BooleanO*)q->getObject())->m_value };
@@ -324,7 +324,7 @@ namespace DTO {
 		public:
 			clear() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 				for (size_t i{ 0 }; i < arr->m_value.size(); i++) {
 					GarbageCollector::Remove(arr->m_value[i]);
 				}
@@ -340,16 +340,16 @@ namespace DTO {
 			contains() {}
 			contains(ArrayListO* arr) :m_arr{ arr } {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
+				IObject* a{ mem.get(L"c") };
 				ArrayListO* arr;
 				if (m_arr == nullptr)
-					arr = (ArrayListO*)mem.get("this");
+					arr = (ArrayListO*)mem.get(L"this");
 				else
 					arr = m_arr;
 
 				for (size_t i{ 0 }; i < arr->m_value.size(); i++) {
 					IObject** args{ new IObject * [2]{arr->m_value[i],a} };
-					CommandReturn* q{ arr->m_value[i]->exec("equals",args,2) };
+					CommandReturn* q{ arr->m_value[i]->exec(L"equals",args,2) };
 					if (q->isThrow())
 						return q;
 					bool r{ ((BooleanO*)q->getObject())->m_value };
@@ -367,18 +367,18 @@ namespace DTO {
 		public:
 			containsAll() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"c") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				FunctionO* func{ new FunctionO(GLOBAL::getClasses()->getClass(Paths::Function),
-					new Function(new Signature("",GLOBAL::getClasses()->getClass(Paths::Boolean),
-						new Arg[1]{GLOBAL::getClasses()->getClass(Paths::Object),"c"},
+					new Function(new Signature(L"",GLOBAL::getClasses()->getClass(Paths::Boolean),
+						new Arg[1]{GLOBAL::getClasses()->getClass(Paths::Object),L"c"},
 							2),new Command * [1]{new contains(arr)},1)) };
 
 				IObject** args{ new IObject * [2]{a,func} };
 
 
-				CommandReturn* q{ a->exec("forEach", args, 2) };
+				CommandReturn* q{ a->exec(L"forEach", args, 2) };
 				if (q->isThrow())
 					return q;
 				bool r{ ((BooleanO*)q->getObject())->m_value };
@@ -393,7 +393,7 @@ namespace DTO {
 		public:
 			isEmpty() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				return new CommandReturn(new BooleanO(GLOBAL::getClasses()->getClass(Paths::Boolean), arr->m_value.empty()), true, false);
 			}
@@ -406,17 +406,17 @@ namespace DTO {
 			remove() {}
 			remove(ArrayListO* arr) :m_arr(arr) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
+				IObject* a{ mem.get(L"c") };
 				ArrayListO* arr;
 
 				if (m_arr == nullptr)
-					arr = (ArrayListO*)mem.get("this");
+					arr = (ArrayListO*)mem.get(L"this");
 				else
 					arr = m_arr;
 
 				for (size_t i{ 0 }; i < arr->m_value.size(); i++) {
 					IObject** args{ new IObject * [2]{arr->m_value[i],a} };
-					CommandReturn* q{ arr->m_value[i]->exec("equals",args,2) };
+					CommandReturn* q{ arr->m_value[i]->exec(L"equals",args,2) };
 					if (q->isThrow())
 						return q;
 					bool r{ ((BooleanO*)q->getObject())->m_value };
@@ -437,10 +437,10 @@ namespace DTO {
 		public:
 			removeI() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("i") };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"i") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
-				CommandReturn* q{ a->exec("toLong", a) };
+				CommandReturn* q{ a->exec(L"toLong", a) };
 				if (q->isThrow())
 					return q;
 				int64_t i{ ((LongO*)q->getObject())->m_value };
@@ -456,18 +456,18 @@ namespace DTO {
 		public:
 			removeAll() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"c") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				FunctionO* func{ new FunctionO(GLOBAL::getClasses()->getClass(Paths::Function),
-					new Function(new Signature("",GLOBAL::getClasses()->getClass(Paths::Boolean),
-						new Arg[1]{GLOBAL::getClasses()->getClass(Paths::Object),"c"},
+					new Function(new Signature(L"",GLOBAL::getClasses()->getClass(Paths::Boolean),
+						new Arg[1]{GLOBAL::getClasses()->getClass(Paths::Object),L"c"},
 							2),new Command * [1]{new remove(arr)},1)) };
 
 				IObject** args{ new IObject * [2]{a,func} };
 
 
-				CommandReturn* q{ a->exec("forEach", args, 2) };
+				CommandReturn* q{ a->exec(L"forEach", args, 2) };
 				if (q->isThrow())
 					return q;
 				delete[] args;
@@ -482,7 +482,7 @@ namespace DTO {
 		public:
 			size() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				return new CommandReturn(new LongO(GLOBAL::getClasses()->getClass(Paths::Long), arr->m_value.size()), true, false);
 			}
@@ -493,7 +493,7 @@ namespace DTO {
 		public:
 			capacity() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				return new CommandReturn(new LongO(GLOBAL::getClasses()->getClass(Paths::Long), arr->m_value.capacity()), true, false);
 			}
@@ -504,13 +504,13 @@ namespace DTO {
 		public:
 			set() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				CommandReturn* q{ a->exec("toLong", a) };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"c") };
+				CommandReturn* q{ a->exec(L"toLong", a) };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 				GarbageCollector::Remove(arr->m_value[((NumberO*)q->getObject())->toLong()]);
 				int64_t i{ ((LongO*)q->getObject())->m_value };
 				GarbageCollector::Remove(arr->m_value[i]);
-				arr->m_value[i] = mem.get("o");
+				arr->m_value[i] = mem.get(L"o");
 				GarbageCollector::Add(arr->m_value[i]);
 				GarbageCollector::Add(arr->m_value[((NumberO*)q->getObject())->toLong()]);
 				delete q;
@@ -540,8 +540,8 @@ namespace DTO {
 		public:
 			sort() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("func") };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"func") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				std::sort(arr->m_value.begin(), arr->m_value.end(), doSort{ a });
 
@@ -555,13 +555,13 @@ namespace DTO {
 			ArrayListC* m_s;
 			subList(ArrayListC* s) :m_s{ s } {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("a") };
-				IObject* b{ mem.get("b") };
+				IObject* a{ mem.get(L"a") };
+				IObject* b{ mem.get(L"b") };
 
-				int64_t i1{ ((LongO*)a->exec("toLong",a)->getObject())->m_value };
-				int64_t i2{ ((LongO*)b->exec("toLong",b)->getObject())->m_value };
+				int64_t i1{ ((LongO*)a->exec(L"toLong",a)->getObject())->m_value };
+				int64_t i2{ ((LongO*)b->exec(L"toLong",b)->getObject())->m_value };
 
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				ArrayListO* newArr{ new ArrayListO(m_s, i2 - i1) };
 
@@ -580,7 +580,7 @@ namespace DTO {
 			Instanciable* m_default;
 			toArray(Instanciable* _default) :m_default(_default) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ClassO* a{ (ClassO*)mem.get("c") };
+				ClassO* a{ (ClassO*)mem.get(L"c") };
 
 				Instanciable* i;
 				if (a == nullptr)
@@ -588,9 +588,9 @@ namespace DTO {
 				else
 					i = (Instanciable*)a->m_value;
 
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
-				ArrayO* newArr{ new ArrayO(GLOBAL::getClasses()->getClass(Paths::Array + '<' + i->getName() + '>'),arr->m_value.size()) };
+				ArrayO* newArr{ new ArrayO(GLOBAL::getClasses()->getClass(Paths::Array + L'<' + i->getName() + L'>'),arr->m_value.size()) };
 
 				for (size_t i{ 0 }; i < arr->m_value.size(); i++) {
 					newArr->m_value[i] = arr->m_value[i];
@@ -606,9 +606,9 @@ namespace DTO {
 		public:
 			ensureCapacity() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				IObject* a{ mem.get("c") };
-				CommandReturn* q{ a->exec("toLong", a) };
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				IObject* a{ mem.get(L"c") };
+				CommandReturn* q{ a->exec(L"toLong", a) };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 				size_t i{ arr->m_value.size() };
 				arr->m_value.reserve(((LongO*)q->getObject())->m_value);
 				for (; i < arr->m_value.size(); i++) {
@@ -625,7 +625,7 @@ namespace DTO {
 		public:
 			trimToSize() {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ArrayListO* arr{ (ArrayListO*)mem.get("this") };
+				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 				arr->m_value.resize(arr->m_value.size());
 				return new CommandReturn(new NullObject(), true, false);
 			}

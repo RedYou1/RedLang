@@ -51,7 +51,7 @@ namespace DTO {
 
 	class ThreadC : public Class {
 	public:
-		ThreadC() : Class("Thread", Paths::Thread, GLOBAL::getClasses()->getClass(Paths::Object)) {
+		ThreadC() : Class(L"Thread", Paths::Thread, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {
@@ -59,8 +59,8 @@ namespace DTO {
 			BooleanC* m_s;
 			Equals(BooleanC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ThreadO* o{ (ThreadO*)mem.get("this") };
-				ThreadO* c{ (ThreadO*)mem.get("c") };
+				ThreadO* o{ (ThreadO*)mem.get(L"this") };
+				ThreadO* c{ (ThreadO*)mem.get(L"c") };
 				return new CommandReturn(new BooleanO(m_s, o->m_func == c->m_func), true, false);
 			}
 			Command* clone()override { return new Equals(m_s); }
@@ -71,9 +71,9 @@ namespace DTO {
 			StringC* m_s;
 			ToString(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ThreadO* a{ (ThreadO*)mem.get("this") };
-				std::string s{ a->m_thread == nullptr ? "not " : "" };
-				return new CommandReturn(new StringO(m_s, "Thread is " + s + "running"), true, false);
+				ThreadO* a{ (ThreadO*)mem.get(L"this") };
+				std::wstring s{ a->m_thread == nullptr ? L"not " : L"" };
+				return new CommandReturn(new StringO(m_s, L"Thread is " + s + L"running"), true, false);
 			}
 			Command* clone()override { return new ToString(m_s); }
 		};
@@ -93,18 +93,18 @@ namespace DTO {
 			ThreadC* m_s;
 			ThreadConstruct(ThreadC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				FunctionO* s{ (FunctionO*)mem.get("func") };
+				FunctionO* s{ (FunctionO*)mem.get(L"func") };
 
 				size_t size{ mem.size() - 2 };
 
 				IObject** args{ new IObject * [size] };
 				for (size_t i{ 0 }; i < size; i++) {
-					args[i] = mem.get(std::to_string(i));
+					args[i] = mem.get(std::to_wstring(i));
 					GarbageCollector::Add(args[i]);
 				}
 
 				Object* c{ new ThreadO(m_s, s->m_value, args, size) };
-				mem.set("this", c);
+				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
 			Command* clone()override { return new ThreadConstruct(m_s); }
@@ -131,9 +131,9 @@ namespace DTO {
 			StringC* m_s;
 			Start(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ThreadO* a{ (ThreadO*)mem.get("this") };
+				ThreadO* a{ (ThreadO*)mem.get(L"this") };
 				if (a->m_thread != nullptr)
-					return new CommandReturn(new StringO(m_s, "Thread already running"), true, true);
+					return new CommandReturn(new StringO(m_s, L"Thread already running"), true, true);
 
 				a->m_joined = false;
 				a->m_thread = new std::thread(start, a);
@@ -148,11 +148,11 @@ namespace DTO {
 			StringC* m_s;
 			Join(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				ThreadO* a{ (ThreadO*)mem.get("this") };
+				ThreadO* a{ (ThreadO*)mem.get(L"this") };
 				if (a->m_thread == nullptr)
 					return new CommandReturn(new NullObject(), true, false);
 				if (!a->m_thread->joinable())
-					return new CommandReturn(new StringO(m_s, "Thread not joinable"), true, true);
+					return new CommandReturn(new StringO(m_s, L"Thread not joinable"), true, true);
 				a->m_joined = true;
 				a->m_thread->join();
 

@@ -37,11 +37,11 @@ namespace DTO {
 	class ForEach :public Command {
 	private:
 		Instanciable* m_type;
-		std::string m_name;
+		std::wstring m_name;
 		Command* m_iterable;
 		Function* m_func;
 	public:
-		ForEach(Instanciable* type, std::string name, Command* iterable, Function* func) :
+		ForEach(Instanciable* type, std::wstring name, Command* iterable, Function* func) :
 			m_type(type), m_name(name), m_iterable(iterable), m_func(func) {}
 		~ForEach() { delete m_iterable; delete m_func; }
 		CommandReturn* exec(MemoryObject& mem) override {
@@ -50,7 +50,7 @@ namespace DTO {
 			FunctionO* func{ new FunctionO(GLOBAL::getClasses()->getClass(Paths::Function),m_func) };
 
 			IObject** args{ new IObject * [2]{q->getObject(),func} };
-			delete q->getObject()->exec("forEach", args, 2);
+			delete q->getObject()->exec(L"forEach", args, 2);
 
 			delete[] args;
 			delete q;

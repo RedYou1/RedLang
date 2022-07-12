@@ -51,9 +51,9 @@ namespace DTO {
 
 	class Generic : public SourceFile {
 	public:
-		Generic(std::string name, std::string path) :SourceFile(name, path) {}
+		Generic(std::wstring name, std::wstring path) :SourceFile(name, path) {}
 		virtual ~Generic() override = default;
-		virtual SourceFile* create(std::string newName, Instanciable** gens, size_t genSize) = 0;
+		virtual SourceFile* create(std::wstring newName, Instanciable** gens, size_t genSize) = 0;
 		virtual void add(GenPossibility* gens, size_t genSize, SourceFile* _class) = 0;
 		virtual bool contains(Instanciable** gens, size_t genSize) = 0;
 		virtual SourceFile* get(Instanciable** gens, size_t genSize) = 0;
@@ -63,7 +63,7 @@ namespace DTO {
 	private:
 		std::forward_list<std::pair<std::vector<GenPossibility>, SourceFile*>> m_classes;
 	public:
-		GenericDynamic(std::string name, std::string path) :Generic(name, path) {}
+		GenericDynamic(std::wstring name, std::wstring path) :Generic(name, path) {}
 		virtual ~GenericDynamic() override;
 		void add(GenPossibility* gens, size_t genSize, SourceFile* _class) override;
 		bool contains(Instanciable** gens, size_t genSize)override;
@@ -75,7 +75,7 @@ namespace DTO {
 		std::forward_list<std::pair<GenPossibility*, SourceFile*>> m_classes;
 		size_t m_genSize;
 	public:
-		GenericStatic(std::string name, std::string path, size_t genSize) :Generic(name, path), m_genSize(genSize) {}
+		GenericStatic(std::wstring name, std::wstring path, size_t genSize) :Generic(name, path), m_genSize(genSize) {}
 		virtual ~GenericStatic() override;
 		size_t genSize() { return m_genSize; }
 		void add(GenPossibility* gens, size_t genSize, SourceFile* _class) override;
@@ -85,11 +85,11 @@ namespace DTO {
 
 	class GenericI : public Instanciable {
 	private:
-		std::string* m_names;
+		std::wstring* m_names;
 		GenPossibility* m_possibilities;
 		size_t m_possSize;
 	public:
-		GenericI(std::string name, std::string path, GenPossibility* possibilities, std::string* names, size_t possSize) :Instanciable(name, path), m_names(names), m_possibilities{ possibilities }, m_possSize{ possSize } {}
+		GenericI(std::wstring name, std::wstring path, GenPossibility* possibilities, std::wstring* names, size_t possSize) :Instanciable(name, path), m_names(names), m_possibilities{ possibilities }, m_possSize{ possSize } {}
 		bool instanceOf(Instanciable* _class) override;
 	};
 }

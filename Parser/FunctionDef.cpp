@@ -4,7 +4,7 @@
 #include "../DTO/Return.h"
 #include "../DTO/MemoryFunction.h"
 
-Parser::FunctionDef::FunctionDef(std::string name, DTO::Class* functionOf, DTO::Signature* signature, std::string definition, DTO::MemorySourceFile* genTypes)
+Parser::FunctionDef::FunctionDef(std::wstring name, DTO::Class* functionOf, DTO::Signature* signature, std::wstring definition, DTO::MemorySourceFile* genTypes)
 	:DTO::PreFunction(signature), m_name(name), m_functionOf(functionOf), m_definition(definition), m_genTypes(genTypes)
 {
 }
@@ -22,14 +22,14 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 
 	bool constructor{ false };
 	{
-		std::string sss{ m_functionOf->getName() };
+		std::wstring sss{ m_functionOf->getName() };
 		constructor = DTO::myString{ &sss }.startWith(m_name);
 	}
 
 
 	if (constructor) {
 		//only classes
-		if (m_definition.at(0) == ':') {
+		if (m_definition.at(0) == L':') {
 			s.extract(1);
 			s.removeUseless();
 			DTO::MemoryVariable var{};
@@ -38,10 +38,10 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 		}
 		else {
 			DTO::Class* parent{ m_functionOf->extends() };
-			if (!parent->getName()._Equal("Object")) {
+			if (!parent->getName()._Equal(L"Object")) {
 				DTO::Instanciable** cc{ new DTO::Instanciable * [1]{parent} };
 				if (DTO::Function * func{ parent->getFuncs()->get(parent->getName(), cc, 1) }) {
-					DTO::Command** cc2{ new DTO::Command * [1]{new DTO::Return("this", m_functionOf)} };
+					DTO::Command** cc2{ new DTO::Command * [1]{new DTO::Return(L"this", m_functionOf)} };
 					commands.push(new DTO::FunctionKnownCom(func, cc2, 1));
 				}
 				else {
@@ -52,26 +52,26 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 		}
 	}
 
-	std::queue<std::string> func{ DTO::myString(&s.extractFunc2()).split2(';') };
+	std::queue<std::wstring> func{ DTO::myString(&s.extractFunc2()).split2(';') };
 
 	if (!func.empty()) {
-		std::string a{ func.front() };
+		std::wstring a{ func.front() };
 		DTO::myString m{ &a };
 		func.pop();
 
 		while (!func.empty()) {
 			m.removeUseless();
-			if (m.startWith("try")) {
+			if (m.startWith(L"try")) {
 				while (true) {
-					std::string n{ func.front() };
+					std::wstring n{ func.front() };
 					DTO::myString m2{ &n };
 					m2.removeUseless();
-					if (m2.startWith("catch")) {
+					if (m2.startWith(L"catch")) {
 						a += n;
 						func.pop();
 						continue;
 					}
-					if (m2.startWith("finally")) {
+					if (m2.startWith(L"finally")) {
 						a += n;
 						func.pop();
 					}
@@ -86,7 +86,7 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 	}
 
 	if (constructor) {
-		commands.push(new DTO::Return("this", m_signature->getReturnType()));
+		commands.push(new DTO::Return(L"this", m_signature->getReturnType()));
 	}
 
 	size_t len{ commands.size() };

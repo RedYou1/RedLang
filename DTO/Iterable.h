@@ -19,12 +19,12 @@ namespace DTO {
 		class IterableI : public Interface {
 		public:
 			Instanciable* m_type;
-			IterableI(std::string name, Instanciable* type);
+			IterableI(std::wstring name, Instanciable* type);
 		};
 	public:
-		Iterable() : GenericStatic("Iterable", Paths::Iterable, 1) {
+		Iterable() : GenericStatic(L"Iterable", Paths::Iterable, 1) {
 		}
 
-		SourceFile* create(std::string newName, Instanciable** gens, size_t genSize)override;
+		SourceFile* create(std::wstring newName, Instanciable** gens, size_t genSize)override;
 	};
 }

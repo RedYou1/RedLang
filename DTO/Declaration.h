@@ -9,10 +9,10 @@ namespace DTO {
 	class Declaration : public Command {
 	private:
 		Instanciable* m_type;
-		std::string m_name;
+		std::wstring m_name;
 		Command* m_cmd;
 	public:
-		Declaration(Instanciable* type, std::string name, Command* cmd);
+		Declaration(Instanciable* type, std::wstring name, Command* cmd);
 		virtual ~Declaration() override { delete m_cmd; }
 
 		CommandReturn* exec(MemoryObject& mem) override;

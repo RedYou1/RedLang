@@ -12,7 +12,7 @@ DTO::MemoryVar::MemoryVar(MemoryVar* parent)
 DTO::MemoryVar::~MemoryVar()
 {
 	delete[] m_int;
-	for (typename std::map<std::string, Var*>::iterator it = m_string.begin(); it != m_string.end(); ++it) {
+	for (typename std::map<std::wstring, Var*>::iterator it = m_string.begin(); it != m_string.end(); ++it) {
 		delete it->second;
 	}
 }
@@ -26,10 +26,10 @@ DTO::Var* DTO::MemoryVar::get(size_t i)
 	return m_int[i - m_min];
 }
 
-void DTO::MemoryVar::add(std::string name, Var* var)
+void DTO::MemoryVar::add(std::wstring name, Var* var)
 {
 	size_t _size{ thisSize() };
-	m_string.insert(std::pair<std::string, Var*>(name, var));
+	m_string.insert(std::pair<std::wstring, Var*>(name, var));
 	Var** t{ new Var * [_size + 1] };
 	memcpy(t, m_int, _size * sizeof(Var*));
 	t[_size] = var;
@@ -39,7 +39,7 @@ void DTO::MemoryVar::add(std::string name, Var* var)
 		m_max = var->m_index + 1;
 }
 
-DTO::Var* DTO::MemoryVar::get(std::string name)
+DTO::Var* DTO::MemoryVar::get(std::wstring name)
 {
 	if (m_string.find(name) == m_string.end()) {
 		if (m_parent != nullptr)
@@ -55,7 +55,7 @@ bool DTO::MemoryVar::containKey(size_t i)
 	return i < m_max;
 }
 
-bool DTO::MemoryVar::containKey(std::string name)
+bool DTO::MemoryVar::containKey(std::wstring name)
 {
 	return (m_parent != nullptr && m_parent->containKey(name)) || m_string.find(name) != m_string.end();
 }

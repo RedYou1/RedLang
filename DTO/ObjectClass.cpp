@@ -4,12 +4,12 @@
 
 DTO::CommandReturn* DTO::ObjectClass::GetClass::exec(MemoryObject& mem)
 {
-	IObject* o{ mem.get("this") };
+	IObject* o{ mem.get(L"this") };
 	return new CommandReturn(new ClassO(m_s, o->getClass()), true, false);
 }
 
 DTO::CommandReturn* DTO::ObjectClass::HashCode::exec(MemoryObject& mem)
 {
-	IObject* o{ mem.get("this") };
+	IObject* o{ mem.get(L"this") };
 	return new CommandReturn(new LongO(m_s, (uintptr_t)o), true, false);//TODO put it to ULong
 }

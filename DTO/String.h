@@ -13,13 +13,13 @@ namespace DTO {
 
 	class StringO : public Object {
 	public:
-		std::string m_value;
+		std::wstring m_value;
 
 		StringO(Class* type) :Object(type) {
-			m_value = "";
+			m_value = L"";
 		}
 
-		StringO(Class* type, std::string value) :Object(type) {
+		StringO(Class* type, std::wstring value) :Object(type) {
 			m_value = value;
 		}
 
@@ -28,7 +28,7 @@ namespace DTO {
 
 	class StringC : public Class {
 	public:
-		StringC() : Class("String", Paths::String, GLOBAL::getClasses()->getClass(Paths::Object)) {
+		StringC() : Class(L"String", Paths::String, GLOBAL::getClasses()->getClass(Paths::Object)) {
 		}
 
 		class Equals :public Command {
@@ -58,7 +58,7 @@ namespace DTO {
 			StringC* m_s;
 			ToString(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				return new CommandReturn(mem.get("this"), true, false);
+				return new CommandReturn(mem.get(L"this"), true, false);
 			}
 			Command* clone()override { return new ToString(m_s); }
 		};
@@ -67,10 +67,10 @@ namespace DTO {
 			StringC* m_s;
 			Concat(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				StringO* a{ (StringO*)mem.get("this") };
-				IObject* b{ mem.get("other") };
+				StringO* a{ (StringO*)mem.get(L"this") };
+				IObject* b{ mem.get(L"other") };
 
-				CommandReturn* q{ b->exec("toString",b) };
+				CommandReturn* q{ b->exec(L"toString",b) };
 
 				a->m_value += ((StringO*)q->getObject())->m_value;
 

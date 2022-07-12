@@ -103,7 +103,7 @@ namespace DTO {
 		virtual ~FunctionBlock();
 
 		CommandReturn* exec(MemoryObject& pre_mem) override;
-		CommandReturn* exec2(MemoryObject& pre_mem, std::string* name, IObject** args, size_t argsLen);
+		CommandReturn* exec2(MemoryObject& pre_mem, std::wstring* name, IObject** args, size_t argsLen);
 
 		Command** getCommands() { return m_commands; }
 		size_t getcommandLen() { return m_commandLen; }
@@ -128,11 +128,11 @@ namespace DTO {
 	class FunctionCom :public Command {
 	private:
 		Class* m_class;
-		std::string m_name;
+		std::wstring m_name;
 		Command** m_args;
 		size_t m_argsLen;
 	public:
-		FunctionCom(Class* _class, std::string name, Command** args, size_t argsLen);
+		FunctionCom(Class* _class, std::wstring name, Command** args, size_t argsLen);
 		virtual ~FunctionCom() override;
 		CommandReturn* exec(MemoryObject& pre_mem) override;
 		Command* clone() override;
@@ -141,11 +141,11 @@ namespace DTO {
 	class FunctionDynCom :public Command {
 	private:
 		Command* m_ob;
-		std::string m_name;
+		std::wstring m_name;
 		Command** m_args;
 		size_t m_argsLen;
 	public:
-		FunctionDynCom(Command* ob, std::string name, Command** args, size_t argsLen);
+		FunctionDynCom(Command* ob, std::wstring name, Command** args, size_t argsLen);
 		virtual ~FunctionDynCom() override;
 		CommandReturn* exec(MemoryObject& pre_mem) override;
 		Command* clone() override;

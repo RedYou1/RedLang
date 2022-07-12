@@ -34,7 +34,7 @@ namespace DTO {
 
 	class ShortC : public Class {
 	public:
-		ShortC(Number* number) : Class("Short", Paths::Short, GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
+		ShortC(Number* number) : Class(L"Short", Paths::Short, GLOBAL::getClasses()->getClass(Paths::Object), new Interface* [1]{ number }, 1) {
 		}
 
 		class Equals :public Command {
