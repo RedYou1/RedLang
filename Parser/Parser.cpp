@@ -171,7 +171,13 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			if (!catchs.empty() || i < size)
 				throw "??";
 
-			return new DTO::Try(t_try, types, names, catches, size);
+			DTO::FunctionBlock* finally { nullptr };
+			if (word._Equal("finally")) {
+				m.removeUseless();
+				finally = parseFunctionBlock(var, &line, genTypes);
+			}
+
+			return new DTO::Try(t_try, types, names, catches, size, finally);
 		}
 	}
 	else if (line.empty()) {
@@ -790,6 +796,10 @@ DTO::FunctionBlock* Parser::Parser::parseFunctionBlock(DTO::MemoryVariable& vari
 						a += n;
 						func.pop();
 						continue;
+					}
+					if (m2.startWith("finally")) {
+						a += n;
+						func.pop();
 					}
 					break;
 				}

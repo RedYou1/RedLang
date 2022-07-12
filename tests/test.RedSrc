@@ -52,7 +52,9 @@ class test{
 		if(i.equals(1i)){
 			throw "1";
 		}
-		throw 2i;
+		if(i.equals(2i)){
+			throw 2i;
+		}
 	}
 
 	static function String testerCast(){
@@ -88,7 +90,7 @@ class test{
 		test.testIn();
 		test.testerTerminal();
 
-		for(Integer i = 1i; i.lte(2i);i.add(1i)){
+		for(Integer i = 1i; i.lte(3i);i.add(1i)){
 			try {
 				test.testerThrow(i);
 			} catch (String e) {
@@ -97,6 +99,8 @@ class test{
 			} catch (Integer e) {
 				System.print("Integer:");
 				System.println(e);
+			} finally {
+				System.println("finally");
 			}
 		}
 

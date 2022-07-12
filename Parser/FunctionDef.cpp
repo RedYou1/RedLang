@@ -71,6 +71,10 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 						func.pop();
 						continue;
 					}
+					if (m2.startWith("finally")) {
+						a += n;
+						func.pop();
+					}
 					break;
 				}
 			}

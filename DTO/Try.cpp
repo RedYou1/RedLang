@@ -1,7 +1,7 @@
 #include "Try.h"
 
-DTO::Try::Try(FunctionBlock* t_try, Instanciable** catchKeys, std::string* names, FunctionBlock** catchs, size_t catchLen)
-	:m_try(t_try), m_catchKeys(catchKeys), m_names(names), m_catchs(catchs), m_catchLen(catchLen)
+DTO::Try::Try(FunctionBlock* t_try, Instanciable** catchKeys, std::string* names, FunctionBlock** catchs, size_t catchLen, FunctionBlock* finally)
+	:m_try(t_try), m_catchKeys(catchKeys), m_names(names), m_catchs(catchs), m_catchLen(catchLen), m_finally(finally)
 {}
 
 DTO::Try::~Try()
@@ -13,6 +13,7 @@ DTO::Try::~Try()
 	delete[] m_names;
 	delete[] m_catchKeys;
 	delete[] m_catchs;
+	delete m_finally;
 }
 
 DTO::CommandReturn* DTO::Try::exec(MemoryObject& mem)
@@ -27,9 +28,19 @@ DTO::CommandReturn* DTO::Try::exec(MemoryObject& mem)
 				delete[] coms;
 				delete[] name;
 				delete r;
-				return r2;
+				r = r2;
+				break;
 			}
 		}
+	}
+	if (m_finally != nullptr) {
+		CommandReturn* r2{ m_finally->exec(mem) };
+		if (r2->exitFunction()) {
+			delete r;
+			r = r2;
+			r2 = nullptr;
+		}
+		delete r2;
 	}
 	return r;
 }
@@ -45,5 +56,5 @@ DTO::Command* DTO::Try::clone()
 	FunctionBlock** catchs{ new FunctionBlock * [m_catchLen] };
 	for (size_t c(0); c < m_catchLen; c++)
 		catchs[c] = (FunctionBlock*)m_catchs[c]->clone();
-	return new Try((FunctionBlock*)m_try->clone(), catchKeys, names, catchs, m_catchLen);
+	return new Try((FunctionBlock*)m_try->clone(), catchKeys, names, catchs, m_catchLen, m_finally == nullptr ? nullptr : (FunctionBlock*)m_finally->clone());
 }
