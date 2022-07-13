@@ -209,8 +209,9 @@ namespace DTO {
 				for (size_t c{ 0 }; c < size; c++) {
 					MemoryObject mem{};
 					i[0] = array->m_value[c];
-					func->m_value->exec(mem, i, 1);
+					delete func->m_value->exec(mem, i, 1);
 				}
+				delete[] i;
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new forEach(); }
