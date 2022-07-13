@@ -16,10 +16,10 @@ namespace DTO {
 		std::map<std::wstring, std::list<Signature*>> m_signs;
 		MemorySourceFile* m_genTypes;//normaly it contains nothing.
 	public:
-		Interface(std::wstring name, std::wstring path);
-		Interface(std::wstring name, std::wstring path, MemorySourceFile* genTypes);
-		Interface(std::wstring name, std::wstring path, Interface** implements, size_t implementsLen);
-		Interface(std::wstring name, std::wstring path, MemorySourceFile* genTypes, Interface** implements, size_t implementsLen);
+		Interface(std::wstring name, std::filesystem::path path);
+		Interface(std::wstring name, std::filesystem::path path, MemorySourceFile* genTypes);
+		Interface(std::wstring name, std::filesystem::path path, Interface** implements, size_t implementsLen);
+		Interface(std::wstring name, std::filesystem::path path, MemorySourceFile* genTypes, Interface** implements, size_t implementsLen);
 		virtual ~Interface() override;
 
 		Interface** getInterfaces() { return m_interfaces; }

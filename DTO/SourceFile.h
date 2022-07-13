@@ -1,13 +1,14 @@
 #pragma once
 #include <string>
+#include <filesystem>
 
 namespace DTO {
 	class SourceFile {
 	private:
 		std::wstring m_name;
-		std::wstring	m_path;
+		std::filesystem::path m_path;
 	public:
-		SourceFile(std::wstring name, std::wstring path);
+		SourceFile(std::wstring name, std::filesystem::path path);
 		virtual ~SourceFile() = default;
 
 		std::wstring getPath() { return m_path; }

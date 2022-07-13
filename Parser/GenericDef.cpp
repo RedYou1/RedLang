@@ -5,7 +5,7 @@
 #include "../DTO/Class.h"
 #include "../DTO/Global.h"
 
-Parser::GenericDef::GenericDef(std::wstring name, std::wstring path, std::wstring type, std::queue<std::wstring> genTypes, std::wstring content)
+Parser::GenericDef::GenericDef(std::wstring name, std::filesystem::path path, std::wstring type, std::queue<std::wstring> genTypes, std::wstring content)
 	:DTO::GenericStatic(name, path, genTypes.size()),
 	m_type(type),
 	m_genTypes(),

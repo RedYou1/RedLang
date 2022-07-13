@@ -10,20 +10,20 @@
 #include "Signature.h"
 #include "Generic.h"
 
-DTO::Class::Class(std::wstring name, std::wstring path, Class* parent)
+DTO::Class::Class(std::wstring name, std::filesystem::path path, Class* parent)
 	: Class(name, path, parent, new Interface* [0], 0) {}
 
-DTO::Class::Class(std::wstring name, std::wstring path, Class* parent, Interface** implements, size_t implementsLen)
+DTO::Class::Class(std::wstring name, std::filesystem::path path, Class* parent, Interface** implements, size_t implementsLen)
 	: Interface(name, path, new MemorySourceFile{ false }, implements, implementsLen),
 	m_funcs(new MemoryFunction(parent ? parent->m_funcs : nullptr)),
 	m_vars(parent ? new MemoryVar(parent->m_vars) : new MemoryVar()),
 	m_statVars(new MemoryStatVar()),
 	m_parent(parent) {}
 
-DTO::Class::Class(std::wstring name, std::wstring path, Class* parent, MemorySourceFile* genTypes)
+DTO::Class::Class(std::wstring name, std::filesystem::path path, Class* parent, MemorySourceFile* genTypes)
 	: Class(name, path, parent, new Interface* [0], 0, genTypes) {}
 
-DTO::Class::Class(std::wstring name, std::wstring path, Class* parent, Interface** implements, size_t implementsLen, MemorySourceFile* genTypes)
+DTO::Class::Class(std::wstring name, std::filesystem::path path, Class* parent, Interface** implements, size_t implementsLen, MemorySourceFile* genTypes)
 	: Interface(name, path, genTypes, implements, implementsLen),
 	m_funcs(new MemoryFunction(parent ? parent->m_funcs : nullptr)),
 	m_vars(parent ? new MemoryVar(parent->m_vars) : new MemoryVar()),

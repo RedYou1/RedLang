@@ -33,7 +33,7 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 			s.extract(1);
 			s.removeUseless();
 			DTO::MemoryVariable var{};
-			commands.push(Parser::parseCommand(m_functionOf->extends(), nullptr, var, m_definition, *m_genTypes));
+			commands.push(Parser::parseCommand(m_functionOf->extends(), nullptr, var, m_signature->getPath(), m_definition, *m_genTypes));
 			s.removeUseless();
 		}
 		else {
@@ -78,7 +78,7 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 					break;
 				}
 			}
-			commands.push(Parser::parseCommand(nullptr, nullptr, variables, a, *m_genTypes));
+			commands.push(Parser::parseCommand(nullptr, nullptr, variables, m_signature->getPath(), a, *m_genTypes));
 
 			a = func.front();
 			func.pop();

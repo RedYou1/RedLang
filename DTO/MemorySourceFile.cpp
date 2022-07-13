@@ -35,17 +35,17 @@ bool DTO::MemorySourceFile::containKey(std::wstring* name, MemorySourceFile* _ge
 
 	std::wstring cName{ *name };
 
-	size_t lastDot{ cName.find_last_of('.') };
-	if (lastDot == SIZE_MAX) {
-		lastDot = 0;
+	std::wstring temp{ L"<" + *name + L">" };
+
+	std::queue<std::wstring> q{ myString{&temp}.split2(L'.') };
+
+	size_t first{ cName.size() };
+	size_t t{ q.back().find('<') };
+	if (t != SIZE_MAX) {
+		first = first - q.back().size() + t;
 	}
 
-	size_t firstTri{ cName.substr(lastDot).find('<') };
-	if (firstTri == SIZE_MAX) {
-		firstTri = cName.size();
-	}
-
-	std::wstring genName{ cName.substr(0,lastDot + firstTri) };
+	std::wstring genName{ cName.substr(0, first) };
 
 	size_t nameSize{ genName.size() };
 
@@ -65,13 +65,14 @@ bool DTO::MemorySourceFile::containKey(std::wstring* name, MemorySourceFile* _ge
 	}
 
 	if (found && cName.at(cName.size() - 1) == L'>') {
-		std::wstring genTypes{ myString{ &cName }.split(L".").back() };
+		std::wstring genTypes{ q.back() };
 		myString{ &genTypes }.extract2();
-		std::queue<std::wstring> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
+		temp = myString{ &genTypes }.extractFunc2();
+		q = myString{ &temp }.split2(L',');
 		size_t size{ q.size() };
 		Instanciable** genTypesArr{ new Instanciable * [size] };
 		size_t i{ 0 };
-		size_t charIndex{ lastDot + firstTri + 1 };
+		size_t charIndex{ first + 1 };
 		while (i < size) {
 			std::wstring genType{ q.front() };
 			if (containKey(&genType, _genTypes)) {
@@ -111,17 +112,17 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::wstring name) {
 
 	std::wstring cName{ name };
 
-	size_t lastDot{ cName.find_last_of('.') };
-	if (lastDot == SIZE_MAX) {
-		lastDot = 0;
+	std::wstring temp{ L"<" + name + L">" };
+
+	std::queue<std::wstring> q{ myString{&temp}.split2(L'.') };
+
+	size_t first{ cName.size() };
+	size_t t{ q.back().find('<') };
+	if (t != SIZE_MAX) {
+		first = first - q.back().size() + t;
 	}
 
-	size_t firstTri{ cName.substr(lastDot).find('<') };
-	if (firstTri == SIZE_MAX) {
-		firstTri = cName.size();
-	}
-
-	std::wstring genName{ cName.substr(0,lastDot + firstTri) };
+	std::wstring genName{ cName.substr(0, first) };
 
 	size_t nameSize{ genName.size() };
 
@@ -142,13 +143,13 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::wstring name) {
 	if (cName.at(cName.size() - 1) == L'>') {
 		if (s == nullptr)
 			throw "not found";
-		std::wstring genTypes{ myString{ &cName }.split(L".").back() };
+		std::wstring genTypes{ q.back() };
 		myString{ &genTypes }.extract2();
-		std::queue<std::wstring> q{ myString{&myString{&genTypes}.extractFunc2() }.split2(',') };
+		temp = myString{ &genTypes }.extractFunc2();
+		q = myString{ &temp }.split2(L',');
 		size_t size{ q.size() };
 		Instanciable** genTypesArr{ new Instanciable * [size] };
 		size_t i{ 0 };
-		size_t charIndex{ genName.size() + 1 };
 		bool a{ false };
 		while (i < size) {
 			std::wstring genType{ q.front() };
@@ -159,7 +160,6 @@ DTO::SourceFile* DTO::MemorySourceFile::get(std::wstring name) {
 				delete[] genTypesArr;
 				throw "??";
 			}
-			charIndex += q.front().size() + 1;
 			q.pop();
 			i++;
 		}

@@ -26,7 +26,7 @@
 #include "../DTO/Char.h"
 
 
-DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, DTO::MemoryVariable& variables, std::wstring line, DTO::MemorySourceFile& genTypes)
+DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, DTO::MemoryVariable& variables, std::filesystem::path path, std::wstring line, DTO::MemorySourceFile& genTypes)
 {
 	if (pre != nullptr && preC != nullptr)
 		throw "??";
@@ -47,7 +47,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			if (line.empty())
 				return new DTO::ReturnObj(new DTO::NullObject());
 			else
-				return new DTO::ReturnCom(parseReturn(variables, line, genTypes));
+				return new DTO::ReturnCom(parseReturn(variables, path, line, genTypes));
 		}
 		else if (word._Equal(L"bp")) {
 			m.removeUseless();
@@ -55,21 +55,21 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 		}
 		else if (line.at(0) == L'{') {
 			DTO::MemoryVariable var{ &variables };
-			return parseFunctionBlock(var, &line, genTypes);
+			return parseFunctionBlock(var, path, &line, genTypes);
 		}
 		else if (word._Equal(L"if")) {
 			m.removeUseless();
 			std::wstring in{ m.extractFunc() };
 			DTO::MemoryVariable var{ &variables };
-			DTO::Command* cond{ parseReturn(var,in,genTypes) };
-			return new DTO::If(cond, parseFunctionBlock(var, &line, genTypes));
+			DTO::Command* cond{ parseReturn(var,path,in,genTypes) };
+			return new DTO::If(cond, parseFunctionBlock(var, path, &line, genTypes));
 		}
 		else if (word._Equal(L"while")) {
 			m.removeUseless();
 			std::wstring in{ m.extractFunc() };
 			DTO::MemoryVariable var{ &variables };
-			DTO::Command* cond{ parseReturn(var,in,genTypes) };
-			return new DTO::While(cond, parseFunctionBlock(var, &line, genTypes));
+			DTO::Command* cond{ parseReturn(var,path,in,genTypes) };
+			return new DTO::While(cond, parseFunctionBlock(var, path, &line, genTypes));
 		}
 		else if (word._Equal(L"for")) {
 			m.removeUseless();
@@ -79,12 +79,12 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			if (func.size() != 3)
 				throw "??";
 			DTO::MemoryVariable var{ &variables };
-			DTO::Command* init{ parseCommand(nullptr,nullptr,var,func.front(),genTypes) };
+			DTO::Command* init{ parseCommand(nullptr,nullptr,var,path,func.front(),genTypes) };
 			func.pop();
-			DTO::Command* cond{ parseReturn(var,func.front(),genTypes) };
+			DTO::Command* cond{ parseReturn(var,path,func.front(),genTypes) };
 			func.pop();
-			DTO::Command* end{ parseCommand(nullptr,nullptr,var,func.front(),genTypes) };
-			return new DTO::For(init, cond, end, parseFunctionBlock(var, &line, genTypes));
+			DTO::Command* end{ parseCommand(nullptr,nullptr,var,path,func.front(),genTypes) };
+			return new DTO::For(init, cond, end, parseFunctionBlock(var, path, &line, genTypes));
 		}
 		else if (word._Equal(L"forEach")) {
 			m.removeUseless();
@@ -105,10 +105,10 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			in = in.substr(0, in.find_last_of(')'));
 			DTO::MemoryVariable var{ &variables };
 			var.add(name, type);
-			DTO::Command* iterable{ parseReturn(var,in,genTypes) };
+			DTO::Command* iterable{ parseReturn(var,path,in,genTypes) };
 
-			DTO::FunctionBlock* fb{ parseFunctionBlock(var, &line, genTypes) };
-			DTO::Function* func{ new DTO::Function(new DTO::Signature(L"",nullptr,new DTO::Arg[1]{type,name},1),fb->getCommands(),fb->getcommandLen()) };
+			DTO::FunctionBlock* fb{ parseFunctionBlock(var,path, &line, genTypes) };
+			DTO::Function* func{ new DTO::Function(new DTO::Signature(path,nullptr,new DTO::Arg[1]{type,name},1),fb->getCommands(),fb->getcommandLen()) };
 
 			fb->clear();
 			delete fb;
@@ -117,12 +117,12 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 		}
 		else if (word._Equal(L"throw")) {
 			m.removeUseless();
-			return new DTO::Throw(parseReturn(variables, line, genTypes));
+			return new DTO::Throw(parseReturn(variables, path, line, genTypes));
 		}
 		else if (word._Equal(L"try")) {
 			m.removeUseless();
 			DTO::MemoryVariable var{ &variables };
-			DTO::FunctionBlock* t_try{ parseFunctionBlock(var, &line, genTypes) };
+			DTO::FunctionBlock* t_try{ parseFunctionBlock(var,path, &line, genTypes) };
 			m.removeUseless();
 			word = m.extractName();
 			std::queue<std::tuple<std::wstring, DTO::Interface*, DTO::FunctionBlock*>> catchs{};
@@ -152,7 +152,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 				DTO::MemoryVariable var2{ &variables };
 				var2.add(name, type);
 
-				DTO::FunctionBlock* t_catch{ parseFunctionBlock(var2, &line, genTypes) };
+				DTO::FunctionBlock* t_catch{ parseFunctionBlock(var2,path, &line, genTypes) };
 				catchs.push(std::tuple<std::wstring, DTO::Interface*, DTO::FunctionBlock*>(name, type, t_catch));
 				m.removeUseless();
 				word = m.extractName();
@@ -175,7 +175,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			DTO::FunctionBlock* finally { nullptr };
 			if (word._Equal(L"finally")) {
 				m.removeUseless();
-				finally = parseFunctionBlock(var, &line, genTypes);
+				finally = parseFunctionBlock(var, path, &line, genTypes);
 			}
 
 			return new DTO::Try(t_try, types, names, catches, size, finally);
@@ -241,7 +241,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 		}
 
 		while (!args.empty() && argI < size) {
-			commandsI[argI] = parseReturn(variables, args.front(), genTypes);
+			commandsI[argI] = parseReturn(variables, path, args.front(), genTypes);
 			args.pop();
 			argI++;
 		}
@@ -261,7 +261,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			return cmd;
 		else if (line.at(0) == L'.') {
 			m.extract(1);
-			return parseCommand(nullptr, cmd, variables, line, genTypes);
+			return parseCommand(nullptr, cmd, variables, path, line, genTypes);
 		}
 
 		throw "??";
@@ -272,21 +272,21 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			if (line.at(0) == L'=') {
 				m.extract(1);
 				m.removeUseless();
-				return new DTO::ReplaceVarInOb(pre, true, word, parseReturn(variables, line, genTypes));
+				return new DTO::ReplaceVarInOb(pre, true, word, parseReturn(variables, path, line, genTypes));
 			}
 		}
 		if (preC != nullptr) {
 			if (line.at(0) == L'=') {
 				m.extract(1);
 				m.removeUseless();
-				return new DTO::ReplaceStatVar(preC, word, parseReturn(variables, line, genTypes));
+				return new DTO::ReplaceStatVar(preC, word, parseReturn(variables, path, line, genTypes));
 			}
 		}
 		else if (variables.containKey(word)) {
 			if (line.at(0) == L'=') {
 				m.extract(1);
 				m.removeUseless();
-				return new DTO::ReplaceVar(variables.get(word), word, parseReturn(variables, line, genTypes));
+				return new DTO::ReplaceVar(variables.get(word), word, parseReturn(variables, path, line, genTypes));
 			}
 			throw "??";
 		}
@@ -299,7 +299,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 				m.extract(1);
 				m.removeUseless();
 				variables.add(name, cl);
-				return new DTO::Declaration(cl, name, parseReturn(variables, line, genTypes));
+				return new DTO::Declaration(cl, name, parseReturn(variables, path, line, genTypes));
 			}
 			throw "?";
 		}
@@ -312,7 +312,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 				m.extract(1);
 				m.removeUseless();
 				variables.add(name, cl);
-				return new DTO::Declaration(cl, name, parseReturn(variables, line, genTypes));
+				return new DTO::Declaration(cl, name, parseReturn(variables, path, line, genTypes));
 			}
 			throw "?";
 		}
@@ -321,24 +321,24 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 	case '.': {
 		m.extract(1);
 		if (pre != nullptr) {
-			return parseCommand(nullptr, new DTO::GetVarFunc(pre, word), variables, line, genTypes);
+			return parseCommand(nullptr, new DTO::GetVarFunc(pre, word), variables, path, line, genTypes);
 		}
 		else if (preC != nullptr) {
-			return parseCommand(nullptr, new DTO::GetStaticVar(preC, word), variables, line, genTypes);
+			return parseCommand(nullptr, new DTO::GetStaticVar(preC, word), variables, path, line, genTypes);
 		}
 		else if (variables.containKey(word)) {
-			return parseCommand(nullptr, new DTO::Return(word, variables.get(word)), variables, line, genTypes);
+			return parseCommand(nullptr, new DTO::Return(word, variables.get(word)), variables, path, line, genTypes);
 		}
 		else if (genTypes.containKey(&word)) {
-			return parseCommand(genTypes.getClass(word), nullptr, variables, line, genTypes);
+			return parseCommand(genTypes.getClass(word), nullptr, variables, path, line, genTypes);
 		}
 		else if (DTO::GLOBAL::getClasses()->containKey(&word, &genTypes)) {
-			return parseCommand(DTO::GLOBAL::getClasses()->getClass(word), nullptr, variables, line, genTypes);
+			return parseCommand(DTO::GLOBAL::getClasses()->getClass(word), nullptr, variables, path, line, genTypes);
 		}
 		throw "??";
 	}
 	case '<': {
-		return parseCommand(DTO::GLOBAL::getClasses()->getClass(word + L'<' + m.extractFunc() + L'>'), nullptr, variables, line, genTypes);
+		return parseCommand(DTO::GLOBAL::getClasses()->getClass(word + L'<' + m.extractFunc() + L'>'), nullptr, variables, path, line, genTypes);
 	}
 	default:
 		throw "??";
@@ -346,7 +346,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 	throw "??";
 }
 
-DTO::Class* Parser::Parser::parseClass(std::wstring path, std::wstring str, DTO::MemorySourceFile& genTypes) {
+DTO::Class* Parser::Parser::parseClass(std::filesystem::path path, std::wstring str, DTO::MemorySourceFile& genTypes) {
 	DTO::myString s{ &str };
 
 	s.removeUseless();
@@ -446,7 +446,7 @@ DTO::Class* Parser::Parser::parseClass(std::wstring path, std::wstring str, DTO:
 				s.removeUseless();
 				DTO::MemoryVariable variables{ };
 				DTO::MemoryObject a{ };
-				DTO::Command* r{ parseReturn(variables, str,genTypes) };
+				DTO::Command* r{ parseReturn(variables,path, str,genTypes) };
 				DTO::CommandReturn* re{ r->exec(a) };
 
 				_default->SetValue(re->getObject());
@@ -464,7 +464,7 @@ DTO::Class* Parser::Parser::parseClass(std::wstring path, std::wstring str, DTO:
 				s.extract(1);
 				s.removeUseless();
 				DTO::MemoryVariable variables{ };
-				_default = parseReturn(variables, str, genTypes);
+				_default = parseReturn(variables, path, str, genTypes);
 			}
 			_class->getVars()->add(name, new DTO::Var(_class->getVars()->size(), type, _default));
 		}
@@ -477,7 +477,7 @@ DTO::Class* Parser::Parser::parseClass(std::wstring path, std::wstring str, DTO:
 	return _class;
 }
 
-DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::wstring& s, DTO::MemorySourceFile& genTypes) {
+DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::filesystem::path path, std::wstring& s, DTO::MemorySourceFile& genTypes) {
 	DTO::myString ms{ &s };
 	ms.removeUseless();
 
@@ -504,7 +504,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::w
 		size_t argI{ 0 };
 
 		while (!args.empty() && argI < size) {
-			commandsI[argI] = parseReturn(variables, args.front(), genTypes);
+			commandsI[argI] = parseReturn(variables, path, args.front(), genTypes);
 			args.pop();
 			argI++;
 		}
@@ -632,7 +632,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::w
 			ms.extract(1);
 			DTO::SourceFile* c{ genTypes.get(arg1) };
 			if (dynamic_cast<DTO::Class*>(c))
-				pre = parseCommand((DTO::Class*)c, nullptr, variables, s, genTypes);
+				pre = parseCommand((DTO::Class*)c, nullptr, variables, path, s, genTypes);
 			else {
 				if (!s.empty())
 					throw "??";
@@ -643,7 +643,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::w
 			ms.extract(1);
 			DTO::SourceFile* c{ DTO::GLOBAL::getClasses()->get(arg1) };
 			if (dynamic_cast<DTO::Class*>(c))
-				pre = parseCommand((DTO::Class*)c, nullptr, variables, s, genTypes);
+				pre = parseCommand((DTO::Class*)c, nullptr, variables, path, s, genTypes);
 			else {
 				if (!s.empty())
 					throw "??";
@@ -684,7 +684,7 @@ DTO::Command* Parser::Parser::parseReturn(DTO::MemoryVariable& variables, std::w
 			commandsI[0] = pre;
 
 			while (!args.empty() && argI < size) {
-				commandsI[argI] = parseReturn(variables, args.front(), genTypes);
+				commandsI[argI] = parseReturn(variables, path, args.front(), genTypes);
 				args.pop();
 				argI++;
 			}
@@ -776,7 +776,7 @@ DTO::Function* Parser::Parser::parseFunction(bool isNotStatic, DTO::Class* metho
 	return new DTO::Function(sig, new FunctionDef(*name, methodeOf, sig, s.extractFunc2(), &genTypes));
 }
 
-DTO::FunctionBlock* Parser::Parser::parseFunctionBlock(DTO::MemoryVariable& variables, std::wstring* str, DTO::MemorySourceFile& genTypes) {
+DTO::FunctionBlock* Parser::Parser::parseFunctionBlock(DTO::MemoryVariable& variables, std::filesystem::path path, std::wstring* str, DTO::MemorySourceFile& genTypes) {
 	DTO::myString s{ str };
 	std::queue<DTO::Command*> commands{};
 	std::queue<std::wstring> func{ DTO::myString(&s.extractFunc2()).split2(';') };
@@ -807,7 +807,7 @@ DTO::FunctionBlock* Parser::Parser::parseFunctionBlock(DTO::MemoryVariable& vari
 				}
 			}
 
-			commands.push(parseCommand(nullptr, nullptr, variables, a, genTypes));
+			commands.push(parseCommand(nullptr, nullptr, variables, path, a, genTypes));
 
 			a = func.front();
 			func.pop();
@@ -829,29 +829,34 @@ DTO::FunctionBlock* Parser::Parser::parseFunctionBlock(DTO::MemoryVariable& vari
 	return new DTO::FunctionBlock(cmds, len);
 }
 
-DTO::SourceFile* Parser::Parser::loadFile(std::wstring filePath)
+DTO::SourceFile* Parser::Parser::loadFile(std::filesystem::path filePath)
 {
 	std::ifstream file(filePath);
-	std::wstring tempPath{ filePath };
-	std::queue<std::wstring> pathqueue{ DTO::myString{ &tempPath }.split(L"\\") };
-	std::wstring path{ pathqueue.front() };
-	pathqueue.pop();
-	while (pathqueue.size() > 1) {
-		path += std::filesystem::path::preferred_separator + pathqueue.front();
-		pathqueue.pop();
-	}
 	if (file.is_open())
 	{
 		{
-			std::wstring p{ filePath };
-			p = DTO::myString{ &p }.split(L"\\").back();
-			p = DTO::myString{ &p }.extract(L".");
-			if (DTO::GLOBAL::getClasses()->containKey(&p)) {
+			if (!filePath.has_filename()) {
+				throw "no name";
+			}
+
+			std::wstring name{ filePath.filename() };
+
+			if (!filePath.has_extension()) {
+				throw "no extension";
+			}
+
+			if (filePath.extension() != ".RedSrc") {
+				throw "not a RedSrc file";
+			}
+
+			name = DTO::myString{ &name }.extract(L".");
+
+			if (DTO::GLOBAL::getClasses()->containKey(&name)) {
 				file.close();
-				return DTO::GLOBAL::getClasses()->get(p);
+				return DTO::GLOBAL::getClasses()->get(name);
 			}
 			else {
-				DTO::GLOBAL::getClasses()->add(p, nullptr);
+				DTO::GLOBAL::getClasses()->add(name, nullptr);
 			}
 		}
 		std::string line;
@@ -871,7 +876,7 @@ DTO::SourceFile* Parser::Parser::loadFile(std::wstring filePath)
 			if (instru == L"include") {
 				s.removeUseless();
 				s.extract(1);
-				std::wstring v{ path + L'\\' };
+				std::wstring v{ filePath.parent_path().wstring() + std::filesystem::path::preferred_separator };
 				wchar_t temp;
 				while ((temp = s.extract(1).at(0)) != L'\"') {
 					if (temp == L'\\') {
@@ -890,24 +895,24 @@ DTO::SourceFile* Parser::Parser::loadFile(std::wstring filePath)
 		s.removeUseless();
 		if (content.at(0) == L'<') {
 			std::queue<std::wstring> q{ DTO::myString(&s.extractFunc2()).split2(',') };
-			GenericDef* g{ new GenericDef(name,path, instru, q, content) };
+			GenericDef* g{ new GenericDef(name,filePath, instru, q, content) };
 			DTO::GLOBAL::getClasses()->set(name, g);
 			return g;
 		}
 		else {
 			DTO::MemorySourceFile* g{ new DTO::MemorySourceFile {false} };
 			if (instru == L"class") {
-				return parseClass(path, name + L' ' + content, *g);
+				return parseClass(filePath, name + L' ' + content, *g);
 			}
 			else {
-				return parseInterface(path, name + L' ' + content, *g);
+				return parseInterface(filePath, name + L' ' + content, *g);
 			}
 		}
 	}
 	else throw "Unable to open file";
 }
 
-DTO::Interface* Parser::Parser::parseInterface(std::wstring path, std::wstring str, DTO::MemorySourceFile& genTypes)
+DTO::Interface* Parser::Parser::parseInterface(std::filesystem::path path, std::wstring str, DTO::MemorySourceFile& genTypes)
 {
 	DTO::myString s{ &str };
 

@@ -44,10 +44,10 @@ namespace DTO {
 		class ClassConstruct :public Command {
 		public:
 			ClassClass* m_s;
-			SourceFile* (*m_parser)(std::wstring);
-			ClassConstruct(ClassClass* s, SourceFile* (*parser)(std::wstring)) :m_s(s), m_parser(parser) {}
+			SourceFile* (*m_parser)(std::filesystem::path);
+			ClassConstruct(ClassClass* s, SourceFile* (*parser)(std::filesystem::path)) :m_s(s), m_parser(parser) {}
 			CommandReturn* exec(MemoryObject& mem) override {
-				std::wstring a{ ((FileO*)mem.get(L"c"))->m_path.wstring() };
+				std::filesystem::path a{ ((FileO*)mem.get(L"c"))->m_path };
 				Object* c{ new ClassO(m_s, m_parser(a)) };
 				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);

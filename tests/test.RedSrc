@@ -252,8 +252,27 @@ class test{
 		names.forEach(test.printNames<String>);
 		System.println("");
 
-		System.println(new File("ExternalClass.RedSrc"));
+		System.println(new File("ExternalClass.RedSrc").getRelativePath());
 		System.println(new File("ExternalClass.RedSrc").getAbsolutePath());
+
+		File testsFile = new File("./");
+		Array<File> testsFiles = testsFile.getFiles();
+		System.println("Files and Directory:");
+		forEach(File file : testsFiles){
+			System.println("	".concat(file.getRelativePath()));
+		}
+
+		testsFiles = testsFile.getFiles(true,false);
+		System.println("Files:");
+		forEach(File file : testsFiles){
+			System.println("	".concat(file.getRelativePath()));
+		}
+
+		testsFiles = testsFile.getFiles(true,false,true);
+		System.println("Files Recursive:");
+		forEach(File file : testsFiles){
+			System.println("	".concat(file.getRelativePath()));
+		}
 
 		throw new Exception("FINI");
 	}

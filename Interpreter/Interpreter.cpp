@@ -21,10 +21,13 @@ int main(int argc, char** argv)
 	}
 
 	std::string ppath{ std::string{argv[1]} };
-	std::wstring path{ ppath.begin(),ppath.end() };
-	if (!path.substr(path.size() - 7, 7)._Equal(L".RedSrc")) {
-		std::cout << "path not ok." << std::endl;
-		return 0;
+	std::filesystem::path path{ std::filesystem::absolute(std::wstring(ppath.begin(),ppath.end())) };
+	if (!path.has_extension()) {
+		throw "no extension";
+	}
+
+	if (path.extension() != ".RedSrc") {
+		throw "not a RedSrc file";
 	}
 
 	DTO::RedLang::importRedLang(Parser::Parser::loadFile);

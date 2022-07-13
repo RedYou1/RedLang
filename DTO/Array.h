@@ -22,11 +22,6 @@ namespace DTO {
 
 		ArrayO(Class* type, size_t size) :Object(type), m_size(size) {
 			m_value = new IObject * [m_size];
-			Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
-			for (size_t i{ 0 }; i < m_size; i++) {
-				m_value[i] = new NullObject(obj);
-				GarbageCollector::Add(m_value[i]);
-			}
 		}
 
 		~ArrayO() override {
@@ -41,22 +36,27 @@ namespace DTO {
 	public:
 
 		Object* clone()override {
-			return new ArrayO(m_type, m_value, m_size);
+			IObject** o{ new IObject * [m_size] };
+			for (size_t i{ 0 }; i < m_size; i++) {
+				o[i] = m_value[i];
+				GarbageCollector::Add(o[i]);
+			}
+			return new ArrayO(m_type, o, m_size);
 		}
 	};
 
 	class Array : public GenericStatic {
-	private:
-		class ArrayC : public Class {
-		public:
-			Instanciable* m_type;
-			ArrayC(std::wstring name, Instanciable* type);
-		};
 	public:
 		Array() : GenericStatic(L"Array", Paths::Array, 1) {
 		}
 
 		SourceFile* create(std::wstring newName, Instanciable** gens, size_t genSize)override;
+
+		class ArrayC : public Class {
+		public:
+			Instanciable* m_type;
+			ArrayC(std::wstring name, Instanciable* type);
+		};
 
 		class Equals :public Command {
 		public:
@@ -85,7 +85,12 @@ namespace DTO {
 				CommandReturn* q{ a->getClass()->getFuncs()->get(L"toLong", i, 1)->exec(mem2, o, 1) };
 				delete[] i;
 				delete[] o;
-				Object* c{ new ArrayO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
+				ArrayO* c{ new ArrayO(m_s, (size_t)(((LongO*)q->getObject())->m_value)) };
+				Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
+				for (size_t i{ 0 }; i < c->m_size; i++) {
+					c->m_value[i] = new NullObject(obj);
+					GarbageCollector::Add(c->m_value[i]);
+				}
 				mem.set(L"this", c);
 				delete q;
 				return new CommandReturn(c, true, false);

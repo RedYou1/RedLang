@@ -2,6 +2,7 @@
 #include "Function.h"
 #include "MemoryFunction.h"
 #include "CastException.h"
+#include "File.h"
 
 DTO::FunctionCom::FunctionCom(Class* _class, std::wstring name, Command** args, size_t argsLen)
 	:m_class(_class), m_name(name), m_args(args), m_argsLen(argsLen) {}
@@ -80,7 +81,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& mem)
 {
 	if (!m_signature->getPath().empty()) {
 		Class* string{ GLOBAL::getClasses()->getClass(Paths::String) };
-		mem.add(L">workspace", new StringO(string, m_signature->getPath()), string);
+		mem.add(L">workspace", new FileO(string, m_signature->getPath()), string);
 	}
 	for (size_t c{ 0 }; c < m_commandLen; c++) {
 		CommandReturn* r{ m_commands[c]->exec(mem) };

@@ -31,7 +31,7 @@
 #include "ArrayList.h"
 #include "File.h"
 
-void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::wstring)) {
+void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::filesystem::path)) {
 	ObjectClass* object{ new ObjectClass() };
 	GLOBAL::getClasses()->add(Paths::Object, object);
 
@@ -275,8 +275,13 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::wstring)) {
 	file->addFunc(L"File", file, new Arg[2]{ file,L"this", String,L"c" }, 2, new FileC::FileConstruct(file));
 	file->addFunc(L"equals", Bool, new Arg[2]{ file,L"this", file,L"c" }, 2, new FileC::Equals(Bool));
 	file->addFunc(L"toString", String, new Arg[1]{ file,L"this" }, 1, new FileC::ToString(String));
-	file->addFunc(L"getPath", String, new Arg[1]{ file,L"this" }, 1, new FileC::GetPath(String));
+	file->addFunc(L"getRelativePath", String, new Arg[1]{ file,L"this" }, 1, new FileC::GetRelativePath(String));
 	file->addFunc(L"getAbsolutePath", String, new Arg[1]{ file,L"this" }, 1, new FileC::GetAbsolutePath(String));
+	Array::ArrayC* fileArray{ (Array::ArrayC*)GLOBAL::getClasses()->checkGetClass(std::wstring(Paths::Array) + L"<" + std::wstring(Paths::File) + L">") };
+	file->addFunc(L"getFiles", fileArray, new Arg[1]{ file,L"this" }, 1, new FileC::GetFiles(file, fileArray), true);
+	file->addFunc(L"getName", String, new Arg[1]{ file,L"this" }, 1, new FileC::GetName(String));
+	file->addFunc(L"getExtension", String, new Arg[1]{ file,L"this" }, 1, new FileC::GetExtension(String));
+	file->addFunc(L"isDirectory", Bool, new Arg[1]{ file,L"this" }, 1, new FileC::IsDirectory(Bool));
 
 	except->addFunc(L"equals", Bool, new Arg[2]{ except,L"this", except,L"c" }, 2, new ExceptionC::Equals(Bool));
 	except->addFunc(L"Exception", except, new Arg[2]{ except,L"this", String,L"c" }, 2, new ExceptionC::ExceptionConstruct(except));

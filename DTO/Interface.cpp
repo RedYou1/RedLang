@@ -5,22 +5,22 @@
 #include "MemorySourceFile.h"
 #include "Generic.h"
 
-DTO::Interface::Interface(std::wstring name, std::wstring path)
+DTO::Interface::Interface(std::wstring name, std::filesystem::path path)
 	:Instanciable(name, path), m_genTypes(new MemorySourceFile{ false }), m_interfaces(new Interface* [0]), m_interfaceLen(0), m_signs()
 {
 }
 
-DTO::Interface::Interface(std::wstring name, std::wstring path, MemorySourceFile* genTypes)
+DTO::Interface::Interface(std::wstring name, std::filesystem::path path, MemorySourceFile* genTypes)
 	: Instanciable(name, path), m_genTypes(genTypes), m_interfaces(new Interface* [0]), m_interfaceLen(0), m_signs()
 {
 }
 
-DTO::Interface::Interface(std::wstring name, std::wstring path, Interface** implements, size_t implementsLen)
+DTO::Interface::Interface(std::wstring name, std::filesystem::path path, Interface** implements, size_t implementsLen)
 	: Instanciable(name, path), m_genTypes(new MemorySourceFile{ false }), m_interfaces(implements), m_interfaceLen(implementsLen), m_signs()
 {
 }
 
-DTO::Interface::Interface(std::wstring name, std::wstring path, MemorySourceFile* genTypes, Interface** implements, size_t implementsLen)
+DTO::Interface::Interface(std::wstring name, std::filesystem::path path, MemorySourceFile* genTypes, Interface** implements, size_t implementsLen)
 	: Instanciable(name, path), m_genTypes(genTypes), m_interfaces(implements), m_interfaceLen(implementsLen), m_signs()
 {
 }
