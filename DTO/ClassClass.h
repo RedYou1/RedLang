@@ -100,22 +100,18 @@ namespace DTO {
 
 				size_t size{ mem.size() - 2 };
 				IObject** args{ new IObject * [size] };
-				Instanciable** argsT{ new Instanciable * [size] };
 				for (size_t i{ 0 }; i < size; i++) {
 					args[i] = mem.get(std::to_wstring(i));
-					argsT[i] = args[i]->getClass();
 				}
 
 				Function* func;
 				try {
-					func = c->getFuncs()->get(s->m_value, argsT, size);
+					func = c->getFuncs()->get(s->m_value, args, size);
 				}
 				catch (std::wstring e) {
-					delete[] argsT;
 					delete[] args;
 					return new CommandReturn(new StringO(m_s, e), true, false);
 				}
-				delete[] argsT;
 
 				CommandReturn* re{ func->exec(mem, args,size) };
 

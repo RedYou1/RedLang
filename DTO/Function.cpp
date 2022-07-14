@@ -2,6 +2,7 @@
 #include "Function.h"
 #include "MemoryFunction.h"
 #include "CastException.h"
+#include "NullException.h"
 #include "File.h"
 
 DTO::FunctionCom::FunctionCom(Class* _class, std::wstring name, Command** args, size_t argsLen)
@@ -16,12 +17,12 @@ DTO::FunctionCom::~FunctionCom()
 
 DTO::CommandReturn* DTO::FunctionCom::exec(MemoryObject& mem) {
 
-	Instanciable** argsType{ new Instanciable * [m_argsLen] };
+	IObject** argsType{ new IObject * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {
 		args[c] = m_args[c]->exec(mem);
-		argsType[c] = args[c]->getObject()->getClass();
+		argsType[c] = args[c]->getObject();
 	}
 
 	CommandReturn* r{ m_class->getFuncs()->get(m_name, argsType, m_argsLen)->exec(mem, args,m_argsLen) };
@@ -66,7 +67,7 @@ DTO::CommandReturn* DTO::FunctionBlock::exec2(MemoryObject& pre_mem, std::wstrin
 	MemoryObject mem(&pre_mem);
 
 	for (size_t c(0); c < argsLen; c++)
-		mem.add(name[c], args[c], args[c]->getClass());
+		mem.add(name[c], args[c], args[c]->getClass(), true);
 
 	for (size_t c{ 0 }; c < m_commandLen; c++) {
 		CommandReturn* r{ m_commands[c]->exec(mem) };
@@ -81,7 +82,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& mem)
 {
 	if (!m_signature->getPath().empty()) {
 		Class* string{ GLOBAL::getClasses()->getClass(Paths::String) };
-		mem.add(L">workspace", new FileO(string, m_signature->getPath()), string);
+		mem.add(L">workspace", new FileO(string, m_signature->getPath()), string, false);
 	}
 	for (size_t c{ 0 }; c < m_commandLen; c++) {
 		CommandReturn* r{ m_commands[c]->exec(mem) };
@@ -118,8 +119,15 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, Command** arg
 DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, Command** args, size_t args_size) {
 	MemoryObject mem{ &pre_mem };
 	for (size_t c{ 0 }; c < m_signature->getArgsLen(); c++) {
-		if (args[c] == nullptr) {
-			mem.add(m_signature->getArgs()[c].name, nullptr, m_signature->getArgs()[c].type);
+		if (c >= args_size || args[c] == nullptr) {
+			if (m_signature->getArgs()[c]._default == nullptr) {
+				mem.add(m_signature->getArgs()[c].name, new NullObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+			}
+			else {
+				CommandReturn* q{ m_signature->getArgs()[c]._default->exec(mem) };
+				mem.add(m_signature->getArgs()[c].name, q->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+				delete q;
+			}
 		}
 		else {
 			CommandReturn* ob{ args[c]->exec(pre_mem) };
@@ -127,27 +135,66 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, Command** arg
 			if (ob->isThrow())
 				return ob;
 
-			if (dynamic_cast<Object*>(ob->getObject()) != nullptr &&
-				!ob->getObject()->getClass()->instanceOf(m_signature->getArgs()[c].type))
-				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionArgs", ob, m_signature->getArgs()[c].type), false, true);
+			CommandReturn* ex{ nullptr };
 
-			mem.add(m_signature->getArgs()[c].name, ob->getObject(), m_signature->getArgs()[c].type);
+			if (dynamic_cast<NullObject*>(ob->getObject()) != nullptr) {
+				if (m_signature->getArgs()[c]._default != nullptr) {
+					MemoryObject tmem{};
+					CommandReturn* q{ m_signature->getArgs()[c]._default->exec(tmem) };
+					mem.add(m_signature->getArgs()[c].name, q->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+					delete q;
+					delete ob;
+					continue;
+				}
+				else if (!m_signature->getArgs()[c].nullable)
+					ex = new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), L"Null argument at {" + m_signature->getPath().wstring() + L"} at position {" + std::to_wstring(c) + L"}"), true, true);
+			}
+			else if (!ob->getObject()->getClass()->instanceOf(m_signature->getArgs()[c].type))
+				ex = new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionArgs", ob, m_signature->getArgs()[c].type), false, true);
+
+			if (ex != nullptr) {
+				delete ob;
+				return ex;
+			}
+
+			mem.add(m_signature->getArgs()[c].name, ob->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
 			delete ob;
 		}
 	}
 
 	for (size_t c{ m_signature->getArgsLen() }; c < args_size; c++) {
 		if (args[c] == nullptr) {
-			mem.add(std::to_wstring(c - m_signature->getArgsLen()), nullptr, nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), new NullObject(), nullptr, true);
 		}
-		else {
+		else
+		{
 			CommandReturn* ob{ args[c]->exec(pre_mem) };
 
 			if (ob->isThrow())
 				return ob;
 
-			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob->getObject(), nullptr);
+			CommandReturn* ex{ nullptr };
+
+			if (dynamic_cast<NullObject*>(ob->getObject()) != nullptr) {
+				if (m_signature->getArgs()[c]._default != nullptr) {
+					MemoryObject tmem{};
+					CommandReturn* q{ m_signature->getArgs()[c]._default->exec(tmem) };
+					mem.add(m_signature->getArgs()[c].name, q->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+					delete q;
+					delete ob;
+					continue;
+				}
+				else if (!m_signature->getArgs()[c].nullable)
+					ex = new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), L"Null argument at {" + m_signature->getPath().wstring() + L"} at position {" + std::to_wstring(c) + L"}"), true, true);
+			}
+			else if (!ob->getObject()->getClass()->instanceOf(m_signature->getArgs()[c].type))
+				ex = new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionArgs", new CommandReturn(ob->getObject(), false, false), m_signature->getArgs()[c].type), false, true);
+
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob->getObject(), nullptr, true);
 			delete ob;
+
+			if (ex != nullptr)
+				return ex;
 		}
 	}
 
@@ -162,28 +209,45 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, IObject** arg
 DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, IObject** args, size_t args_size) {
 	MemoryObject mem{ &pre_mem };
 	for (size_t c{ 0 }; c < m_signature->getArgsLen(); c++) {
-		if (args[c] == nullptr) {
-			mem.add(m_signature->getArgs()[c].name, nullptr, m_signature->getArgs()[c].type);
+		if (c >= args_size || args[c] == nullptr) {
+			if (m_signature->getArgs()[c]._default == nullptr) {
+				mem.add(m_signature->getArgs()[c].name, new NullObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+			}
+			else {
+				CommandReturn* q{ m_signature->getArgs()[c]._default->exec(mem) };
+				mem.add(m_signature->getArgs()[c].name, q->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+				delete q;
+			}
 		}
 		else {
 			IObject* ob{ args[c] };
 
-			if (dynamic_cast<Object*>(ob) != nullptr &&
-				!ob->getClass()->instanceOf(m_signature->getArgs()[c].type))
+			if (dynamic_cast<NullObject*>(ob) != nullptr) {
+				if (m_signature->getArgs()[c]._default != nullptr) {
+					MemoryObject tmem{};
+					CommandReturn* q{ m_signature->getArgs()[c]._default->exec(tmem) };
+					mem.add(m_signature->getArgs()[c].name, q->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+					delete q;
+					continue;
+				}
+				else if (!m_signature->getArgs()[c].nullable)
+					return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), L"Null argument at {" + m_signature->getPath().wstring() + L"} at position {" + std::to_wstring(c) + L"}"), true, true);
+			}
+			else if (!ob->getClass()->instanceOf(m_signature->getArgs()[c].type))
 				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionArgs", new CommandReturn(ob, false, false), m_signature->getArgs()[c].type), false, true);
 
-			mem.add(m_signature->getArgs()[c].name, ob, m_signature->getArgs()[c].type);
+			mem.add(m_signature->getArgs()[c].name, ob, m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
 		}
 	}
 
 	for (size_t c{ m_signature->getArgsLen() }; c < args_size; c++) {
 		if (args[c] == nullptr) {
-			mem.add(std::to_wstring(c - m_signature->getArgsLen()), nullptr, nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), new NullObject(), nullptr, true);
 		}
 		else {
 			IObject* ob{ args[c] };
 
-			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob, nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob, nullptr, true);
 		}
 	}
 
@@ -198,8 +262,15 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, CommandReturn
 DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, CommandReturn** args, size_t args_size) {
 	MemoryObject mem{ &pre_mem };
 	for (size_t c{ 0 }; c < m_signature->getArgsLen(); c++) {
-		if (args[c] == nullptr) {
-			mem.add(m_signature->getArgs()[c].name, nullptr, m_signature->getArgs()[c].type);
+		if (c >= args_size || args[c] == nullptr) {
+			if (m_signature->getArgs()[c]._default == nullptr) {
+				mem.add(m_signature->getArgs()[c].name, new NullObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+			}
+			else {
+				CommandReturn* q{ m_signature->getArgs()[c]._default->exec(mem) };
+				mem.add(m_signature->getArgs()[c].name, q->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+				delete q;
+			}
 		}
 		else {
 			CommandReturn* ob{ args[c] };
@@ -207,17 +278,27 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, CommandReturn
 			if (ob->isThrow())
 				return ob;
 
-			if (dynamic_cast<Object*>(ob->getObject()) != nullptr &&
-				!ob->getObject()->getClass()->instanceOf(m_signature->getArgs()[c].type))
+			if (dynamic_cast<NullObject*>(ob->getObject()) != nullptr) {
+				if (m_signature->getArgs()[c]._default != nullptr) {
+					MemoryObject tmem{};
+					CommandReturn* q{ m_signature->getArgs()[c]._default->exec(tmem) };
+					mem.add(m_signature->getArgs()[c].name, q->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
+					delete q;
+					continue;
+				}
+				else if (!m_signature->getArgs()[c].nullable)
+					return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), L"Null argument at {" + m_signature->getPath().wstring() + L"} at position {" + std::to_wstring(c) + L"}"), true, true);
+			}
+			else if (!ob->getObject()->getClass()->instanceOf(m_signature->getArgs()[c].type))
 				return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"FunctionArgs", ob, m_signature->getArgs()[c].type), false, true);
 
-			mem.add(m_signature->getArgs()[c].name, ob->getObject(), m_signature->getArgs()[c].type);
+			mem.add(m_signature->getArgs()[c].name, ob->getObject(), m_signature->getArgs()[c].type, m_signature->getArgs()[c].nullable);
 		}
 	}
 
 	for (size_t c{ m_signature->getArgsLen() }; c < args_size; c++) {
 		if (args[c] == nullptr) {
-			mem.add(std::to_wstring(c - m_signature->getArgsLen()), nullptr, nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), new NullObject(), nullptr, m_signature->getArgs()[c].nullable);
 		}
 		else {
 			CommandReturn* ob{ args[c] };
@@ -225,7 +306,7 @@ DTO::CommandReturn* DTO::PostFunction::exec(MemoryObject& pre_mem, CommandReturn
 			if (ob->isThrow())
 				return ob;
 
-			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob->getObject(), nullptr);
+			mem.add(std::to_wstring(c - m_signature->getArgsLen()), ob->getObject(), nullptr, true);
 		}
 	}
 
@@ -271,12 +352,12 @@ DTO::CommandReturn* DTO::FunctionDynCom::exec(MemoryObject& pre_mem)
 	if (cl == nullptr)
 		throw "??";
 
-	Instanciable** argsType{ new Instanciable * [m_argsLen] };
+	IObject** argsType{ new IObject * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {
 		args[c] = m_args[c]->exec(pre_mem);
-		argsType[c] = args[c]->getObject()->getClass();
+		argsType[c] = args[c]->getObject();
 	}
 
 	CommandReturn* r{ cl->getFuncs()->get(m_name, argsType, m_argsLen)->exec(pre_mem, args,m_argsLen) };

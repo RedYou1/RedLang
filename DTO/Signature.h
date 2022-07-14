@@ -22,6 +22,8 @@ namespace DTO {
 		bool equalsI(Arg* args, size_t argsLen);
 		bool similarI(Instanciable** argsType, size_t argsLen);
 		bool similar(Instanciable** argsType, size_t argsLen);
+		bool similarI(IObject** args, size_t argsLen);
+		bool similar(IObject** args, size_t argsLen);
 
 		std::filesystem::path getPath() { return m_path; }
 		Instanciable* getReturnType() { return m_returnType; }

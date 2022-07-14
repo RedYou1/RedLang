@@ -7,6 +7,7 @@
 #include "../DTO/String.h"
 #include "../DTO/Global.h"
 #include "../DTO/GarbageCollector.h"
+#include "../DTO/Instanciable.h"
 
 void help() {
 	std::cout << "program [file]" << std::endl;
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
 	DTO::Class* c1{ (DTO::Class*)Parser::Parser::loadFile(path) };
 
 	DTO::MemoryObject* mem{ new DTO::MemoryObject {} };
-	DTO::CommandReturn* r{ c1->getFuncs()->get(L"main", nullptr, 0)->exec(*mem, (DTO::Command**)nullptr,0) };
+	DTO::CommandReturn* r{ c1->getFuncs()->get(L"main", (DTO::Instanciable**)nullptr, 0)->exec(*mem, (DTO::Command**)nullptr,0) };
 	if (r->isThrow()) {
 		DTO::Instanciable** cc{ new DTO::Instanciable * [1] {r->getObject()->getClass()} };
 		DTO::Function* func{ r->getObject()->getClass()->getFuncs()->get(L"toString",cc,1) };

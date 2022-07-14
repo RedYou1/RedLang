@@ -36,6 +36,17 @@ DTO::Function* DTO::MemoryFunction::get(std::wstring name, Instanciable** argsTy
 	throw "not found";
 }
 
+DTO::Function* DTO::MemoryFunction::get(std::wstring name, IObject** argsType, size_t argsLen) {
+	std::list<Function*> li(get(name));
+	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {
+		if ((*it)->getSignature()->similarI(argsType, argsLen))
+			return (*it);
+	}
+	if (m_parent)
+		return m_parent->get(name, argsType, argsLen);
+	throw "not found";
+}
+
 bool DTO::MemoryFunction::containsI(std::wstring name, Instanciable** argsType, size_t argsLen) {
 	std::list<Function*> li(get(name));
 	for (std::list<Function*>::iterator it = li.begin(); it != li.end(); ++it) {

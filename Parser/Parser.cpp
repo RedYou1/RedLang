@@ -294,12 +294,17 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			DTO::Instanciable* cl{ genTypes.getType(word) };
 			m.removeUseless();
 			std::wstring name{ m.extractName() };
+			bool nullable{ false };
+			if (line.at(0) == L'?') {
+				nullable = true;
+				m.extract(1);
+			}
 			m.removeUseless();
 			if (line.at(0) == L'=') {
 				m.extract(1);
 				m.removeUseless();
 				variables.add(name, cl);
-				return new DTO::Declaration(cl, name, parseReturn(variables, path, line, genTypes));
+				return new DTO::Declaration(cl, name, parseReturn(variables, path, line, genTypes), nullable);
 			}
 			throw "?";
 		}
@@ -307,12 +312,17 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			DTO::Instanciable* cl{ DTO::GLOBAL::getClasses()->getType(word) };
 			m.removeUseless();
 			std::wstring name{ m.extractName() };
+			bool nullable{ false };
+			if (line.at(0) == L'?') {
+				nullable = true;
+				m.extract(1);
+			}
 			m.removeUseless();
 			if (line.at(0) == L'=') {
 				m.extract(1);
 				m.removeUseless();
 				variables.add(name, cl);
-				return new DTO::Declaration(cl, name, parseReturn(variables, path, line, genTypes));
+				return new DTO::Declaration(cl, name, parseReturn(variables, path, line, genTypes), nullable);
 			}
 			throw "?";
 		}

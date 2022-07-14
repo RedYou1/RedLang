@@ -197,7 +197,7 @@ namespace DTO {
 			FunctionO* m_func;
 			addAll(ArrayListC* s) :m_s{ s },
 				m_func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function), new Function(
-					new Signature(L"", nullptr,new Arg[2]{ m_s,L"this", m_s->m_type,L"c" }, 2), new Command * [1]{ new add() }, 1)) }{}
+					new Signature(L"", nullptr,new Arg[2]{ {m_s,L"this"}, {m_s->m_type,L"c"} }, 2), new Command * [1]{ new add() }, 1)) }{}
 			~addAll() override { delete m_func->m_value; delete m_func; }
 			CommandReturn* exec(MemoryObject& mem) override {
 				ArrayListO* a{ (ArrayListO*)mem.get(L"this") };

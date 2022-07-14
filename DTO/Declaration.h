@@ -11,8 +11,9 @@ namespace DTO {
 		Instanciable* m_type;
 		std::wstring m_name;
 		Command* m_cmd;
+		bool m_nullable;
 	public:
-		Declaration(Instanciable* type, std::wstring name, Command* cmd);
+		Declaration(Instanciable* type, std::wstring name, Command* cmd, bool nullable);
 		virtual ~Declaration() override { delete m_cmd; }
 
 		CommandReturn* exec(MemoryObject& mem) override;

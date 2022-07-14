@@ -94,20 +94,9 @@ namespace DTO {
 			GetFiles(FileC* s, Array::ArrayC* arr) :m_s(s), m_arr(arr) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				FileO* a{ (FileO*)mem.get(L"this") };
-				bool file{ true };
-				bool dir{ true };
-				bool recursive{ false };
-				BooleanO* _bool;
-
-				if (mem.containKey(L"0") && (_bool = dynamic_cast<BooleanO*>(mem.get(L"0"))) != nullptr) {
-					file = _bool->m_value;
-				}
-				if (mem.containKey(L"1") && (_bool = dynamic_cast<BooleanO*>(mem.get(L"1"))) != nullptr) {
-					dir = _bool->m_value;
-				}
-				if (mem.containKey(L"2") && (_bool = dynamic_cast<BooleanO*>(mem.get(L"2"))) != nullptr) {
-					recursive = _bool->m_value;
-				}
+				bool file{ ((BooleanO*)mem.get(L"file"))->m_value };
+				bool dir{ ((BooleanO*)mem.get(L"dir"))->m_value };
+				bool recursive{ ((BooleanO*)mem.get(L"recursive"))->m_value };
 
 				std::queue<std::filesystem::path> q{};
 				if (recursive)

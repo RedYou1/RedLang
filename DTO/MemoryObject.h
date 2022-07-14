@@ -12,12 +12,14 @@ namespace DTO {
 		private:
 			IObject* m_object;
 			Instanciable* m_type;
+			bool m_nullable;
 		public:
-			Memory(IObject* object, Instanciable* type);
+			Memory(IObject* object, Instanciable* type, bool nullable);
 			~Memory();
 
 			IObject* getObject();
 			Instanciable* getType();
+			bool isNullable();
 
 			void setObject(IObject* object);
 		};
@@ -29,8 +31,9 @@ namespace DTO {
 		MemoryObject(MemoryObject* parent);
 		~MemoryObject();
 
-		void add(std::wstring name, IObject* object, Instanciable* type);
+		void add(std::wstring name, IObject* object, Instanciable* type, bool nullable);
 		void set(std::wstring name, IObject* object);
+		bool isNullable(std::wstring name);
 
 		bool containKey(std::wstring name);
 

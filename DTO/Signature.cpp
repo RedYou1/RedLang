@@ -1,5 +1,6 @@
 #include "Signature.h"
 #include "Instanciable.h"
+#include "Object.h"
 
 DTO::Signature::Signature(std::filesystem::path path, Instanciable* returnType, Arg* args, size_t argsLen)
 	:m_path(path), m_returnType(returnType), m_args(args), m_argsLen(argsLen), m_infinite(false)
@@ -64,6 +65,34 @@ bool DTO::Signature::similar(Instanciable** argsType, size_t argsLen)
 		return true;
 	}
 	return false;
+}
+
+bool DTO::Signature::similarI(IObject** args, size_t argsLen)
+{
+	if (m_argsLen < argsLen && !m_infinite)
+		return false;
+	if (m_argsLen > argsLen)
+		for (size_t c(argsLen + 1); c < m_argsLen; c++)
+			if (!m_args[c].nullable && m_args[c]._default == nullptr)
+				return false;
+	for (size_t c(1); c < argsLen && c < m_argsLen; c++)
+		if (dynamic_cast<Object*>(args[c]) != nullptr && !((Object*)args[c])->getClass()->instanceOf(m_args[c].type))
+			return false;
+	return true;
+}
+
+bool DTO::Signature::similar(IObject** args, size_t argsLen)
+{
+	if (m_argsLen < argsLen && !m_infinite)
+		return false;
+	if (m_argsLen > argsLen)
+		for (size_t c(argsLen + 1); c < m_argsLen; c++)
+			if (!m_args[c].nullable && m_args[c]._default == nullptr)
+				return false;
+	for (size_t c(0); c < argsLen && c < m_argsLen; c++)
+		if (dynamic_cast<Object*>(args[c]) != nullptr && !((Object*)args[c])->getClass()->instanceOf(m_args[c].type))
+			return false;
+	return true;
 }
 
 DTO::Signature* DTO::Signature::clone()

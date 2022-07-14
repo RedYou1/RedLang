@@ -24,12 +24,12 @@ DTO::ReturnFunc::~ReturnFunc() {
 }
 
 DTO::CommandReturn* DTO::ReturnFunc::exec(MemoryObject& mem) {
-	Instanciable** argsType{ new Instanciable * [m_argsLen] };
+	IObject** argsType{ new IObject * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {
 		args[c] = m_args[c]->exec(mem);
-		argsType[c] = args[c]->getObject()->getClass();
+		argsType[c] = args[c]->getObject();
 	}
 
 	CommandReturn* r{ m_class->getFuncs()->get(m_name, argsType, m_argsLen)->exec(mem, args,m_argsLen) };
@@ -65,15 +65,15 @@ DTO::InstanceFunc::~InstanceFunc() {
 }
 
 DTO::CommandReturn* DTO::InstanceFunc::exec(MemoryObject& pre_mem) {
-	Instanciable** argsType{ new Instanciable * [m_argsLen] };
+	IObject** argsType{ new IObject * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	args[0] = new CommandReturn(new Object(m_class), false, false);
-	argsType[0] = m_class;
+	argsType[0] = args[0]->getObject();
 
 	for (size_t c{ 1 }; c < m_argsLen; c++) {
 		args[c] = m_args[c - 1]->exec(pre_mem);
-		argsType[c] = args[c]->getObject()->getClass();
+		argsType[c] = args[c]->getObject();
 	}
 	std::wstring name{ std::wstring(m_class->getName()) };
 	CommandReturn* r{ m_class->getFuncs()->get(myString{&name}.extract2(), argsType, m_argsLen)->exec(pre_mem, args,m_argsLen) };
@@ -221,12 +221,12 @@ DTO::ObFunc::~ObFunc()
 DTO::CommandReturn* DTO::ObFunc::exec(MemoryObject& pre_mem)
 {
 
-	Instanciable** argsType{ new Instanciable * [m_argsLen] };
+	IObject** argsType{ new IObject * [m_argsLen] };
 	CommandReturn** args{ new CommandReturn * [m_argsLen] };
 
 	for (size_t c{ 0 }; c < m_argsLen; c++) {
 		args[c] = m_args[c]->exec(pre_mem);
-		argsType[c] = args[c]->getObject()->getClass();
+		argsType[c] = args[c]->getObject();
 	}
 
 	CommandReturn* r{ args[0]->getObject()->getClass()->getFuncs()->get(m_name, argsType, m_argsLen)->exec(pre_mem, args,m_argsLen) };

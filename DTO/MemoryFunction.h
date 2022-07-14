@@ -18,6 +18,7 @@ namespace DTO {
 
 		std::list<Function*> get(std::wstring name);
 		Function* get(std::wstring name, Instanciable** argsType, size_t argsLen);
+		Function* get(std::wstring name, IObject** argsType, size_t argsLen);
 
 		bool containsI(std::wstring name, Instanciable** argsType, size_t argsLen);
 		bool containsI(std::wstring name, Arg* args, size_t argsLen);
