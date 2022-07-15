@@ -24,7 +24,20 @@
 #include "../DTO/Long.h"
 #include "../DTO/Double.h"
 #include "../DTO/Char.h"
-
+#include "../DTO/ReturnObj.h"
+#include "../DTO/ReturnCom.h"
+#include "../DTO/For.h"
+#include "../DTO/ForEach.h"
+#include "../DTO/Throw.h"
+#include "../DTO/GetStaticVar.h"
+#include "../DTO/GetVarFunc.h"
+#include "../DTO/FunctionDynCom.h"
+#include "../DTO/FunctionCom.h"
+#include "../DTO/MemoryVar.h"
+#include "../DTO/Var.h"
+#include "../DTO/InstanceFunc.h"
+#include "../DTO/ObjectCreator.h"
+#include "../DTO/ObFunc.h"
 
 DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, DTO::MemoryVariable& variables, std::filesystem::path path, std::wstring line, DTO::MemorySourceFile& genTypes)
 {

@@ -5,6 +5,11 @@
 DTO::Declaration::Declaration(Instanciable* type, std::wstring name, Command* cmd, bool nullable)
 	:m_type(type), m_name(name), m_cmd(cmd), m_nullable{ nullable } {}
 
+DTO::Declaration::~Declaration()
+{
+	delete m_cmd;
+}
+
 DTO::CommandReturn* DTO::Declaration::exec(MemoryObject& mem) {
 	CommandReturn* obj{ m_cmd->exec(mem) };
 	if (obj->isThrow())

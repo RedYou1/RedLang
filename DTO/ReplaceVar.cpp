@@ -5,6 +5,11 @@
 DTO::ReplaceVar::ReplaceVar(Instanciable* type, std::wstring name, Command* cmd)
 	:m_type(type), m_name(name), m_cmd(cmd) {}
 
+DTO::ReplaceVar::~ReplaceVar()
+{
+	delete m_cmd;
+}
+
 DTO::CommandReturn* DTO::ReplaceVar::exec(MemoryObject& mem) {
 	CommandReturn* obj{ m_cmd->exec(mem) };
 	if (dynamic_cast<NullObject*>(obj->getObject()) != nullptr) {

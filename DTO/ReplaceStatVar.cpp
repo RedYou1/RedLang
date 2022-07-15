@@ -6,6 +6,11 @@
 DTO::ReplaceStatVar::ReplaceStatVar(Class* _class, std::wstring name, Command* value)
 	:m_class(_class), m_name(name), m_value(value) {}
 
+DTO::ReplaceStatVar::~ReplaceStatVar()
+{
+	delete m_value;
+}
+
 DTO::CommandReturn* DTO::ReplaceStatVar::exec(MemoryObject& mem) {
 	CommandReturn* r{ m_value->exec(mem) };
 	StatVar* var{ m_class->getStatVars()->get(m_name) };

@@ -1,9 +1,5 @@
 #pragma once
-
-#include "Object.h"
 #include "Command.h"
-#include "Class.h"
-#include "Var.h"
 
 namespace DTO {
 	class ReplaceVarInOb : public Command {

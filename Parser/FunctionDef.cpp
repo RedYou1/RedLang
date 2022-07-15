@@ -3,6 +3,7 @@
 #include "../DTO/myString.h"
 #include "../DTO/Return.h"
 #include "../DTO/MemoryFunction.h"
+#include "../DTO/FunctionKnownCom.h"
 
 Parser::FunctionDef::FunctionDef(std::wstring name, DTO::Class* functionOf, DTO::Signature* signature, std::wstring definition, DTO::MemorySourceFile* genTypes)
 	:DTO::PreFunction(signature), m_name(name), m_functionOf(functionOf), m_definition(definition), m_genTypes(genTypes)

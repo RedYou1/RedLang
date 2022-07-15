@@ -1,10 +1,7 @@
 #pragma once
-#include <string>
 #include "Command.h"
-#include "Class.h"
-#include "Object.h"
-
-#include "Function.h"
+#include "Instanciable.h"
+#include "FunctionBlock.h"
 
 namespace DTO {
 	class Try : public Command {

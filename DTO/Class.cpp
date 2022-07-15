@@ -47,6 +47,21 @@ bool DTO::Class::instanceOf(Instanciable* other)
 	return false;
 }
 
+DTO::MemoryFunction* DTO::Class::getFuncs()
+{
+	return m_funcs;
+}
+
+DTO::MemoryVar* DTO::Class::getVars()
+{
+	return m_vars;
+}
+
+DTO::MemoryStatVar* DTO::Class::getStatVars()
+{
+	return m_statVars;
+}
+
 void DTO::Class::addFunc(std::wstring name, Instanciable* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity)
 {
 	m_funcs->add(name, new Function(new Signature(L"", returnType, args, argsLen, infinity), new Command * [1]{ cmd }, 1));

@@ -127,3 +127,55 @@ bool DTO::GenericI::instanceOf(Instanciable* other)
 		throw "??";
 	}
 }
+
+DTO::GenPossibility::GenPossibility()
+	:m_type(nullptr), m_possibilitiesLen(0)
+{
+}
+
+DTO::GenPossibility::GenPossibility(Instanciable* type)
+	: m_type(type), m_possibilitiesLen{ 0 }
+{
+}
+
+DTO::GenPossibility::GenPossibility(Instanciable** possibilities, size_t possibilitiesLen)
+	: m_possibilities(possibilities), m_possibilitiesLen(possibilitiesLen)
+{
+}
+
+DTO::GenPossibility::~GenPossibility()
+{
+	if (m_possibilitiesLen != 0)
+		delete[] m_possibilities;
+}
+
+bool DTO::GenPossibility::isOk(Instanciable* type)
+{
+	if (m_possibilitiesLen == 0) {
+		return type == m_type;
+	}
+	else {
+		for (size_t i{ 0 }; i < m_possibilitiesLen; i++) {
+			if (!type->instanceOf(m_possibilities[i]))
+				return false;
+		}
+		return true;
+	}
+}
+
+bool DTO::GenPossibility::isOk(GenPossibility& type)
+{
+	if (type.m_possibilitiesLen == 0) {
+		if (m_possibilities != 0)
+			return false;
+		return type.m_type == m_type;
+	}
+	else {
+		if (m_possibilitiesLen == 0) {
+			return type.isOk(m_type);
+		}
+		else {
+			throw "IDK really complicated";
+		}
+	}
+}

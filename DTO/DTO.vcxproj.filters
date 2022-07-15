@@ -64,6 +64,36 @@
     <Filter Include="Fichiers sources\RedLang\Iterable\Collection\List">
       <UniqueIdentifier>{e5809ae7-0013-47df-b7e8-35ef8ee3d467}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Commands\Function">
+      <UniqueIdentifier>{a1e7ba15-21c4-4ce1-85af-b2ce41c390c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Commands\Function">
+      <UniqueIdentifier>{b023ce0e-55d2-4f30-bd8c-9b061e88ceaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Commands\GetVar">
+      <UniqueIdentifier>{cde5b286-e4f1-44c3-b4c2-7b14c2256241}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Commands\GetVar">
+      <UniqueIdentifier>{818954e9-2550-4bf3-973a-b8e38804158c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Commands\Return">
+      <UniqueIdentifier>{eb18193c-8b3c-48b6-9d79-351af3a6841a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Commands\ReplaceVar">
+      <UniqueIdentifier>{4b0cee65-1da1-4e3e-bb04-271558645f77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Commands\Loop">
+      <UniqueIdentifier>{7e97a0d7-26ca-447b-93c6-4242886e3e30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Commands\Return">
+      <UniqueIdentifier>{628222a6-b519-4cf3-8f1a-4e1c7690869a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Commands\ReplaceVar">
+      <UniqueIdentifier>{4769d985-9054-4d38-a741-1c93e8b90b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Commands\Loop">
+      <UniqueIdentifier>{efafa836-c529-43ed-b307-4ada24dfe6c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BreakPoint.h">
@@ -72,31 +102,10 @@
     <ClInclude Include="Declaration.h">
       <Filter>Fichiers d%27en-tête\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="Function.h">
-      <Filter>Fichiers d%27en-tête\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="GetVar.h">
-      <Filter>Fichiers d%27en-tête\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="If.h">
       <Filter>Fichiers d%27en-tête\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="ReplaceStatVar.h">
-      <Filter>Fichiers d%27en-tête\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="ReplaceVar.h">
-      <Filter>Fichiers d%27en-tête\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="ReplaceVarInOb.h">
-      <Filter>Fichiers d%27en-tête\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="Return.h">
-      <Filter>Fichiers d%27en-tête\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="Try.h">
-      <Filter>Fichiers d%27en-tête\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="While.h">
       <Filter>Fichiers d%27en-tête\Commands</Filter>
     </ClInclude>
     <ClInclude Include="Class.h">
@@ -240,6 +249,81 @@
     <ClInclude Include="File.h">
       <Filter>Fichiers d%27en-tête\RedLang</Filter>
     </ClInclude>
+    <ClInclude Include="Function.h">
+      <Filter>Fichiers d%27en-tête\Commands\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="IFunction.h">
+      <Filter>Fichiers d%27en-tête\Commands\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="PostFunction.h">
+      <Filter>Fichiers d%27en-tête\Commands\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="PreFunction.h">
+      <Filter>Fichiers d%27en-tête\Commands\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionBlock.h">
+      <Filter>Fichiers d%27en-tête\Commands\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionKnownCom.h">
+      <Filter>Fichiers d%27en-tête\Commands\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionCom.h">
+      <Filter>Fichiers d%27en-tête\Commands\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionDynCom.h">
+      <Filter>Fichiers d%27en-tête\Commands\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="GetVar.h">
+      <Filter>Fichiers d%27en-tête\Commands\GetVar</Filter>
+    </ClInclude>
+    <ClInclude Include="GetStaticVar.h">
+      <Filter>Fichiers d%27en-tête\Commands\GetVar</Filter>
+    </ClInclude>
+    <ClInclude Include="GetVarFunc.h">
+      <Filter>Fichiers d%27en-tête\Commands\GetVar</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplaceStatVar.h">
+      <Filter>Fichiers d%27en-tête\Commands\ReplaceVar</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplaceVar.h">
+      <Filter>Fichiers d%27en-tête\Commands\ReplaceVar</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplaceVarInOb.h">
+      <Filter>Fichiers d%27en-tête\Commands\ReplaceVar</Filter>
+    </ClInclude>
+    <ClInclude Include="Return.h">
+      <Filter>Fichiers d%27en-tête\Commands\Return</Filter>
+    </ClInclude>
+    <ClInclude Include="ReturnCom.h">
+      <Filter>Fichiers d%27en-tête\Commands\Return</Filter>
+    </ClInclude>
+    <ClInclude Include="ReturnObj.h">
+      <Filter>Fichiers d%27en-tête\Commands\Return</Filter>
+    </ClInclude>
+    <ClInclude Include="Throw.h">
+      <Filter>Fichiers d%27en-tête\Commands\Return</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectCreator.h">
+      <Filter>Fichiers d%27en-tête\Commands\Return</Filter>
+    </ClInclude>
+    <ClInclude Include="ReturnFunc.h">
+      <Filter>Fichiers d%27en-tête\Commands\Return</Filter>
+    </ClInclude>
+    <ClInclude Include="ObFunc.h">
+      <Filter>Fichiers d%27en-tête\Commands\Return</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceFunc.h">
+      <Filter>Fichiers d%27en-tête\Commands\Return</Filter>
+    </ClInclude>
+    <ClInclude Include="While.h">
+      <Filter>Fichiers d%27en-tête\Commands\Loop</Filter>
+    </ClInclude>
+    <ClInclude Include="For.h">
+      <Filter>Fichiers d%27en-tête\Commands\Loop</Filter>
+    </ClInclude>
+    <ClInclude Include="ForEach.h">
+      <Filter>Fichiers d%27en-tête\Commands\Loop</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakPoint.cpp">
@@ -248,22 +332,7 @@
     <ClCompile Include="Declaration.cpp">
       <Filter>Fichiers sources\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="Function.cpp">
-      <Filter>Fichiers sources\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="If.cpp">
-      <Filter>Fichiers sources\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="ReplaceStatVar.cpp">
-      <Filter>Fichiers sources\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="ReplaceVarInOb.cpp">
-      <Filter>Fichiers sources\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="Return.cpp">
-      <Filter>Fichiers sources\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="While.cpp">
       <Filter>Fichiers sources\Commands</Filter>
     </ClCompile>
     <ClCompile Include="Class.cpp">
@@ -338,12 +407,6 @@
     <ClCompile Include="Signature.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Try.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ReplaceVar.cpp">
-      <Filter>Fichiers sources\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="Iterable.cpp">
       <Filter>Fichiers sources\RedLang\Iterable</Filter>
     </ClCompile>
@@ -361,6 +424,81 @@
     </ClCompile>
     <ClCompile Include="Array.cpp">
       <Filter>Fichiers sources\RedLang\Iterable</Filter>
+    </ClCompile>
+    <ClCompile Include="Function.cpp">
+      <Filter>Fichiers sources\Commands\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionCom.cpp">
+      <Filter>Fichiers sources\Commands\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionBlock.cpp">
+      <Filter>Fichiers sources\Commands\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="PostFunction.cpp">
+      <Filter>Fichiers sources\Commands\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionDynCom.cpp">
+      <Filter>Fichiers sources\Commands\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionKownCom.cpp">
+      <Filter>Fichiers sources\Commands\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="IFunction.cpp">
+      <Filter>Fichiers sources\Commands\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="GetStaticVar.cpp">
+      <Filter>Fichiers sources\Commands\GetVar</Filter>
+    </ClCompile>
+    <ClCompile Include="GetVarFunc.cpp">
+      <Filter>Fichiers sources\Commands\GetVar</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceStatVar.cpp">
+      <Filter>Fichiers sources\Commands\ReplaceVar</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceVar.cpp">
+      <Filter>Fichiers sources\Commands\ReplaceVar</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceVarInOb.cpp">
+      <Filter>Fichiers sources\Commands\ReplaceVar</Filter>
+    </ClCompile>
+    <ClCompile Include="Return.cpp">
+      <Filter>Fichiers sources\Commands\Return</Filter>
+    </ClCompile>
+    <ClCompile Include="While.cpp">
+      <Filter>Fichiers sources\Commands\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="Try.cpp">
+      <Filter>Fichiers sources\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ForEach.cpp">
+      <Filter>Fichiers sources\Commands\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="ReturnFunc.cpp">
+      <Filter>Fichiers sources\Commands\Return</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceFunc.cpp">
+      <Filter>Fichiers sources\Commands\Return</Filter>
+    </ClCompile>
+    <ClCompile Include="ReturnCom.cpp">
+      <Filter>Fichiers sources\Commands\Return</Filter>
+    </ClCompile>
+    <ClCompile Include="ReturnObj.cpp">
+      <Filter>Fichiers sources\Commands\Return</Filter>
+    </ClCompile>
+    <ClCompile Include="Throw.cpp">
+      <Filter>Fichiers sources\Commands\Return</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectCreator.cpp">
+      <Filter>Fichiers sources\Commands\Return</Filter>
+    </ClCompile>
+    <ClCompile Include="ObFunc.cpp">
+      <Filter>Fichiers sources\Commands\Return</Filter>
+    </ClCompile>
+    <ClCompile Include="For.cpp">
+      <Filter>Fichiers sources\Commands\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="GetVar.cpp">
+      <Filter>Fichiers sources\Commands\GetVar</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

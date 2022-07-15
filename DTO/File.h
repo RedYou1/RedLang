@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <filesystem>
+#include <queue>
 #include "Object.h"
 #include "String.h"
 #include "Command.h"

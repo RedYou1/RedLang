@@ -7,6 +7,12 @@ DTO::If::If(Command* cond, Command* block)
 {
 }
 
+DTO::If::~If()
+{
+	delete m_cond;
+	delete m_block;
+}
+
 DTO::CommandReturn* DTO::If::exec(MemoryObject& pre_mem)
 {
 	MemoryObject mem{ &pre_mem };

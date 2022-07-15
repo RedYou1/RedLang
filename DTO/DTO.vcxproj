@@ -35,14 +35,24 @@
     <ClInclude Include="Exception.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="Float.h" />
+    <ClInclude Include="For.h" />
+    <ClInclude Include="ForEach.h" />
+    <ClInclude Include="FunctionCom.h" />
     <ClInclude Include="Function.h" />
+    <ClInclude Include="FunctionBlock.h" />
     <ClInclude Include="FunctionClass.h" />
+    <ClInclude Include="FunctionDynCom.h" />
+    <ClInclude Include="FunctionKnownCom.h" />
     <ClInclude Include="GarbageCollector.h" />
     <ClInclude Include="Generic.h" />
+    <ClInclude Include="GetStaticVar.h" />
     <ClInclude Include="GetVar.h" />
+    <ClInclude Include="GetVarFunc.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="If.h" />
+    <ClInclude Include="IFunction.h" />
     <ClInclude Include="IllegalArgumentException.h" />
+    <ClInclude Include="InstanceFunc.h" />
     <ClInclude Include="Instanciable.h" />
     <ClInclude Include="Integer.h" />
     <ClInclude Include="Interface.h" />
@@ -59,13 +69,20 @@
     <ClInclude Include="myString.h" />
     <ClInclude Include="NullException.h" />
     <ClInclude Include="Number.h" />
+    <ClInclude Include="ObFunc.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectClass.h" />
+    <ClInclude Include="ObjectCreator.h" />
+    <ClInclude Include="PostFunction.h" />
+    <ClInclude Include="PreFunction.h" />
     <ClInclude Include="RedLang.h" />
     <ClInclude Include="ReplaceStatVar.h" />
     <ClInclude Include="ReplaceVar.h" />
     <ClInclude Include="ReplaceVarInOb.h" />
     <ClInclude Include="Return.h" />
+    <ClInclude Include="ReturnCom.h" />
+    <ClInclude Include="ReturnFunc.h" />
+    <ClInclude Include="ReturnObj.h" />
     <ClInclude Include="Short.h" />
     <ClInclude Include="Signature.h" />
     <ClInclude Include="Array.h" />
@@ -74,6 +91,7 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Thread.h" />
+    <ClInclude Include="Throw.h" />
     <ClInclude Include="Try.h" />
     <ClInclude Include="Var.h" />
     <ClInclude Include="While.h" />
@@ -88,11 +106,22 @@
     <ClCompile Include="Declaration.cpp" />
     <ClCompile Include="Double.cpp" />
     <ClCompile Include="Float.cpp" />
+    <ClCompile Include="For.cpp" />
+    <ClCompile Include="ForEach.cpp" />
     <ClCompile Include="Function.cpp" />
+    <ClCompile Include="FunctionBlock.cpp" />
+    <ClCompile Include="FunctionCom.cpp" />
+    <ClCompile Include="FunctionDynCom.cpp" />
+    <ClCompile Include="FunctionKownCom.cpp" />
     <ClCompile Include="GarbageCollector.cpp" />
     <ClCompile Include="Generic.cpp" />
+    <ClCompile Include="GetStaticVar.cpp" />
+    <ClCompile Include="GetVar.cpp" />
+    <ClCompile Include="GetVarFunc.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="If.cpp" />
+    <ClCompile Include="IFunction.cpp" />
+    <ClCompile Include="InstanceFunc.cpp" />
     <ClCompile Include="Integer.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="Iterable.cpp" />
@@ -105,18 +134,25 @@
     <ClCompile Include="MemoryVar.cpp" />
     <ClCompile Include="MemoryVariable.cpp" />
     <ClCompile Include="myString.cpp" />
+    <ClCompile Include="ObFunc.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectClass.cpp" />
+    <ClCompile Include="ObjectCreator.cpp" />
+    <ClCompile Include="PostFunction.cpp" />
     <ClCompile Include="RedLang.cpp" />
     <ClCompile Include="ReplaceStatVar.cpp" />
     <ClCompile Include="ReplaceVar.cpp" />
     <ClCompile Include="ReplaceVarInOb.cpp" />
     <ClCompile Include="Return.cpp" />
+    <ClCompile Include="ReturnCom.cpp" />
+    <ClCompile Include="ReturnFunc.cpp" />
+    <ClCompile Include="ReturnObj.cpp" />
     <ClCompile Include="Short.cpp" />
     <ClCompile Include="Signature.cpp" />
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="SourceFile.cpp" />
     <ClCompile Include="String.cpp" />
+    <ClCompile Include="Throw.cpp" />
     <ClCompile Include="Try.cpp" />
     <ClCompile Include="While.cpp" />
   </ItemGroup>
@@ -221,6 +257,7 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -237,6 +274,7 @@
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>

@@ -1,7 +1,4 @@
 #pragma once
-#include <string>
-#include "MemoryObject.h"
-#include "Object.h"
 #include "Command.h"
 #include "Class.h"
 
@@ -13,7 +10,7 @@ namespace DTO {
 		Command* m_value;
 	public:
 		ReplaceStatVar(Class* _class, std::wstring name, Command* value);
-		virtual ~ReplaceStatVar() override { delete m_value; }
+		virtual ~ReplaceStatVar() override;
 
 		CommandReturn* exec(MemoryObject& mem) override;
 		Command* clone() override;

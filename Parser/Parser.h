@@ -5,6 +5,7 @@
 #include "../DTO/Function.h"
 #include "../DTO/MemoryVariable.h"
 #include "../DTO/MemorySourceFile.h"
+#include "../DTO/FunctionBlock.h"
 
 namespace Parser {
 	class Parser {

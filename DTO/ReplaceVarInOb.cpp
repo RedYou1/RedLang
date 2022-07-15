@@ -1,6 +1,7 @@
 #include "ReplaceVarInOb.h"
 #include "CastException.h"
 #include "MemoryVar.h"
+#include "Var.h"
 
 DTO::ReplaceVarInOb::ReplaceVarInOb(Command* ob, bool _delete, std::wstring name, Command* value)
 	:m_ob(ob), m_delete(_delete), m_name(name), m_value(value) {}

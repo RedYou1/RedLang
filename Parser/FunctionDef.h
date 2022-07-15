@@ -5,6 +5,7 @@
 #include "../DTO/MemoryObject.h"
 #include "../DTO/MemorySourceFile.h"
 #include "../DTO/Command.h"
+#include "../DTO/PreFunction.h"
 
 namespace Parser {
 	class FunctionDef :public DTO::PreFunction {

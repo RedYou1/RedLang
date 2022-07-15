@@ -1,9 +1,7 @@
 #pragma once
 #include <string>
 #include "Command.h"
-#include "Class.h"
-#include "Object.h"
-#include "MemoryObject.h"
+#include "Instanciable.h"
 
 namespace DTO {
 	class Declaration : public Command {
@@ -14,7 +12,7 @@ namespace DTO {
 		bool m_nullable;
 	public:
 		Declaration(Instanciable* type, std::wstring name, Command* cmd, bool nullable);
-		virtual ~Declaration() override { delete m_cmd; }
+		virtual ~Declaration() override;
 
 		CommandReturn* exec(MemoryObject& mem) override;
 

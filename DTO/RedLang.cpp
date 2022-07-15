@@ -31,6 +31,7 @@
 #include "ArrayList.h"
 #include "File.h"
 #include "Return.h"
+#include "ReturnObj.h"
 
 void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::filesystem::path)) {
 	ObjectClass* object{ new ObjectClass() };

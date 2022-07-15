@@ -14,40 +14,12 @@ namespace DTO {
 		};
 		size_t m_possibilitiesLen;
 	public:
-		GenPossibility() :m_type(nullptr), m_possibilitiesLen(0) {}
-		GenPossibility(Instanciable* type) :m_type(type), m_possibilitiesLen{ 0 } {}
-		GenPossibility(Instanciable** possibilities, size_t possibilitiesLen) :m_possibilities(possibilities), m_possibilitiesLen(possibilitiesLen) {}
-		~GenPossibility() {
-			if (m_possibilitiesLen != 0)
-				delete[] m_possibilities;
-		}
-		bool isOk(Instanciable* type) {
-			if (m_possibilitiesLen == 0) {
-				return type == m_type;
-			}
-			else {
-				for (size_t i{ 0 }; i < m_possibilitiesLen; i++) {
-					if (!type->instanceOf(m_possibilities[i]))
-						return false;
-				}
-				return true;
-			}
-		}
-		bool isOk(GenPossibility& type) {
-			if (type.m_possibilitiesLen == 0) {
-				if (m_possibilities != 0)
-					return false;
-				return type.m_type == m_type;
-			}
-			else {
-				if (m_possibilitiesLen == 0) {
-					return type.isOk(m_type);
-				}
-				else {
-					throw "IDK really complicated";
-				}
-			}
-		}
+		GenPossibility();
+		GenPossibility(Instanciable* type);
+		GenPossibility(Instanciable** possibilities, size_t possibilitiesLen);
+		~GenPossibility();
+		bool isOk(Instanciable* type);
+		bool isOk(GenPossibility& type);
 	};
 
 	class Generic : public SourceFile {
