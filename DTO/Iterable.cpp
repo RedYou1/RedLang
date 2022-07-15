@@ -6,7 +6,7 @@ DTO::Iterable::IterableI::IterableI(std::wstring name, Instanciable* type)
 	:Interface(name, Paths::Iterable), m_type(type)
 {
 	FunctionClass* function{ (FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function) };
-	add(L"forEach", new Signature(L"", nullptr, new Arg[2]{ {this,L"this"}, {function,L"func"} }, 2));
+	add(L"forEach", new Signature(L"", { nullptr,true }, new Arg[2]{ {this,false,L"this"}, {function,false,L"func"} }, 2));
 }
 
 DTO::SourceFile* DTO::Iterable::create(std::wstring newName, Instanciable** gens, size_t genSize)

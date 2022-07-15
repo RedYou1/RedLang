@@ -22,7 +22,7 @@ DTO::CommandReturn* DTO::FunctionBlock::exec2(MemoryObject& pre_mem, std::wstrin
 	MemoryObject mem(&pre_mem);
 
 	for (size_t c(0); c < argsLen; c++)
-		mem.add(name[c], args[c], args[c]->getClass(), true);
+		mem.add(name[c], args[c], { args[c]->getClass(), true });
 
 	for (size_t c{ 0 }; c < m_commandLen; c++) {
 		CommandReturn* r{ m_commands[c]->exec(mem) };

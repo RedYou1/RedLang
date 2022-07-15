@@ -46,8 +46,8 @@ namespace DTO {
 				Signature* sig{ a->m_value->getSignature() };
 				std::wstring s{ L"Function<" };
 				for (size_t c{ 0 }; c < sig->getArgsLen(); c++)
-					s += sig->getArgs()[c].type->getName() + L",L";
-				s += sig->getReturnType() == nullptr ? L"void" : sig->getReturnType()->getName();
+					s += sig->getArgs()[c].type.type->getName() + L",";
+				s += sig->getReturnType().type == nullptr ? L"void" : sig->getReturnType().type->getName();
 				return new CommandReturn(new StringO(m_s, s + L">"), true, false);
 			}
 			Command* clone()override { return new ToString(m_s); }

@@ -3,36 +3,22 @@
 #include "Class.h"
 
 DTO::MemoryVariable::MemoryVariable(MemoryVariable* parent)
-	:m_parent(parent), m_vars(std::map<std::wstring, Instanciable*>())
+	:m_parent(parent), m_vars(std::map<std::wstring, Type>())
 {
 }
 
-void DTO::MemoryVariable::add(std::wstring name, Instanciable* o) {
+void DTO::MemoryVariable::add(std::wstring name, Type o) {
 	if (m_vars.find(name) != m_vars.end())
 		throw "variable already exists";
-	m_vars.insert(std::pair<std::wstring, Instanciable*>(name, o));
-}
-
-void DTO::MemoryVariable::set(std::wstring name, Instanciable* o) {
-	typename std::map<std::wstring, Instanciable*>::iterator it(m_vars.find(name));
-	if (it == m_vars.end()) {
-		if (m_parent != nullptr)
-			return m_parent->set(name, o);
-		else
-			throw "not found";
-	}
-	if (it->second == o)
-		return;
-	delete it->second;
-	it->second = o;
+	m_vars.insert(std::pair<std::wstring, Type>(name, o));
 }
 
 bool DTO::MemoryVariable::containKey(std::wstring name) {
 	return m_vars.find(name) != m_vars.end() || (m_parent != nullptr && m_parent->containKey(name));
 }
 
-DTO::Instanciable* DTO::MemoryVariable::get(std::wstring name) {
-	typename std::map<std::wstring, Instanciable*>::iterator it(m_vars.find(name));
+DTO::Type DTO::MemoryVariable::get(std::wstring name) {
+	typename std::map<std::wstring, Type>::iterator it(m_vars.find(name));
 	if (it == m_vars.end())
 		if (m_parent != nullptr)
 			return m_parent->get(name);

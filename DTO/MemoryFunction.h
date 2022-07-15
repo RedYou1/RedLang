@@ -22,12 +22,5 @@ namespace DTO {
 
 		bool containsI(std::wstring name, Instanciable** argsType, size_t argsLen);
 		bool containsI(std::wstring name, Arg* args, size_t argsLen);
-
-		template <class K>
-		void forEach(K* global, void(*func)(K* global, std::wstring name, std::list<Function*> ob)) {
-			for (typename std::map<std::wstring, std::list<Function*>>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
-				func(global, it->first, it->second);
-			}
-		}
 	};
 }

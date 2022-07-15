@@ -42,7 +42,7 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 			if (!parent->getName()._Equal(L"Object")) {
 				DTO::Instanciable** cc{ new DTO::Instanciable * [1]{parent} };
 				if (DTO::Function * func{ parent->getFuncs()->get(parent->getName(), cc, 1) }) {
-					DTO::Command** cc2{ new DTO::Command * [1]{new DTO::Return(L"this", m_functionOf)} };
+					DTO::Command** cc2{ new DTO::Command * [1]{new DTO::Return(L"this")} };
 					commands.push(new DTO::FunctionKnownCom(func, cc2, 1));
 				}
 				else {
@@ -87,7 +87,7 @@ DTO::PostFunction* Parser::FunctionDef::convert(DTO::Function* _f)
 	}
 
 	if (constructor) {
-		commands.push(new DTO::Return(L"this", m_signature->getReturnType()));
+		commands.push(new DTO::Return(L"this"));
 	}
 
 	size_t len{ commands.size() };

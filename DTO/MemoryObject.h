@@ -2,7 +2,7 @@
 #include <string>
 #include <map>
 #include "Object.h"
-#include "Interface.h"
+#include "Type.h"
 
 namespace DTO {
 	class MemoryObject {
@@ -11,15 +11,13 @@ namespace DTO {
 		class Memory {
 		private:
 			IObject* m_object;
-			Instanciable* m_type;
-			bool m_nullable;
+			Type m_type;
 		public:
-			Memory(IObject* object, Instanciable* type, bool nullable);
+			Memory(IObject* object, Type type);
 			~Memory();
 
 			IObject* getObject();
-			Instanciable* getType();
-			bool isNullable();
+			Type getType();
 
 			void setObject(IObject* object);
 		};
@@ -31,7 +29,7 @@ namespace DTO {
 		MemoryObject(MemoryObject* parent);
 		~MemoryObject();
 
-		void add(std::wstring name, IObject* object, Instanciable* type, bool nullable);
+		void add(std::wstring name, IObject* object, Type type);
 		void set(std::wstring name, IObject* object);
 		bool isNullable(std::wstring name);
 

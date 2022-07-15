@@ -1,17 +1,16 @@
 #pragma once
 #include <string>
 #include "Command.h"
-#include "Instanciable.h"
+#include "Type.h"
 
 namespace DTO {
 	class Declaration : public Command {
 	private:
-		Instanciable* m_type;
+		Type m_type;
 		std::wstring m_name;
 		Command* m_cmd;
-		bool m_nullable;
 	public:
-		Declaration(Instanciable* type, std::wstring name, Command* cmd, bool nullable);
+		Declaration(Type type, std::wstring name, Command* cmd);
 		virtual ~Declaration() override;
 
 		CommandReturn* exec(MemoryObject& mem) override;

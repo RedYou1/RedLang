@@ -324,6 +324,9 @@
     <ClInclude Include="ForEach.h">
       <Filter>Fichiers d%27en-tête\Commands\Loop</Filter>
     </ClInclude>
+    <ClInclude Include="Type.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakPoint.cpp">

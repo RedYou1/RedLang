@@ -12,13 +12,13 @@ DTO::MemoryObject::~MemoryObject() {
 	}
 }
 
-void DTO::MemoryObject::add(std::wstring name, IObject* o, Instanciable* type, bool nullable) {
+void DTO::MemoryObject::add(std::wstring name, IObject* o, Type type) {
 	if (m_vars.find(name) != m_vars.end())
 		throw "variable already exists";
-	if (!nullable &&
+	if (!type.nullable &&
 		dynamic_cast<NullObject*>(o) != nullptr)
 		throw "null obj";
-	m_vars.insert(std::pair<std::wstring, Memory*>(name, new Memory{ o ,type,nullable }));
+	m_vars.insert(std::pair<std::wstring, Memory*>(name, new Memory{ o ,type }));
 }
 
 void DTO::MemoryObject::set(std::wstring name, IObject* o) {
@@ -29,7 +29,7 @@ void DTO::MemoryObject::set(std::wstring name, IObject* o) {
 		else
 			throw "not found";
 	}
-	if (!it->second->isNullable() &&
+	if (!it->second->getType().nullable &&
 		dynamic_cast<NullObject*>(o) != nullptr)
 		throw "null obj";
 	if (it->second->getObject() == o)
@@ -46,7 +46,7 @@ bool DTO::MemoryObject::isNullable(std::wstring name)
 		else
 			throw "not found";
 	}
-	return it->second->isNullable();
+	return it->second->getType().nullable;
 }
 
 bool DTO::MemoryObject::containKey(std::wstring name) {
@@ -68,8 +68,8 @@ size_t DTO::MemoryObject::size() {
 	return m_vars.size();
 }
 
-DTO::MemoryObject::Memory::Memory(IObject* object, Instanciable* type, bool nullable)
-	:m_object(object), m_type(type), m_nullable(nullable)
+DTO::MemoryObject::Memory::Memory(IObject* object, Type type)
+	:m_object(object), m_type(type)
 {
 	GarbageCollector::Add(m_object);
 }
@@ -84,14 +84,9 @@ DTO::IObject* DTO::MemoryObject::Memory::getObject()
 	return m_object;
 }
 
-DTO::Instanciable* DTO::MemoryObject::Memory::getType()
+DTO::Type DTO::MemoryObject::Memory::getType()
 {
 	return m_type;
-}
-
-bool DTO::MemoryObject::Memory::isNullable()
-{
-	return m_nullable;
 }
 
 void DTO::MemoryObject::Memory::setObject(IObject* object)

@@ -93,6 +93,7 @@
     <ClInclude Include="Thread.h" />
     <ClInclude Include="Throw.h" />
     <ClInclude Include="Try.h" />
+    <ClInclude Include="Type.h" />
     <ClInclude Include="Var.h" />
     <ClInclude Include="While.h" />
   </ItemGroup>

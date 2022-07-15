@@ -1,7 +1,7 @@
 #include "ForEach.h"
 #include "FunctionClass.h"
 
-DTO::ForEach::ForEach(Instanciable* type, std::wstring name, Command* iterable, Function* func)
+DTO::ForEach::ForEach(Type type, std::wstring name, Command* iterable, Function* func)
 	:m_type(type), m_name(name), m_iterable(iterable), m_func(func)
 {
 }

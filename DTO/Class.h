@@ -32,7 +32,7 @@ namespace DTO {
 		MemoryVar* getVars();
 		MemoryStatVar* getStatVars();
 
-		void addFunc(std::wstring name, Instanciable* returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity = false);
-		void addFunc(std::wstring name, Instanciable* returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity = false);
+		void addFunc(std::wstring name, Type returnType, Arg* args, size_t argsLen, Command* cmd, bool infinity = false);
+		void addFunc(std::wstring name, Type returnType, Arg* args, size_t argsLen, Command** cmds, size_t cmdsLen, bool infinity = false);
 	};
 }

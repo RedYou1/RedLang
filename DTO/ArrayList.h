@@ -123,7 +123,7 @@ namespace DTO {
 				size_t size{ (size_t)(((LongO*)q->getObject())->m_value) };
 				ArrayListO* c{ new ArrayListO(m_s, size) };
 				FunctionO* func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function),
-					new Function(new Signature(L"", nullptr, new Arg[1]{ m_s->m_type, L"c" }, 1),
+					new Function(new Signature(L"", {nullptr,true}, new Arg[1]{ m_s->m_type,false, L"c" }, 1),
 						new Command * [1]{ new get(c) }, 1)) };
 				IObject** i{ new IObject * [2]{a,func} };
 				CommandReturn* e{ a->exec(L"forEach", i, 2) };
@@ -197,7 +197,7 @@ namespace DTO {
 			FunctionO* m_func;
 			addAll(ArrayListC* s) :m_s{ s },
 				m_func{ new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function), new Function(
-					new Signature(L"", nullptr,new Arg[2]{ {m_s,L"this"}, {m_s->m_type,L"c"} }, 2), new Command * [1]{ new add() }, 1)) }{}
+					new Signature(L"", {nullptr,true},new Arg[2]{ {m_s,false,L"this"}, {m_s->m_type,false,L"c"} }, 2), new Command * [1]{ new add() }, 1)) }{}
 			~addAll() override { delete m_func->m_value; delete m_func; }
 			CommandReturn* exec(MemoryObject& mem) override {
 				ArrayListO* a{ (ArrayListO*)mem.get(L"this") };
@@ -246,7 +246,7 @@ namespace DTO {
 
 				FunctionO* func{
 				new FunctionO((FunctionClass*)GLOBAL::getClasses()->getInterface(Paths::Function),
-					new Function(new Signature(L"", nullptr, new Arg[1]{ m_s->m_type, L"c" }, 1),
+					new Function(new Signature(L"", {nullptr,true}, new Arg[1]{ m_s->m_type,false, L"c" }, 1),
 						new Command * [1]{ new addInside(array,index) }, 1))
 				};
 				IObject** ob{ new IObject * [2]{a,func} };
@@ -371,8 +371,8 @@ namespace DTO {
 				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				FunctionO* func{ new FunctionO(GLOBAL::getClasses()->getClass(Paths::Function),
-					new Function(new Signature(L"",GLOBAL::getClasses()->getClass(Paths::Boolean),
-						new Arg[1]{GLOBAL::getClasses()->getClass(Paths::Object),L"c"},
+					new Function(new Signature(L"",{GLOBAL::getClasses()->getClass(Paths::Boolean),false},
+						new Arg[1]{GLOBAL::getClasses()->getClass(Paths::Object),false,L"c"},
 							2),new Command * [1]{new contains(arr)},1)) };
 
 				IObject** args{ new IObject * [2]{a,func} };
@@ -460,8 +460,8 @@ namespace DTO {
 				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 
 				FunctionO* func{ new FunctionO(GLOBAL::getClasses()->getClass(Paths::Function),
-					new Function(new Signature(L"",GLOBAL::getClasses()->getClass(Paths::Boolean),
-						new Arg[1]{GLOBAL::getClasses()->getClass(Paths::Object),L"c"},
+					new Function(new Signature(L"",{GLOBAL::getClasses()->getClass(Paths::Boolean),false},
+						new Arg[1]{GLOBAL::getClasses()->getClass(Paths::Object),false,L"c"},
 							2),new Command * [1]{new remove(arr)},1)) };
 
 				IObject** args{ new IObject * [2]{a,func} };

@@ -30,12 +30,5 @@ namespace DTO {
 		Class* checkGetClass(std::wstring name);
 
 		size_t size();
-
-		template <class K>
-		void forEach(K* global, void(*func)(K* global, std::wstring name, SourceFile* ob)) {
-			for (typename std::map<std::wstring, SourceFile*>::iterator it = m_vars.begin(); it != m_vars.end(); ++it) {
-				func(global, it->first, it->second);
-			}
-		}
 	};
 }
