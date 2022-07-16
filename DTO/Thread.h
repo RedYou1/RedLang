@@ -153,8 +153,11 @@ namespace DTO {
 			Join(StringC* s) :m_s(s) {}
 			CommandReturn* exec(MemoryObject& mem) override {
 				ThreadO* a{ (ThreadO*)mem.get(L"this") };
-				if (a->m_thread == nullptr)
-					return new CommandReturn(new NullObject(), true, false);
+				if (a->m_thread == nullptr) {
+					CommandReturn* r{ a->m_lastReturn };
+					a->m_lastReturn = nullptr;
+					return r;
+				}
 				if (!a->m_thread->joinable())
 					return new CommandReturn(new StringO(m_s, L"Thread not joinable"), true, true);
 				a->m_joined = true;
