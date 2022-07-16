@@ -1,17 +1,16 @@
 #include "ReturnObj.h"
-#include "GarbageCollector.h"
 
 DTO::ReturnObj::ReturnObj(IObject* cmd)
 	:m_cmd(cmd)
 {
 	if (m_cmd == nullptr)
 		throw "??";
-	GarbageCollector::Add(m_cmd);
+	m_cmd->addRef();
 }
 
 DTO::ReturnObj::~ReturnObj()
 {
-	GarbageCollector::Remove(m_cmd);
+	m_cmd->removeRef();
 }
 
 DTO::CommandReturn* DTO::ReturnObj::exec(MemoryObject& mem)

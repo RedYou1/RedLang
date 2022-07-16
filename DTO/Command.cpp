@@ -1,5 +1,4 @@
 #include "Command.h"
-#include "GarbageCollector.h"
 #include "Object.h"
 
 DTO::CommandReturn::CommandReturn(IObject* object, bool _return, bool _throw)
@@ -7,7 +6,7 @@ DTO::CommandReturn::CommandReturn(IObject* object, bool _return, bool _throw)
 {
 	if (m_object == nullptr)
 		throw "??";
-	GarbageCollector::Add(m_object);
+	m_object->addRef();
 }
 
 DTO::CommandReturn::CommandReturn(CommandReturn* value)
@@ -15,12 +14,12 @@ DTO::CommandReturn::CommandReturn(CommandReturn* value)
 {
 	if (m_object == nullptr)
 		throw "??";
-	GarbageCollector::Add(m_object);
+	m_object->addRef();
 }
 
 DTO::CommandReturn::~CommandReturn()
 {
-	GarbageCollector::Remove(m_object);
+	m_object->removeRef();
 }
 
 DTO::IObject* DTO::CommandReturn::getObject() { return m_object; }

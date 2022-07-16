@@ -1,16 +1,28 @@
 #pragma once
 #include <string>
 #include "Global.h"
+#include <thread>
+#include <mutex>
 
 namespace DTO {
 	class Class;
 	class CommandReturn;
 
 	class IObject {
+	private:
+		static std::mutex s_mutex;
+		static size_t s_isRunning;
+		static std::thread::id s_current_id;
+		static std::lock_guard<std::mutex>* s_lock;
+
+		static void lock();
+		static void unLock();
+
+		size_t m_refs;
 	protected:
 		Class* m_type;
 	public:
-		IObject(Class* type) :m_type(type) {}
+		IObject(Class* type) :m_type(type), m_refs(0) {}
 
 		virtual ~IObject() = default;
 
@@ -18,6 +30,10 @@ namespace DTO {
 		virtual IObject* clone() = 0;
 		virtual CommandReturn* exec(std::wstring name, IObject** args, size_t argsSize) = 0;
 		virtual CommandReturn* exec(std::wstring name, IObject* arg) = 0;
+
+		void addRef();
+		void removeRef();
+		size_t GetAmountRef();
 	};
 
 	class NullObject : public IObject {

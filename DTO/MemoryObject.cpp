@@ -1,5 +1,4 @@
 #include "MemoryObject.h"
-#include "GarbageCollector.h"
 
 DTO::MemoryObject::MemoryObject(MemoryObject* parent)
 	:m_parent(parent), m_vars(std::map<std::wstring, Memory*>())
@@ -71,12 +70,12 @@ size_t DTO::MemoryObject::size() {
 DTO::MemoryObject::Memory::Memory(IObject* object, Type type)
 	:m_object(object), m_type(type)
 {
-	GarbageCollector::Add(m_object);
+	m_object->addRef();
 }
 
 DTO::MemoryObject::Memory::~Memory()
 {
-	GarbageCollector::Remove(m_object);
+	m_object->removeRef();
 }
 
 DTO::IObject* DTO::MemoryObject::Memory::getObject()
@@ -93,7 +92,7 @@ void DTO::MemoryObject::Memory::setObject(IObject* object)
 {
 	if (m_object == object)
 		return;
-	GarbageCollector::Remove(m_object);
-	GarbageCollector::Add(object);
+	m_object->removeRef();
+	object->addRef();
 	m_object = object;
 }

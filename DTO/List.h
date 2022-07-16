@@ -10,7 +10,6 @@
 #include "MemoryFunction.h"
 #include "Class.h"
 #include "CastException.h"
-#include "GarbageCollector.h"
 #include "CastException.h"
 
 namespace DTO {

@@ -10,7 +10,6 @@
 #include "MemoryFunction.h"
 #include "Class.h"
 #include "CastException.h"
-#include "GarbageCollector.h"
 #include "CastException.h"
 #include "FunctionClass.h"
 
@@ -26,7 +25,7 @@ namespace DTO {
 
 		~ArrayO() override {
 			for (size_t i{ 0 }; i < m_size; i++) {
-				GarbageCollector::Remove(m_value[i]);
+				m_value[i]->removeRef();
 			}
 			delete[] m_value;
 		}
@@ -39,7 +38,7 @@ namespace DTO {
 			IObject** o{ new IObject * [m_size] };
 			for (size_t i{ 0 }; i < m_size; i++) {
 				o[i] = m_value[i];
-				GarbageCollector::Add(o[i]);
+				o[i]->addRef();
 			}
 			return new ArrayO(m_type, o, m_size);
 		}
@@ -89,7 +88,7 @@ namespace DTO {
 				Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
 				for (size_t i{ 0 }; i < c->m_size; i++) {
 					c->m_value[i] = new NullObject(obj);
-					GarbageCollector::Add(c->m_value[i]);
+					c->m_value[i]->addRef();
 				}
 				mem.set(L"this", c);
 				delete q;
@@ -138,9 +137,9 @@ namespace DTO {
 				delete[] o;
 				ArrayO* arr{ (ArrayO*)mem.get(L"this") };
 				int64_t index{ ((LongO*)q->getObject())->m_value };
-				GarbageCollector::Remove(arr->m_value[index]);
+				arr->m_value[index]->removeRef();
 				arr->m_value[index] = mem.get(L"o");
-				GarbageCollector::Add(arr->m_value[index]);
+				arr->m_value[index]->addRef();
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
 			}
@@ -177,17 +176,17 @@ namespace DTO {
 				uint64_t newSize{ (uint64_t)((LongO*)q->getObject())->m_value };
 
 				for (uint64_t i{ newSize }; i < arr->m_size; i++) {
-					GarbageCollector::Remove(arr->m_value[i]);
+					arr->m_value[i]->removeRef();
 				}
 				IObject** newArr{ new IObject * [newSize] };
 				memcpy(newArr, arr->m_value, std::min(arr->m_size, newSize) * sizeof(IObject*));
 				Class* obj{ GLOBAL::getClasses()->getClass(Paths::Object) };
 				for (uint64_t i{ newSize }; i < arr->m_size; i++) {
-					GarbageCollector::Remove(arr->m_value[i]);
+					arr->m_value[i]->removeRef();
 				}
 				for (uint64_t i{ arr->m_size }; i < newSize; i++) {
 					newArr[i] = new NullObject(obj);
-					GarbageCollector::Add(newArr[i]);
+					newArr[i]->addRef();
 				}
 				delete[] arr->m_value;
 				arr->m_value = newArr;

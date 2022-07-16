@@ -5,8 +5,26 @@
 #include "MemoryVar.h"
 #include "Class.h"
 #include "Var.h"
-#include "GarbageCollector.h"
 #include "NullException.h"
+
+std::mutex DTO::IObject::s_mutex{};
+size_t DTO::IObject::s_isRunning{ 0 };
+std::thread::id DTO::IObject::s_current_id{ std::this_thread::get_id() };
+std::lock_guard<std::mutex>* DTO::IObject::s_lock{ nullptr };
+
+void DTO::IObject::lock() {
+	if (s_isRunning == 0 || s_current_id != std::this_thread::get_id()) {
+		s_lock = new std::lock_guard<std::mutex>(s_mutex);
+		s_current_id = std::this_thread::get_id();
+	}
+	s_isRunning++;
+}
+
+void DTO::IObject::unLock() {
+	s_isRunning--;
+	if (s_isRunning == 0)
+		delete s_lock;
+}
 
 DTO::Object::Object(Class* type, IObject** vars, size_t size)
 	:IObject(type), m_vars(vars), m_size(size)
@@ -23,7 +41,7 @@ DTO::Object::Object(Class* type) : IObject(type), m_size(m_type->getVars()->size
 			MemoryObject m{ };
 			CommandReturn* r{ m_type->getVars()->get(c)->m_default->exec(m) };
 			m_vars[c] = r->getObject();
-			GarbageCollector::Add(m_vars[c]);
+			m_vars[c]->addRef();
 			delete r;
 		}
 	}
@@ -31,7 +49,7 @@ DTO::Object::Object(Class* type) : IObject(type), m_size(m_type->getVars()->size
 
 DTO::Object::~Object() {
 	for (size_t c{ 0 }; c < m_size; c++)
-		GarbageCollector::Remove(m_vars[c]);
+		m_vars[c]->removeRef();
 	delete[] m_vars;
 }
 
@@ -52,8 +70,8 @@ void DTO::Object::set(size_t i, IObject* obj)
 {
 	if (i >= m_size)
 		throw "OutOfBound";
-	GarbageCollector::Remove(m_vars[i]);
-	GarbageCollector::Add(obj);
+	m_vars[i]->removeRef();
+	obj->addRef();
 	m_vars[i] = obj;
 }
 
@@ -62,7 +80,7 @@ DTO::IObject* DTO::Object::clone()
 	IObject** vars{ new IObject * [m_size] };
 	for (size_t c(0); c < m_size; c++) {
 		vars[c] = m_vars[c]->clone();
-		GarbageCollector::Add(vars[c]);
+		vars[c]->addRef();
 	}
 	return new Object(m_type, vars, m_size);
 }
@@ -98,4 +116,37 @@ DTO::CommandReturn* DTO::Object::exec(std::wstring name, IObject* arg)
 DTO::CommandReturn* DTO::NullObject::exec(std::wstring name, IObject* arg)
 {
 	return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), L"Can't execute a function on a null object."), true, true);
+}
+
+void DTO::IObject::addRef()
+{
+	if (this == nullptr)
+		return;
+
+	lock();
+
+	m_refs++;
+
+	unLock();
+}
+
+void DTO::IObject::removeRef()
+{
+	if (this == nullptr)
+		return;
+
+	lock();
+
+	if (m_refs <= 1) {
+		delete this;
+	}
+	else
+		m_refs--;
+
+	unLock();
+}
+
+size_t DTO::IObject::GetAmountRef()
+{
+	return m_refs;
 }

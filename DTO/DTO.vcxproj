@@ -43,7 +43,6 @@
     <ClInclude Include="FunctionClass.h" />
     <ClInclude Include="FunctionDynCom.h" />
     <ClInclude Include="FunctionKnownCom.h" />
-    <ClInclude Include="GarbageCollector.h" />
     <ClInclude Include="Generic.h" />
     <ClInclude Include="GetStaticVar.h" />
     <ClInclude Include="GetVar.h" />
@@ -114,7 +113,6 @@
     <ClCompile Include="FunctionCom.cpp" />
     <ClCompile Include="FunctionDynCom.cpp" />
     <ClCompile Include="FunctionKownCom.cpp" />
-    <ClCompile Include="GarbageCollector.cpp" />
     <ClCompile Include="Generic.cpp" />
     <ClCompile Include="GetStaticVar.cpp" />
     <ClCompile Include="GetVar.cpp" />

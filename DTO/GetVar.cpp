@@ -1,15 +1,14 @@
 #include "GetVar.h"
-#include "GarbageCollector.h"
 
 DTO::GetVar::GetVar(Object* o, std::wstring name)
 	: m_o(o), m_name(name)
 {
-	GarbageCollector::Add(m_o);
+	m_o->addRef();
 }
 
 DTO::GetVar::~GetVar()
 {
-	GarbageCollector::Remove(m_o);
+	m_o->removeRef();
 }
 
 DTO::CommandReturn* DTO::GetVar::exec(MemoryObject& mem)

@@ -37,7 +37,7 @@ namespace DTO {
 				delete m_thread;
 			}
 			for (size_t c{ 0 }; c < m_argsLen; c++)
-				GarbageCollector::Remove(m_args[c]);
+				m_args[c]->removeRef();
 			delete[] m_args;
 			delete m_lastReturn;
 		}
@@ -46,7 +46,7 @@ namespace DTO {
 			IObject** cmd{ new IObject * [m_argsLen] };
 			for (size_t c{ 0 }; c < m_argsLen; c++) {
 				cmd[c] = m_args[c]->clone();
-				GarbageCollector::Add(cmd[c]);
+				cmd[c]->addRef();
 			}
 			return new ThreadO(m_type, m_func, cmd, m_argsLen, m_lastReturn == nullptr ? nullptr : new CommandReturn(m_lastReturn));
 		}
@@ -103,7 +103,7 @@ namespace DTO {
 				IObject** args{ new IObject * [size] };
 				for (size_t i{ 0 }; i < size; i++) {
 					args[i] = mem.get(std::to_wstring(i));
-					GarbageCollector::Add(args[i]);
+					args[i]->addRef();
 				}
 
 				Object* c{ new ThreadO(m_s, s->m_value, args, size,nullptr) };

@@ -118,7 +118,7 @@ namespace DTO {
 				for (size_t i{ 0 }; i < arr->m_size; i++) {
 					arr->m_value[i] = new FileO(m_s, q.front());
 					q.pop();
-					GarbageCollector::Add(arr->m_value[i]);
+					arr->m_value[i]->addRef();
 				}
 
 				return new CommandReturn(arr, true, false);

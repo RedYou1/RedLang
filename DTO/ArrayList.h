@@ -11,7 +11,6 @@
 #include "MemoryFunction.h"
 #include "Class.h"
 #include "CastException.h"
-#include "GarbageCollector.h"
 #include "CastException.h"
 #include "Collection.h"
 #include "ClassClass.h"
@@ -28,14 +27,14 @@ namespace DTO {
 		ArrayListO(Class* type, std::vector<IObject*> value) :Object(type), m_value(value) {
 			for (IObject* var : m_value)
 			{
-				GarbageCollector::Add(var);
+				var->addRef();
 			}
 		}
 
 		~ArrayListO() override {
 			for (IObject* var : m_value)
 			{
-				GarbageCollector::Remove(var);
+				var->removeRef();
 			}
 		}
 
@@ -89,7 +88,7 @@ namespace DTO {
 				size_t size{ (size_t)((LongO*)q->getObject())->m_value };
 				ArrayListO* c{ new ArrayListO(m_s, size) };
 				for (size_t i{ 0 }; i < size; i++) {
-					GarbageCollector::Add(c->m_value[i]);
+					c->m_value[i]->addRef();
 				}
 				mem.set(L"this", c);
 				delete q;
@@ -108,7 +107,7 @@ namespace DTO {
 				CommandReturn* exec(MemoryObject& mem) override {
 					IObject* a{ mem.get(L"c") };
 					m_array->m_value[m_index] = a;
-					GarbageCollector::Add(a);
+					a->addRef();
 					m_index++;
 					return new CommandReturn(new NullObject(), true, false);
 				}
@@ -164,7 +163,7 @@ namespace DTO {
 				ArrayListO* a{ (ArrayListO*)mem.get(L"this") };
 				IObject* b{ mem.get(L"c") };
 				a->m_value.push_back(b);
-				GarbageCollector::Add(b);
+				b->addRef();
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new add(); }
@@ -185,7 +184,7 @@ namespace DTO {
 					return new CommandReturn(new IllegalArgumentExceptionO(GLOBAL::getClasses()->getClass(Paths::IllegalArgumentException), L"index too big"), true, true);
 				}
 				a->m_value.insert(a->m_value.begin() + index, b);
-				GarbageCollector::Add(b);
+				b->addRef();
 				return new CommandReturn(new NullObject(), true, false);
 			}
 			Command* clone()override { return new addI(); }
@@ -221,7 +220,7 @@ namespace DTO {
 				CommandReturn* exec(MemoryObject& mem) override {
 					IObject* a{ mem.get(L"c") };
 					m_array->m_value[m_index] = a;
-					GarbageCollector::Add(a);
+					a->addRef();
 					m_index++;
 					return new CommandReturn(new NullObject(), true, false);
 				}
@@ -326,7 +325,7 @@ namespace DTO {
 			CommandReturn* exec(MemoryObject& mem) override {
 				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
 				for (size_t i{ 0 }; i < arr->m_value.size(); i++) {
-					GarbageCollector::Remove(arr->m_value[i]);
+					arr->m_value[i]->removeRef();
 				}
 				arr->m_value.clear();
 				return new CommandReturn(new NullObject(), true, false);
@@ -423,7 +422,7 @@ namespace DTO {
 					delete[] args;
 					delete q;
 					if (r) {
-						GarbageCollector::Remove(arr->m_value[i]);
+						arr->m_value[i]->removeRef();
 						arr->m_value.erase(arr->m_value.begin() + i);
 						break;
 					}
@@ -444,7 +443,7 @@ namespace DTO {
 				if (q->isThrow())
 					return q;
 				int64_t i{ ((LongO*)q->getObject())->m_value };
-				GarbageCollector::Remove(arr->m_value[i]);
+				arr->m_value[i]->removeRef();
 				arr->m_value.erase(arr->m_value.begin() + i);
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
@@ -507,12 +506,12 @@ namespace DTO {
 				IObject* a{ mem.get(L"c") };
 				CommandReturn* q{ a->exec(L"toLong", a) };
 				ArrayListO* arr{ (ArrayListO*)mem.get(L"this") };
-				GarbageCollector::Remove(arr->m_value[((NumberO*)q->getObject())->toLong()]);
+				arr->m_value[((NumberO*)q->getObject())->toLong()]->removeRef();
 				int64_t i{ ((LongO*)q->getObject())->m_value };
-				GarbageCollector::Remove(arr->m_value[i]);
+				arr->m_value[i]->removeRef();
 				arr->m_value[i] = mem.get(L"o");
-				GarbageCollector::Add(arr->m_value[i]);
-				GarbageCollector::Add(arr->m_value[((NumberO*)q->getObject())->toLong()]);
+				arr->m_value[i]->addRef();
+				arr->m_value[((NumberO*)q->getObject())->toLong()]->addRef();
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);
 			}
@@ -567,7 +566,7 @@ namespace DTO {
 
 				for (int64_t i{ 0 }; i < i2 - i1; i++) {
 					newArr->m_value[i] = arr->m_value[i1 + i];
-					GarbageCollector::Add(newArr->m_value[i]);
+					newArr->m_value[i]->addRef();
 				}
 
 				return new CommandReturn(newArr, true, false);
@@ -594,7 +593,7 @@ namespace DTO {
 
 				for (size_t i{ 0 }; i < arr->m_value.size(); i++) {
 					newArr->m_value[i] = arr->m_value[i];
-					GarbageCollector::Add(newArr->m_value[i]);
+					newArr->m_value[i]->addRef();
 				}
 
 				return new CommandReturn(newArr, true, false);
@@ -613,7 +612,7 @@ namespace DTO {
 				arr->m_value.reserve(((LongO*)q->getObject())->m_value);
 				for (; i < arr->m_value.size(); i++) {
 					arr->m_value[i] = new NullObject();
-					GarbageCollector::Add(arr->m_value[i]);
+					arr->m_value[i]->addRef();
 				}
 				delete q;
 				return new CommandReturn(new NullObject(), true, false);

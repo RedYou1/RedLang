@@ -6,7 +6,6 @@
 #include "../DTO/MemoryObject.h"
 #include "../DTO/String.h"
 #include "../DTO/Global.h"
-#include "../DTO/GarbageCollector.h"
 #include "../DTO/Instanciable.h"
 
 void help() {
@@ -52,5 +51,4 @@ int main(int argc, char** argv)
 
 	delete mem;
 	DTO::GLOBAL::Delete();
-	DTO::GarbageCollector::Clear();
 }

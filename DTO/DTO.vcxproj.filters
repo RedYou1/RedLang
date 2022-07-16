@@ -201,9 +201,6 @@
     <ClInclude Include="Command.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="GarbageCollector.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Global.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -390,9 +387,6 @@
       <Filter>Fichiers sources\RedLang\Number</Filter>
     </ClCompile>
     <ClCompile Include="Command.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GarbageCollector.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Global.cpp">

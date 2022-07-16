@@ -1,7 +1,7 @@
 #pragma once
 #include "Class.h"
 #include "Command.h"
-#include "GarbageCollector.h"
+#include "Object.h"
 
 namespace DTO {
 	class StatVar {
@@ -9,17 +9,17 @@ namespace DTO {
 		Instanciable* m_type;
 		IObject* m_value;
 	public:
-		StatVar(Instanciable* type, IObject* value) :m_type(type), m_value(value) { GarbageCollector::Add(m_value); }
-		~StatVar() { GarbageCollector::Remove(m_value); }
+		StatVar(Instanciable* type, IObject* value) :m_type(type), m_value(value) { m_value->addRef(); }
+		~StatVar() { m_value->removeRef(); }
 
 		Instanciable* GetType() { return m_type; }
 
 		IObject* GetValue() { return m_value; }
 
 		void SetValue(IObject* value) {
-			GarbageCollector::Remove(m_value);
+			m_value->removeRef();
 			m_value = value;
-			GarbageCollector::Add(m_value);
+			m_value->addRef();
 		}
 	};
 }
