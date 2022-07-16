@@ -8,13 +8,13 @@ DTO::Collection::CollectionI::CollectionI(std::wstring name, Instanciable* type)
 {
 	Interface* Bool{ GLOBAL::getClasses()->getInterface(Paths::Boolean) };
 	Interface* Integer{ GLOBAL::getClasses()->getInterface(Paths::Integer) };
-	add(L"add", new Signature(L"", { nullptr, true }, new Arg[2]{ {this,false,L"this"}, {type,false,L"c"} }, 2));
+	add(L"add", new Signature(L"", { nullptr, true }, new Arg[2]{ {this,false,L"this"}, {type,true,L"c"} }, 2));
 	add(L"addAll", new Signature(L"", { nullptr, true }, new Arg[2]{ {this,false,L"this"}, {this,false,L"c"} }, 2));
 	add(L"clear", new Signature(L"", { nullptr, true }, new Arg[1]{ {this,false,L"this"} }, 1));
-	add(L"contains", new Signature(L"", { Bool,false }, new Arg[2]{ {this,false,L"this"}, {type,false,L"c"} }, 2));
+	add(L"contains", new Signature(L"", { Bool,false }, new Arg[2]{ {this,false,L"this"}, {type,true,L"c"} }, 2));
 	add(L"containsAll", new Signature(L"", { Bool,false }, new Arg[2]{ {this,false,L"this"}, {this,false,L"c"} }, 2));
 	add(L"isEmpty", new Signature(L"", { Bool,false }, new Arg[1]{ {this,false,L"this"} }, 1));
-	add(L"remove", new Signature(L"", { nullptr, true }, new Arg[2]{ {this,false,L"this"}, {type,false,L"c"} }, 2));
+	add(L"remove", new Signature(L"", { nullptr, true }, new Arg[2]{ {this,false,L"this"}, {type,true,L"c"} }, 2));
 	add(L"removeAll", new Signature(L"", { nullptr, true }, new Arg[2]{ {this,false,L"this"}, {this,false,L"c"} }, 2));
 	add(L"size", new Signature(L"", { Integer,false }, new Arg[1]{ {this,false,L"this"} }, 1));
 }

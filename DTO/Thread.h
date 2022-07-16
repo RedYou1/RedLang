@@ -23,9 +23,11 @@ namespace DTO {
 		std::thread* m_thread;
 		bool m_joined;
 
-		ThreadO(Class* type, Function* func, IObject** args, size_t argsLen)
+		CommandReturn* m_lastReturn;
+
+		ThreadO(Class* type, Function* func, IObject** args, size_t argsLen, CommandReturn* ret)
 			:Object(type), m_func(func), m_thread(nullptr), m_joined(false),
-			m_args{ args }, m_argsLen(argsLen)
+			m_args{ args }, m_argsLen(argsLen), m_lastReturn{ ret }
 		{}
 
 		~ThreadO() override {
@@ -37,6 +39,7 @@ namespace DTO {
 			for (size_t c{ 0 }; c < m_argsLen; c++)
 				GarbageCollector::Remove(m_args[c]);
 			delete[] m_args;
+			delete m_lastReturn;
 		}
 
 		Object* clone()override {
@@ -45,7 +48,7 @@ namespace DTO {
 				cmd[c] = m_args[c]->clone();
 				GarbageCollector::Add(cmd[c]);
 			}
-			return new ThreadO(m_type, m_func, cmd, m_argsLen);
+			return new ThreadO(m_type, m_func, cmd, m_argsLen, m_lastReturn == nullptr ? nullptr : new CommandReturn(m_lastReturn));
 		}
 	};
 
@@ -103,7 +106,7 @@ namespace DTO {
 					GarbageCollector::Add(args[i]);
 				}
 
-				Object* c{ new ThreadO(m_s, s->m_value, args, size) };
+				Object* c{ new ThreadO(m_s, s->m_value, args, size,nullptr) };
 				mem.set(L"this", c);
 				return new CommandReturn(c, true, false);
 			}
@@ -113,9 +116,10 @@ namespace DTO {
 		class Start :public Command {
 		private:
 			inline static void start(ThreadO* a) {
+				delete a->m_lastReturn;
 				MemoryObject* mem{ new MemoryObject{} };
 				try {
-					delete a->m_func->exec(*mem, a->m_args, a->m_argsLen);
+					a->m_lastReturn = a->m_func->exec(*mem, a->m_args, a->m_argsLen);
 				}
 				catch (...) {}
 				delete mem;
@@ -160,7 +164,9 @@ namespace DTO {
 				a->m_thread = nullptr;
 				delete t;
 
-				return new CommandReturn(new NullObject(), true, false);
+				CommandReturn* r{ a->m_lastReturn };
+				a->m_lastReturn = nullptr;
+				return r;
 			}
 			Command* clone()override { return new Join(m_s); }
 		};

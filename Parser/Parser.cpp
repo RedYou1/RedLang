@@ -287,6 +287,7 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 				m.removeUseless();
 				return new DTO::ReplaceVarInOb(pre, true, word, parseReturn(variables, path, line, genTypes));
 			}
+			throw "??";
 		}
 		if (preC != nullptr) {
 			if (line.at(0) == L'=') {
@@ -294,8 +295,14 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 				m.removeUseless();
 				return new DTO::ReplaceStatVar(preC, word, parseReturn(variables, path, line, genTypes));
 			}
+			throw "??";
 		}
-		else if (variables.containKey(word)) {
+		bool nullable{ false };
+		if (word.at(word.size() - 1) == L'?') {
+			nullable = true;
+			word = word.substr(0, word.size() - 1);
+		}
+		if (variables.containKey(word)) {
 			if (line.at(0) == L'=') {
 				m.extract(1);
 				m.removeUseless();
@@ -303,14 +310,10 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			}
 			throw "??";
 		}
-		else if (genTypes.containKey(&word)) {
-			DTO::Type type{ genTypes.getType(word) };
+		if (genTypes.containKey(&word)) {
+			DTO::Type type{ genTypes.getType(word),nullable };
 			m.removeUseless();
 			std::wstring name{ m.extractName() };
-			if (line.at(0) == L'?') {
-				type.nullable = true;
-				m.extract(1);
-			}
 			m.removeUseless();
 			if (line.at(0) == L'=') {
 				m.extract(1);
@@ -320,14 +323,10 @@ DTO::Command* Parser::Parser::parseCommand(DTO::Class* preC, DTO::Command* pre, 
 			}
 			throw "?";
 		}
-		else if (DTO::GLOBAL::getClasses()->containKey(&word, &genTypes)) {
-			DTO::Type cl{ DTO::GLOBAL::getClasses()->getType(word) };
+		if (DTO::GLOBAL::getClasses()->containKey(&word, &genTypes)) {
+			DTO::Type cl{ DTO::GLOBAL::getClasses()->getType(word),nullable };
 			m.removeUseless();
 			std::wstring name{ m.extractName() };
-			if (line.at(0) == L'?') {
-				cl.nullable = true;
-				m.extract(1);
-			}
 			m.removeUseless();
 			if (line.at(0) == L'=') {
 				m.extract(1);
@@ -733,7 +732,7 @@ DTO::Function* Parser::Parser::parseFunction(bool isNotStatic, DTO::Class* metho
 	if (returnTypeName == DTO::myString{ &methodeName }.extract2()) {
 		isNotStatic = true;
 		*name = returnTypeName;
-		returnType = { methodeOf ,false };
+		returnType = { methodeOf };
 		s.removeUseless();
 	}
 	else {
@@ -744,9 +743,12 @@ DTO::Function* Parser::Parser::parseFunction(bool isNotStatic, DTO::Class* metho
 				returnType = { DTO::GLOBAL::getClasses()->getType(returnTypeName) };
 			else
 				throw "??";
+			if (str->at(0) == L'?')
+				returnType.nullable = true;
 		}
-		if (str->at(0) == L'?')
-			returnType.nullable = true;
+		else {
+			returnType = { nullptr ,true };
+		}
 		s.removeUseless();
 		*name = s.extractName();
 		s.removeUseless();

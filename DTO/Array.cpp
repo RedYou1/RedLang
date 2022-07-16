@@ -10,8 +10,8 @@ DTO::Array::ArrayC::ArrayC(std::wstring name, Instanciable* type)
 	Interface* function{ GLOBAL::getClasses()->getInterface(Paths::Function) };
 	addFunc(L"Array", { this ,false }, new Arg[2]{ {this,true,L"this"}, {number,false,L"c"} }, 2, new ArrayConstruct(this));
 	addFunc(L"equals", { Bool,false }, new Arg[2]{ {this,false,L"this"}, {this,false,L"c"} }, 2, new Equals(Bool));
-	addFunc(L"get", { m_type,false }, new Arg[2]{ {this,false,L"this"}, {number,false,L"c"} }, 2, new Get(this));
-	addFunc(L"set", { nullptr, true }, new Arg[3]{ {this,false,L"this"}, {m_type,false,L"o"}, {number,false,L"c"} }, 3, new Set(this));
+	addFunc(L"get", { m_type,true }, new Arg[2]{ {this,false,L"this"}, {number,false,L"c"} }, 2, new Get(this));
+	addFunc(L"set", { nullptr, true }, new Arg[3]{ {this,false,L"this"}, {m_type,true,L"o"}, {number,false,L"c"} }, 3, new Set(this));
 	addFunc(L"size", { Long,false }, new Arg[1]{ {this,false,L"this"} }, 1, new Size(Long));
 	addFunc(L"resize", { nullptr, true }, new Arg[2]{ {this,false,L"this"}, {number,false,L"c"} }, 2, new Resize());
 

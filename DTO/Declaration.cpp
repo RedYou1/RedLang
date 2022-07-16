@@ -14,7 +14,7 @@ DTO::CommandReturn* DTO::Declaration::exec(MemoryObject& mem) {
 	CommandReturn* obj{ m_cmd->exec(mem) };
 	if (obj->isThrow())
 		return obj;
-	if (m_type.nullable && dynamic_cast<NullObject*>(obj->getObject()) != nullptr)
+	if (!m_type.nullable && dynamic_cast<NullObject*>(obj->getObject()) != nullptr)
 		return new CommandReturn(new NullExceptionO(GLOBAL::getClasses()->getClass(Paths::NullException), L"Null argument"), true, true);
 	else if (!obj->getObject()->getClass()->instanceOf(m_type.type))
 		return new CommandReturn(new CastExceptionO(GLOBAL::getClasses()->getClass(Paths::CastException), L"Declaration", obj, m_type.type), false, true);

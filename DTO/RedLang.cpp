@@ -111,8 +111,8 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::filesystem::path)) {
 	String->addFunc(L"toString", { String, false }, new Arg[1]{ {String,true,L"this"} }, 1, new StringC::ToString(String));
 
 	system->addFunc(L"getWord", { String, false }, new Arg[0]{}, 0, new System::GetWord(String));
-	system->addFunc(L"print", { nullptr, true }, new Arg[1]{ {object,false,L"s"} }, 1, new System::print());
-	system->addFunc(L"println", { nullptr, true }, new Arg[1]{ {object,false,L"s"} }, 1, new System::println());
+	system->addFunc(L"print", { nullptr, true }, new Arg[1]{ {object,true,L"s"} }, 1, new System::print());
+	system->addFunc(L"println", { nullptr, true }, new Arg[1]{ {object,true,L"s"} }, 1, new System::println());
 	system->getStatVars()->add(L"is32x", new StatVar(Bool, new BooleanO(Bool, sizeof(intptr_t) == 4)));
 	system->getStatVars()->add(L"is64x", new StatVar(Bool, new BooleanO(Bool, sizeof(intptr_t) == 8)));
 
@@ -264,7 +264,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::filesystem::path)) {
 	thread->addFunc(L"equals", { Bool, false }, new Arg[2]{ {thread,false,L"this"}, {thread,false,L"c"} }, 2, new ThreadC::Equals(Bool));
 	thread->addFunc(L"toString", { String, false }, new Arg[1]{ {thread,true,L"this"} }, 1, new ThreadC::ToString(String));
 	thread->addFunc(L"start", { nullptr, true }, new Arg[1]{ {thread,false,L"this"} }, 1, new ThreadC::Start(String));
-	thread->addFunc(L"join", { nullptr, true }, new Arg[1]{ {thread,false,L"this"} }, 1, new ThreadC::Join(String));
+	thread->addFunc(L"join", { object, true }, new Arg[1]{ {thread,false,L"this"} }, 1, new ThreadC::Join(String));
 	//thread->addFunc(L"detach",nullptr, new Arg[1]{{thread,false,L"this"}}, 1, new ThreadC::Detach(String));
 
 	lock->addFunc(L"Lock", { lock, false }, new Arg[1]{ {lock,true,L"this"} }, 1, new LockC::LockConstruct(lock));

@@ -66,12 +66,18 @@ class test{
 		return 1i;
 	}
 
-	static function void testerThread(Lock lock, String s){
+	static function String testerThread(Lock lock, String s){
 		for(Integer i = 0i;i.lt(test.maxThreadFor);i.add(1i)){
 			lock.lock();
 			System.println(s);
 			lock.unLock();
 		}
+		return s;
+	}
+
+	static function void printNames(String name){
+		System.print(name);
+		System.print(",");
 	}
 
 	static function void preMain(){
@@ -156,8 +162,11 @@ class test{
 			System.println("salut");
 		}
 
-		t1.join();
-		t2.join();
+		String t1R = t1.join();
+		String t2R = t2.join();
+
+		System.println("Thread1:".concat(t1R));
+		System.println("Thread2:".concat(t2R));
 
 		System.println("Is 32x:".concat(System.is32x.toString()));
 		System.println("Is 64x:".concat(System.is64x.toString()));
@@ -225,10 +234,6 @@ class test{
             s2.concat(arr.get(y).toString());
         }
 		System.println(s2);
-	}
-
-	static function void main(){
-		test.preMain();
 
 		ArrayList<String> names = new ArrayList<String>();
 		names.add("James");
@@ -273,12 +278,26 @@ class test{
 		forEach(File file : testsFiles){
 			System.println("	".concat(file.getRelativePath()));
 		}
-
-		throw new Exception("FINI");
 	}
 
-	static function void printNames(String name){
-		System.print(name);
-		System.print(",");
+	static function void main(){
+		test.preMain();
+
+		Array<Object> nullArray = new Array<Object>(1i);
+		try {
+			Object o = nullArray.get(0i);
+		} catch (NullException e) {
+			System.println(e);
+		}
+		Object? o1 = nullArray.get(0i);
+		System.println(o1);
+		nullArray.set(1i,0i);
+		Object? o2 = nullArray.get(0i);
+		System.println(o2);
+		System.println(nullArray.get(0i));
+		nullArray.set(NULL,0i);
+		System.println(nullArray.get(0i));
+
+		throw new Exception("FINI");
 	}
 }
