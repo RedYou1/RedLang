@@ -10,14 +10,6 @@ namespace DTO {
 
 	class IObject {
 	private:
-		static std::mutex s_mutex;
-		static size_t s_isRunning;
-		static std::thread::id s_current_id;
-		static std::lock_guard<std::mutex>* s_lock;
-
-		static void lock();
-		static void unLock();
-
 		size_t m_refs;
 	protected:
 		Class* m_type;

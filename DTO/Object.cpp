@@ -7,25 +7,6 @@
 #include "Var.h"
 #include "NullException.h"
 
-std::mutex DTO::IObject::s_mutex{};
-size_t DTO::IObject::s_isRunning{ 0 };
-std::thread::id DTO::IObject::s_current_id{ std::this_thread::get_id() };
-std::lock_guard<std::mutex>* DTO::IObject::s_lock{ nullptr };
-
-void DTO::IObject::lock() {
-	if (s_isRunning == 0 || s_current_id != std::this_thread::get_id()) {
-		s_lock = new std::lock_guard<std::mutex>(s_mutex);
-		s_current_id = std::this_thread::get_id();
-	}
-	s_isRunning++;
-}
-
-void DTO::IObject::unLock() {
-	s_isRunning--;
-	if (s_isRunning == 0)
-		delete s_lock;
-}
-
 DTO::Object::Object(Class* type, IObject** vars, size_t size)
 	:IObject(type), m_vars(vars), m_size(size)
 {
@@ -123,11 +104,7 @@ void DTO::IObject::addRef()
 	if (this == nullptr)
 		return;
 
-	lock();
-
 	m_refs++;
-
-	unLock();
 }
 
 void DTO::IObject::removeRef()
@@ -135,15 +112,11 @@ void DTO::IObject::removeRef()
 	if (this == nullptr)
 		return;
 
-	lock();
-
 	if (m_refs <= 1) {
 		delete this;
 	}
 	else
 		m_refs--;
-
-	unLock();
 }
 
 size_t DTO::IObject::GetAmountRef()
