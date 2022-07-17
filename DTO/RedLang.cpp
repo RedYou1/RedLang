@@ -94,6 +94,7 @@ void DTO::RedLang::importRedLang(SourceFile* (*parser)(std::filesystem::path)) {
 	object->addFunc(L"toString", { String, false }, new Arg[1]{ {object,true,L"this"} }, 1, new ObjectClass::ToString(String));
 	object->addFunc(L"getClass", { classClass, false }, new Arg[1]{ {object,false,L"this"} }, 1, new ObjectClass::GetClass(classClass));
 	object->addFunc(L"hashCode", { Long, false }, new Arg[1]{ {object,false,L"this"} }, 1, new ObjectClass::HashCode(Long));
+	object->addFunc(L"getPointer", { Long,false }, new Arg[1]{ object,false,L"this" }, 1, new ObjectClass::GetPtr(Long));
 
 	Bool->addFunc(L"not", { Bool, false }, new Arg[1]{ {Bool,false,L"this"} }, 1, new BooleanC::Not(Bool));
 	Bool->addFunc(L"equals", { Bool, false }, new Arg[2]{ {Bool,false,L"this"}, {Bool,false,L"c"} }, 2, new BooleanC::Equals(Bool));

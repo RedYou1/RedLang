@@ -65,5 +65,13 @@ namespace DTO {
 			CommandReturn* exec(MemoryObject& mem) override;
 			Command* clone()override { return new HashCode(m_s); }
 		};
+
+		class GetPtr :public Command {
+		public:
+			LongC* m_s;
+			GetPtr(LongC* s) :m_s(s) {}
+			CommandReturn* exec(MemoryObject& mem) override;
+			Command* clone()override { return new GetPtr(m_s); }
+		};
 	};
 }
