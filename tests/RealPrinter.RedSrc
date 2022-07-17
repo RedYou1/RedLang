@@ -4,7 +4,7 @@ class RealPrinter<T> implements Printer<T>{
 
     T object;
 
-    static function RealPrinter(T object){
+    function RealPrinter(T object){
         this.object = object;
     }
 

@@ -4,7 +4,7 @@ class HeatMap<T> implements Iterable<T>{
     Number width;
     Number heigth;
 
-    static function HeatMap(Number width, Number heigth){
+    function HeatMap(Number width, Number heigth){
         this.width = width;
         this.heigth = heigth;
         this.heatMap = new Array<Array<T>>(width);

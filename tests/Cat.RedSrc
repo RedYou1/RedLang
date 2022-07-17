@@ -1,7 +1,7 @@
 include "Animal.RedSrc"
 
 class Cat implements Animal {
-    static function Cat(){
+    function Cat(){
     }
 
     function void speak(){

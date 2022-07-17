@@ -1,7 +1,7 @@
 class Generic<T>{
     T a;
 
-	static function Generic(T a){
+	function Generic(T a){
 		this.a = a;
 	}
 }

@@ -3,7 +3,7 @@ include "BoucleB.RedSrc"
 class BoucleA{
     String s = "A";
 
-    static function BoucleA(){}
+    function BoucleA(){}
 
     function void test(BoucleB b, Integer i){
         if(i.equals(0i)){

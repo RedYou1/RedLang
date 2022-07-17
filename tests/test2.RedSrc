@@ -3,7 +3,7 @@ class test2{
 	static Integer b = 1i;
 	Integer a = 1i;
 
-	static function test2(Integer a){
+	function test2(Integer a){
 		this.a = a;
 	}
 

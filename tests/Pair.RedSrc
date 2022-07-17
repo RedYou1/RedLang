@@ -2,7 +2,7 @@ class Pair<K,V>{
     K key;
     V value;
 
-	static function Pair(K key, V value){
+	function Pair(K key, V value){
 		this.key = key;
         this.value = value;
 	}
